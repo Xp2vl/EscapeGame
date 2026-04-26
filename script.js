@@ -21,7 +21,6 @@ function startGame() {
   console.log("Timer startet");
 }
 
-
 function stopGameTimer() {
   endTime = Date.now();
   const diff = endTime - startTime;
@@ -71,17 +70,35 @@ const codes = {
 let dialogQueue = [];
 let nextAction = null;
 
+// ⭐ NY VERSION MED LYD I RÆKKEFØLGE ⭐
 function playDialog(lines) {
   dialogQueue = lines;
 
+  // Vis hele teksten
   const fullText = lines.map(l => l.text).join("\n");
   document.getElementById("dialogText").innerText = fullText;
 
-  if (lines[0].sound) {
-    const audio = new Audio("assets/lyd/" + lines[0].sound);
-    audio.play();
+  // Spil lydfiler i rækkefølge
+  let index = 0;
+
+  function playNextSound() {
+    if (index >= lines.length) return;
+
+    const line = lines[index];
+    index++;
+
+    if (line.sound) {
+      const audio = new Audio("assets/lyd/" + line.sound);
+      audio.onended = playNextSound;
+      audio.play();
+    } else {
+      playNextSound();
+    }
   }
 
+  playNextSound();
+
+  // Aktivér næste-knappen
   document.getElementById("nextBtn").classList.add("active");
 }
 
@@ -285,8 +302,7 @@ function showHint() {
 
 
 // -----------------------------
-// EKSEMPEL PÅ SLUT-FLOW MED TID
-// (kald denne funktion når du synes spillet er færdigt)
+// SLUT-FLOW MED TID
 // -----------------------------
 
 function endGame() {
