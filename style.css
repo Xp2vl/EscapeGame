@@ -156,51 +156,55 @@ button {
 /* MOBIL — KOMPAKT MODE */
 @media (max-width: 390px) {
 
-.explore-row,
-.code-row {
-  gap: 4px;
-}
+  .explore-row,
+  .code-row {
+    gap: 4px;
+  }
 
-.digit {
-  width: 26px;
-  height: 34px;
-  font-size: 1.05em;
-}
+  .digit,
+  .digit.explore,
+  .digit.code {
+    width: 26px;
+    height: 34px;
+    font-size: 1.05em;
+  }
 
   .plus {
     font-size: 1.3em;
     margin: 0 2px;
   }
 
-.explore-row button,
-.code-row button {
-  padding: 6px 8px;
-  font-size: 0.85em;
-}
+  .explore-row button,
+  .code-row button {
+    padding: 6px 8px;
+    font-size: 0.85em;
+  }
 }
 
 /* ULTRA-KOMPAKT MODE */
 @media (max-width: 350px) {
 
-.explore-row,
-.code-row {
-  gap: 3px;
-}
+  .explore-row,
+  .code-row {
+    gap: 3px;
+  }
 
-.digit {
-  width: 24px;
-  height: 32px;
-  font-size: 0.95em;
-}
+  .digit,
+  .digit.explore,
+  .digit.code {
+    width: 24px;
+    height: 32px;
+    font-size: 0.95em;
+  }
 
   .plus {
     font-size: 1.2em;
     margin: 0 2px;
   }
 
-.explore-row button,
-.code-row button {
-  padding: 5px 7px;
-  font-size: 0.75em;
-}
+  .explore-row button,
+  .code-row button {
+    padding: 5px 7px;
+    font-size: 0.75em;
+  }
 }
