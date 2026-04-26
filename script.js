@@ -1,8 +1,8 @@
 const interactions = {
   "854+259": 
   { dialog: [
-  { text: "Malthe: Feeedt!", sound: "assets/lyd/Malthe_1.mp3" },
-  { text: "Josephine: Pas lige på med den der!", sound: "assets/lyd/Josephine_1.mp3" }
+  { text: "Malthe: Feeedt!", sound: "Malthe_1.mp3" },
+  { text: "Josephine: Pas lige på med den der!", sound: "Josephine_1.mp3" }
 ] },
   "418+951": 
   { dialog: [
