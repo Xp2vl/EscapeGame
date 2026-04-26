@@ -13,17 +13,32 @@ function interact() {
   const a = document.getElementById("interactA").value.trim();
   const b = document.getElementById("interactB").value.trim();
 
-  let key = "";
-  let altKey = "";
+  // Hvis begge felter er udfyldt → lav to mulige keys
+  let key1 = "";
+  let key2 = "";
 
   if (a && b) {
-    key = `${a}+${b}`;
-    altKey = `${b}+${a}`;
+    key1 = `${a}+${b}`;
+    key2 = `${b}+${a}`;
   } else if (a) {
-    key = a;
+    key1 = a;
   } else if (b) {
-    key = b;
+    key1 = b;
   }
+
+  console.log("key1:", key1, "key2:", key2);
+
+  const result = interactions[key1] || interactions[key2];
+
+  if (result) {
+    playDialog(result.dialog);
+  } else {
+    playDialog([
+      "Malthe: Hmm… det virkede vist ikke.",
+      "Josephine: Prøv en anden kombination!"
+    ]);
+  }
+}
 
   const result = interactions[key] || interactions[altKey];
 
