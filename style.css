@@ -10,24 +10,28 @@ body {
   padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
 }
 
-/* Gør alt indhold smallere på mobil */
-#gameArea, #startScreen {
-  max-width: 500px;
-  margin: 0 auto;
+/* FULD-SKÆRM STARTSKÆRM — VIRKER PÅ ALLE MOBILER */
+#startScreen {
+  position: fixed;
+  inset: 0;
+  background: rgba(222, 184, 135, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999; /* ALTID øverst */
 }
 
-/* STARTSKÆRM */
-#startScreen {
-  background-color: #deb887;
+#startContent {
+  background: #deb887;
   border: 3px solid #8b5a2b;
   padding: 40px 20px;
   border-radius: 15px;
-  margin-top: 60px;
-  position: relative;
-  z-index: 9999; /* vigtig! */
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
 }
 
-#startScreen h1 {
+#startContent h1 {
   background-color: #c49a6c;
   border: 3px solid #8b5a2b;
   padding: 15px;
@@ -43,8 +47,19 @@ body {
   border-radius: 12px;
   border: 3px solid #8b5a2b;
   cursor: pointer;
-  width: 80%;
-  max-width: 300px;
+  width: 100%;
+}
+
+/* GAMEAREA SKJULES HELT INDTIL START */
+#gameArea {
+  display: none !important;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 /* PANELER */
@@ -130,8 +145,7 @@ button {
 
 /* MOBIL-SPECIFIKT */
 @media (max-width: 600px) {
-  #startScreen {
-    margin-top: 30px;
+  #startContent {
     padding: 30px 15px;
   }
 

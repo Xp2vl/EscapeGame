@@ -7,36 +7,38 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- STARTSKÆRM -->
-  <div id="startScreen">
+<!-- STARTSKÆRM (FULD SKÆRM) -->
+<div id="startScreen">
+  <div id="startContent">
     <h1>Fang Yetien!</h1>
     <button id="startBtn" onclick="startGame()">Start spil</button>
   </div>
+</div>
 
-  <!-- SELVE SPILLET (skjult indtil man trykker Start) -->
-  <div id="gameArea" style="display:none;">
+<!-- SPILLET -->
+<div id="gameArea">
 
-    <div class="panel">
-      <label>Udforsk</label>
-      <input id="interactA" placeholder="fx854">
-      <input id="interactB" placeholder="fx259">
-      <button onclick="interact()">OK</button>
-    </div>
-
-    <div class="panel">
-      <label>Kode</label>
-      <input id="codeInput" placeholder="5287">
-      <button onclick="checkCode()">OK</button>
-    </div>
-
-    <button id="hintBtn" onclick="showHint()">?</button>
-
-    <div id="dialogArea">
-      <p id="dialogText"></p>
-      <button id="nextBtn" onclick="nextDialog()">Næste</button>
-    </div>
-
+  <div class="panel">
+    <label>Udforsk</label>
+    <input id="interactA" placeholder="fx854">
+    <input id="interactB" placeholder="fx259">
+    <button onclick="interact()">OK</button>
   </div>
+
+  <div class="panel">
+    <label>Kode</label>
+    <input id="codeInput" placeholder="5287">
+    <button onclick="checkCode()">OK</button>
+  </div>
+
+  <button id="hintBtn" onclick="showHint()">?</button>
+
+  <div id="dialogArea">
+    <p id="dialogText"></p>
+    <button id="nextBtn" onclick="nextDialog()">Næste</button>
+  </div>
+
+</div>
 
   <script src="script.js"></script>
 </body>
