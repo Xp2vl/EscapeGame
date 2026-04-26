@@ -7,16 +7,13 @@ let startTime = null;
 let endTime = null;
 
 function startGame() {
-  const start = document.getElementById("startScreen");
+  document.getElementById("startScreen").style.display = "none";
+
   const game = document.getElementById("gameArea");
-
-  // Fjern startskærm helt
-  start.style.display = "none";
-
-  // Vis spillet
   game.style.display = "block";
+  game.style.position = "fixed";   // vigtigt
+  game.style.inset = "0";          // vigtigt
 
-  // Start timer
   startTime = Date.now();
   console.log("Timer startet");
 }
