@@ -1,18 +1,14 @@
 /* GENERELT */
-html {
+html, body {
   background: #2b2b2b;
-}
-
-body {
-  background: #2b2b2b;
+  margin: 0;
+  padding: 0;
   font-family: 'Comic Sans MS', sans-serif;
   color: #3b2a1a;
   text-align: center;
-  margin: 0;
-  padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
 }
 
-/* FULD-SKÆRM STARTSKÆRM — VIRKER PÅ ALLE MOBILER */
+/* STARTSKÆRM */
 #startScreen {
   position: fixed;
   inset: 0;
@@ -20,7 +16,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999999;
+  z-index: 9999;
 }
 
 #startContent {
@@ -30,79 +26,38 @@ body {
   border-radius: 15px;
   width: 80%;
   max-width: 400px;
-  text-align: center;
 }
 
-#startContent h1 {
-  background-color: #c49a6c;
-  border: 3px solid #8b5a2b;
-  padding: 15px;
-  border-radius: 10px;
-  font-size: 1.8em;
-}
-
-#startBtn {
-  background-color: #ffcc66;
-  color: #4a2e0f;
-  padding: 18px 30px;
-  font-size: 1.5em;
-  border-radius: 12px;
-  border: 3px solid #8b5a2b;
-  cursor: pointer;
-  width: 100%;
-}
-
-/* GAMEAREA SKJULES HELT INDTIL START */
+/* GAMEAREA */
 #gameArea {
-  box-shadow: 0 0 40px rgba(0,0,0,0.4);
   display: none;
   background: #2b2b2b;
-  min-height: 100vh;
-  width: 100%;
   max-width: 500px;
   margin: 0 auto;
+  min-height: 100vh;
   padding-top: 40px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.4);
   position: relative;
-  z-index: 1;
 }
 
 /* PANELER */
 .panel {
-  background-color: #deb887;
+  background: #deb887;
   border: 3px solid #8b5a2b;
-  margin: 20px auto;
-  padding: 18px 15px 20px;
-  width: 90%;
   border-radius: 12px;
+  padding: 20px;
+  width: 90%;
+  margin: 20px auto;
   position: relative;
 }
 
 .panel-title {
-  display: block;
   font-weight: bold;
-  margin-bottom: 6px;
+  display: block;
+  margin-bottom: 8px;
 }
 
-/* UDFORSK-RÆKKE */
-.explore-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  margin-top: 8px;
-  flex-wrap: wrap;
-}
-
-/* KODE-RÆKKE */
-.code-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  margin-top: 8px;
-}
-
-/* SMÅ CIFER-FELTER */
+/* DIGIT FELTER */
 .digit {
   width: 32px;
   height: 40px;
@@ -113,63 +68,63 @@ body {
   padding: 0;
 }
 
-/* GENEREL KNAP */
+/* RÆKKER */
+.explore-row,
+.code-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.plus {
+  font-size: 1.6em;
+  font-weight: bold;
+}
+
+/* KNAPPER */
 button {
-  background-color: #8b5a2b;
+  background: #8b5a2b;
   color: white;
   border: none;
   padding: 10px 16px;
   border-radius: 10px;
   font-size: 1.1em;
-  margin-top: 5px;
+  cursor: pointer;
 }
 
-/* HINT-KNAP – OVERLAPPER UDFORSK-PANELET */
+/* HINT-KNAP */
 #hintBtn {
   position: absolute;
-  top: -10px;
-  right: -10px;
-
-  background-color: #c49a6c;
-  font-size: 1.2em;
-  border-radius: 50%;
+  top: -12px;
+  right: -12px;
   width: 38px;
   height: 38px;
-
+  border-radius: 50%;
+  background: #c49a6c;
+  font-size: 1.2em;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  z-index: 20;
 }
 
-/* DIALOGBOKS */
+/* DIALOG */
 #dialogArea {
-  margin-top: 25px;
-  background-color: #f5deb3;
+  background: #f5deb3;
   border: 3px solid #8b5a2b;
   border-radius: 12px;
-  padding: 25px;
   width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  min-height: 160px;
-  font-size: 1.1em;
+  margin: 25px auto;
+  padding: 25px;
+  min-height: 180px;
+  font-size: 1.2em;
 }
 
 /* NÆSTE-KNAP */
 #nextBtn {
-  background: #8b5a2b;
-  color: white;
-  border: none;
-  padding: 12px 22px;
-  border-radius: 10px;
-  font-size: 1.3em;
-  margin-top: 12px;
-
   opacity: 0.4;
   pointer-events: none;
-  transition: 0.2s ease;
+  transition: 0.2s;
 }
 
 #nextBtn.active {
@@ -178,33 +133,4 @@ button {
   background: #ffcc66;
   color: #4a2e0f;
   box-shadow: 0 0 12px #ffcc66;
-  animation: pulse 1.2s infinite ease-in-out;
-}
-
-@keyframes pulse {
-  0%   { box-shadow: 0 0 6px #ffcc66; }
-  50%  { box-shadow: 0 0 14px #ffdd88; }
-  100% { box-shadow: 0 0 6px #ffcc66; }
-}
-
-/* MOBIL-SPECIFIKT */
-@media (max-width: 600px) {
-  #startContent {
-    padding: 30px 15px;
-  }
-
-  #startBtn {
-    font-size: 1.3em;
-    padding: 15px 20px;
-  }
-
-  .digit {
-    width: 30px;
-    height: 38px;
-    font-size: 1.3em;
-  }
-
-  #dialogArea {
-    padding: 18px;
-  }
 }

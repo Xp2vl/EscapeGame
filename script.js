@@ -1,37 +1,97 @@
 // -----------------------------
-// SPIL-STATE & TIMER
+// START & TIMER
 // -----------------------------
 let gameState = "start";
-
 let startTime = null;
-let endTime = null;
 
 function startGame() {
-  const start = document.getElementById("startScreen");
-  const game = document.getElementById("gameArea");
-
-  start.style.display = "none";
-  game.style.display = "block";
-
+  document.getElementById("startScreen").style.display = "none";
+  document.getElementById("gameArea").style.display = "block";
   startTime = Date.now();
-  console.log("Timer startet");
-}
-
-function stopGameTimer() {
-  endTime = Date.now();
-  const diff = endTime - startTime;
-
-  const seconds = Math.floor(diff / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-
-  return `${minutes} min ${remainingSeconds} sek`;
 }
 
 // -----------------------------
-// DIALOGDATA
+// DIALOGSYSTEM
 // -----------------------------
+let nextAction = null;
 
+function playDialog(lines) {
+  document.getElementById("dialogText").innerText =
+    lines.map(l => l.text).join("\n");
+
+  let index = 0;
+
+  function playNext() {
+    if (index >= lines.length) return;
+    const line = lines[index++];
+    if (line.sound) {
+      const audio = new Audio("assets/lyd/" + line.sound);
+      audio.onended = playNext;
+      audio.play();
+    } else playNext();
+  }
+
+  playNext();
+  document.getElementById("nextBtn").classList.add("active");
+}
+
+function nextDialog() {
+  document.getElementById("nextBtn").classList.remove("active");
+  if (nextAction) {
+    const a = nextAction;
+    nextAction = null;
+    a();
+  }
+}
+
+function flow(steps) {
+  let i = 0;
+  function run() {
+    if (i < steps.length) {
+      const step = steps[i++];
+      step();
+      nextAction = run;
+    }
+  }
+  run();
+}
+
+// -----------------------------
+// INPUT HJÆLPERE
+// -----------------------------
+function get3(prefix) {
+  const d1 = document.getElementById(prefix + "1").value;
+  const d2 = document.getElementById(prefix + "2").value;
+  const d3 = document.getElementById(prefix + "3").value;
+  if (!d1 || !d2 || !d3) return "";
+  return d1 + d2 + d3;
+}
+
+function get4() {
+  const c1 = document.getElementById("code1").value;
+  const c2 = document.getElementById("code2").value;
+  const c3 = document.getElementById("code3").value;
+  const c4 = document.getElementById("code4").value;
+  if (!c1 || !c2 || !c3 || !c4) return "";
+  return c1 + c2 + c3 + c4;
+}
+
+// -----------------------------
+// AUTOFOKUS (B)
+// -----------------------------
+document.addEventListener("input", e => {
+  if (!e.target.classList.contains("digit")) return;
+
+  if (e.target.value.length === 1) {
+    const inputs = [...document.querySelectorAll(".digit")];
+    const index = inputs.indexOf(e.target);
+    if (index < inputs.length - 1) inputs[index + 1].focus();
+  }
+});
+
+// -----------------------------
+// INTERACTIONS
+// -----------------------------
 const interactions = {
   "854+259": {
     dialog: [
@@ -39,7 +99,6 @@ const interactions = {
       { text: "Josephine: Pas lige på med den der!", sound: "Josephine_1.mp3" }
     ]
   },
-
   "418+951": {
     dialog: [
       { text: "Malthe: Tænk at det virkede!", sound: null },
@@ -48,140 +107,16 @@ const interactions = {
   }
 };
 
-const codes = {
-  "5287": {
-    dialog: [
-      { text: "Josephine: Du løste koden!", sound: null },
-      { text: "Malthe: Hvad har du fundet?", sound: null }
-    ]
-  }
-};
-
-// -----------------------------
-// FLOW-MOTOR
-// -----------------------------
-
-let dialogQueue = [];
-let nextAction = null;
-
-// NY VERSION MED LYD I RÆKKEFØLGE
-function playDialog(lines) {
-  dialogQueue = lines;
-
-  const fullText = lines.map(l => l.text).join("\n");
-  document.getElementById("dialogText").innerText = fullText;
-
-  let index = 0;
-
-  function playNextSound() {
-    if (index >= lines.length) return;
-
-    const line = lines[index];
-    index++;
-
-    if (line.sound) {
-      const audio = new Audio("assets/lyd/" + line.sound);
-      audio.onended = playNextSound;
-      audio.play();
-    } else {
-      playNextSound();
-    }
-  }
-
-  playNextSound();
-
-  document.getElementById("nextBtn").classList.add("active");
-}
-
-function nextDialog() {
-  document.getElementById("nextBtn").classList.remove("active");
-
-  if (nextAction) {
-    const action = nextAction;
-    nextAction = null;
-    action();
-  }
-}
-
-// -----------------------------
-// FLOW-FUNKTION
-// -----------------------------
-
-function flow(steps) {
-  let index = 0;
-
-  function runNext() {
-    if (index < steps.length) {
-      const step = steps[index];
-      index++;
-
-      step();
-      nextAction = runNext;
-    } else {
-      nextAction = null;
-      console.log("Flow færdigt");
-    }
-  }
-
-  runNext();
-}
-
-// -----------------------------
-// HJÆLPEFUNKTION: "Tag kort X"
-// -----------------------------
-
-function showCardInstruction(cardNumber) {
-  playDialog([
-    { text: `Tag kort ${cardNumber}`, sound: null }
-  ]);
-}
-
-// -----------------------------
-// HJÆLPEFUNKTIONER TIL INPUT
-// -----------------------------
-
-function getThreeDigitValue(prefix) {
-  const d1 = document.getElementById(prefix + "1").value.trim();
-  const d2 = document.getElementById(prefix + "2").value.trim();
-  const d3 = document.getElementById(prefix + "3").value.trim();
-  if (!d1 || !d2 || !d3) return "";
-  return d1 + d2 + d3;
-}
-
-function getFourDigitCode() {
-  const c1 = document.getElementById("code1").value.trim();
-  const c2 = document.getElementById("code2").value.trim();
-  const c3 = document.getElementById("code3").value.trim();
-  const c4 = document.getElementById("code4").value.trim();
-  if (!c1 || !c2 || !c3 || !c4) return "";
-  return c1 + c2 + c3 + c4;
-}
-
-// -----------------------------
-// UDFORSK
-// -----------------------------
-
 function interact() {
-  const a = getThreeDigitValue("interactA");
-  const b = getThreeDigitValue("interactB");
+  const A = get3("A");
+  const B = get3("B");
 
-  let key1 = "";
-  let key2 = "";
-
-  if (a && b) {
-    key1 = `${a}+${b}`;
-    key2 = `${b}+${a}`;
-  } else if (a) {
-    key1 = a;
-  } else if (b) {
-    key1 = b;
-  }
+  let key1 = A && B ? `${A}+${B}` : A || B;
+  let key2 = A && B ? `${B}+${A}` : "";
 
   const result = interactions[key1] || interactions[key2];
 
   if (!result) {
-    gameState = "wrong_interaction";
-
     flow([
       () => playDialog([
         { text: "Malthe: Hmm… det virkede vist ikke.", sound: null },
@@ -191,38 +126,28 @@ function interact() {
     return;
   }
 
-  if (key1 === "854+259" || key2 === "854+259") {
-    gameState = "after_854_259";
-
-    flow([
-      () => playDialog(result.dialog),
-      () => showCardInstruction(12),
-      () => playDialog([
-        { text: "Malthe: Det kort var vigtigt!", sound: null }
-      ])
-    ]);
-  }
-
-  else if (key1 === "418+951" || key2 === "418+951") {
-    gameState = "after_418_951";
-
-    flow([
-      () => playDialog(result.dialog)
-    ]);
-  }
+  flow([
+    () => playDialog(result.dialog)
+  ]);
 }
 
 // -----------------------------
-// KODE
+// KODE (A)
 // -----------------------------
+const codes = {
+  "5287": {
+    dialog: [
+      { text: "Josephine: Du løste koden!", sound: null },
+      { text: "Malthe: Hvad har du fundet?", sound: null }
+    ]
+  }
+};
 
 function checkCode() {
-  const input = getFourDigitCode();
-  const result = codes[input];
+  const code = get4();
+  const result = codes[code];
 
   if (!result) {
-    gameState = "wrong_code";
-
     flow([
       () => playDialog([
         { text: "Josephine: Den kode passer vist ikke...", sound: null },
@@ -232,94 +157,18 @@ function checkCode() {
     return;
   }
 
-  if (input === "5287") {
-    gameState = "after_code_5287";
-
-    flow([
-      () => playDialog(result.dialog),
-      () => showCardInstruction(5),
-      () => playDialog([
-        { text: "Josephine: Det her bliver spændende!", sound: null }
-      ])
-    ]);
-  }
+  flow([
+    () => playDialog(result.dialog)
+  ]);
 }
 
 // -----------------------------
-// HINT (dynamisk baseret på state)
+// HINT
 // -----------------------------
-
 function showHint() {
-  if (gameState === "start") {
-    flow([
-      () => playDialog([
-        { text: "Malthe: Måske skal du prøve at taste nogle tal?", sound: null }
-      ])
-    ]);
-  }
-
-  else if (gameState === "after_854_259") {
-    flow([
-      () => playDialog([
-        { text: "Josephine: Kort 12 viser noget vigtigt!", sound: null }
-      ])
-    ]);
-  }
-
-  else if (gameState === "after_418_951") {
-    flow([
-      () => playDialog([
-        { text: "Malthe: Noget drejer rundt… måske skal du kigge efter noget rundt?", sound: null }
-      ])
-    ]);
-  }
-
-  else if (gameState === "after_code_5287") {
-    flow([
-      () => playDialog([
-        { text: "Josephine: Koden afslørede noget… måske skal du bruge det nu?", sound: null }
-      ])
-    ]);
-  }
-
-  else if (gameState === "wrong_interaction") {
-    flow([
-      () => playDialog([
-        { text: "Malthe: Det var vist ikke rigtigt… prøv en anden kombination!", sound: null }
-      ])
-    ]);
-  }
-
-  else if (gameState === "wrong_code") {
-    flow([
-      () => playDialog([
-        { text: "Josephine: Koden var forkert… måske står den et sted?", sound: null }
-      ])
-    ]);
-  }
-
-  else {
-    flow([
-      () => playDialog([
-        { text: "Josephine: Jeg er ikke helt sikker… prøv noget andet!", sound: null }
-      ])
-    ]);
-  }
-}
-
-// -----------------------------
-// SLUT-FLOW MED TID
-// -----------------------------
-
-function endGame() {
-  const tid = stopGameTimer();
-
   flow([
     () => playDialog([
-      { text: "Josephine: Du fangede Yetien!", sound: null }
-    ]),
-    () => playDialog([
-      { text: `Malthe: Du brugte ${tid}!`, sound: null }
+      { text: "Malthe: Måske skal du prøve at taste nogle tal?", sound: null }
     ])
   ]);
 }
