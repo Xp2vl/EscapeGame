@@ -52,3 +52,34 @@ button {
   border-radius: 10px;
   padding: 10px;
 }
+
+/* Næste-knap (inaktiv som standard) */
+#nextBtn {
+  background: #8b5a2b;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 1.1em;
+  margin-top: 10px;
+
+  opacity: 0.4;            /* grå og slukket */
+  pointer-events: none;    /* kan ikke trykkes */
+  transition: 0.2s ease;   /* glidende animation */
+}
+
+/* Når knappen er aktiv */
+#nextBtn.active {
+  opacity: 1;
+  pointer-events: auto;
+  background: #ffcc66;
+  color: #4a2e0f;
+  box-shadow: 0 0 12px #ffcc66;
+  animation: pulse 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%   { box-shadow: 0 0 6px #ffcc66; }
+  50%  { box-shadow: 0 0 14px #ffdd88; }
+  100% { box-shadow: 0 0 6px #ffcc66; }
+}
