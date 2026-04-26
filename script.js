@@ -9,6 +9,7 @@ const codes = {
 
 let dialogQueue = [];
 
+// UDFORSK
 function interact() {
   const a = document.getElementById("interactA").value.trim();
   const b = document.getElementById("interactB").value.trim();
@@ -37,4 +38,31 @@ function interact() {
       "Josephine: Prøv en anden kombination!"
     ]);
   }
+}
+
+// KODE
+function checkCode() {
+  const input = document.getElementById("codeInput").value.replace(/\s+/g, "");
+  const result = codes[input];
+  if (result) playDialog(result.dialog);
+  else playDialog(["Josephine: Den kode passer vist ikke...", "Malthe: Prøv igen!"]);
+}
+
+// HINT
+function showHint() {
+  playDialog(["Malthe: Måske skal du kigge under kommoden?", "Josephine: Eller husk symbolerne!"]);
+}
+
+// DIALOGSYSTEM
+function playDialog(lines) {
+  dialogQueue = lines;
+  nextDialog();
+}
+
+function nextDialog() {
+  if (dialogQueue.length === 0) {
+    document.getElementById("dialogText").innerText = "";
+    return;
+  }
+  document.getElementById("dialogText").innerText = dialogQueue.shift();
 }
