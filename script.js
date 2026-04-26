@@ -1,4 +1,10 @@
 // -----------------------------
+// SPIL-STATE (styrer hvor vi er i historien)
+// -----------------------------
+let gameState = "start"; // start-state
+
+
+// -----------------------------
 // DIALOGDATA
 // -----------------------------
 
@@ -33,36 +39,32 @@ const codes = {
 // -----------------------------
 
 let dialogQueue = [];
-let nextAction = null; // hvad der sker, når spilleren trykker "Næste"
+let nextAction = null;
 
 function playDialog(lines) {
   dialogQueue = lines;
 
-  // Saml al tekst i én boks
   const fullText = lines.map(l => l.text).join("\n");
   document.getElementById("dialogText").innerText = fullText;
 
-  // Afspil lyd på første linje (hvis der er en)
   if (lines[0].sound) {
     const audio = new Audio("assets/lyd/" + lines[0].sound);
     audio.play();
   }
 
-  // Aktivér Næste-knappen
   document.getElementById("nextBtn").classList.add("active");
 }
 
 function nextDialog() {
-  // Deaktivér knappen
   document.getElementById("nextBtn").classList.remove("active");
 
-  // Hvis der er sat en handling, udfør den
   if (nextAction) {
     const action = nextAction;
     nextAction = null;
     action();
   }
 }
+
 
 // -----------------------------
 // FLOW-FUNKTION
@@ -76,16 +78,14 @@ function flow(steps) {
       const step = steps[index];
       index++;
 
-      step();              // kør dette step
-      nextAction = runNext; // næste tryk på "Næste" → næste step
+      step();
+      nextAction = runNext;
     } else {
-      // Flow slut
       nextAction = null;
       console.log("Flow færdigt");
     }
   }
 
-  // Start flowet
   runNext();
 }
 
@@ -124,7 +124,8 @@ function interact() {
   const result = interactions[key1] || interactions[key2];
 
   if (!result) {
-    // Forkert kombination – enkelt flow
+    gameState = "wrong_interaction";
+
     flow([
       () => playDialog([
         { text: "Malthe: Hmm… det virkede vist ikke.", sound: null },
@@ -134,9 +135,10 @@ function interact() {
     return;
   }
 
-  // Eksempel på forskelligt flow afhængigt af kombination
+  // Eksempel: 854+259 har et særligt flow
   if (key1 === "854+259" || key2 === "854+259") {
-    // Her har du et flow med kort
+    gameState = "after_854_259";
+
     flow([
       () => playDialog(result.dialog),
       () => showCardInstruction(12),
@@ -144,8 +146,12 @@ function interact() {
         { text: "Malthe: Det kort var vigtigt!", sound: null }
       ])
     ]);
-  } else {
-    // Standard: kun dialog, ingen kort
+  }
+
+  // Eksempel: 418+951 har et andet flow
+  else if (key1 === "418+951" || key2 === "418+951") {
+    gameState = "after_418_951";
+
     flow([
       () => playDialog(result.dialog)
     ]);
@@ -162,6 +168,8 @@ function checkCode() {
   const result = codes[input];
 
   if (!result) {
+    gameState = "wrong_code";
+
     flow([
       () => playDialog([
         { text: "Josephine: Den kode passer vist ikke...", sound: null },
@@ -171,8 +179,9 @@ function checkCode() {
     return;
   }
 
-  // Eksempel: korrekt kode giver dialog + kort + mere dialog
   if (input === "5287") {
+    gameState = "after_code_5287";
+
     flow([
       () => playDialog(result.dialog),
       () => showCardInstruction(5),
@@ -180,24 +189,68 @@ function checkCode() {
         { text: "Josephine: Det her bliver spændende!", sound: null }
       ])
     ]);
-  } else {
-    // fallback hvis du senere tilføjer flere koder
-    flow([
-      () => playDialog(result.dialog)
-    ]);
   }
 }
 
 
 // -----------------------------
-// HINT
+// HINT (dynamisk baseret på state)
 // -----------------------------
 
 function showHint() {
-  flow([
-    () => playDialog([
-      { text: "Malthe: Måske skal du kigge under kommoden?", sound: null },
-      { text: "Josephine: Eller husk symbolerne!", sound: null }
-    ])
-  ]);
+  if (gameState === "start") {
+    flow([
+      () => playDialog([
+        { text: "Malthe: Måske skal du prøve at taste nogle tal?", sound: null }
+      ])
+    ]);
+  }
+
+  else if (gameState === "after_854_259") {
+    flow([
+      () => playDialog([
+        { text: "Josephine: Kort 12 viser noget vigtigt!", sound: null }
+      ])
+    ]);
+  }
+
+  else if (gameState === "after_418_951") {
+    flow([
+      () => playDialog([
+        { text: "Malthe: Noget drejer rundt… måske skal du kigge efter noget rundt?", sound: null }
+      ])
+    ]);
+  }
+
+  else if (gameState === "after_code_5287") {
+    flow([
+      () => playDialog([
+        { text: "Josephine: Koden afslørede noget… måske skal du bruge det nu?", sound: null }
+      ])
+    ]);
+  }
+
+  else if (gameState === "wrong_interaction") {
+    flow([
+      () => playDialog([
+        { text: "Malthe: Det var vist ikke rigtigt… prøv en anden kombination!", sound: null }
+      ])
+    ]);
+  }
+
+  else if (gameState === "wrong_code") {
+    flow([
+      () => playDialog([
+        { text: "Josephine: Koden var forkert… måske står den et sted?", sound: null }
+      ])
+    ]);
+  }
+
+  else {
+    flow([
+      () => playDialog([
+        { text: "Josephine: Jeg er ikke helt sikker… prøv noget andet!", sound: null }
+      ])
+    ]);
+  }
 }
