@@ -1,7 +1,32 @@
 // -----------------------------
-// SPIL-STATE (styrer hvor vi er i historien)
+// SPIL-STATE & TIMER
 // -----------------------------
-let gameState = "start"; // start-state
+let gameState = "start";
+
+let startTime = null;
+let endTime = null;
+
+function startGame() {
+  // Skjul startskærm
+  document.getElementById("startScreen").style.display = "none";
+  // Vis spillet
+  document.getElementById("gameArea").style.display = "block";
+
+  // Start timer
+  startTime = Date.now();
+  console.log("Timer startet");
+}
+
+function stopGameTimer() {
+  endTime = Date.now();
+  const diff = endTime - startTime;
+
+  const seconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+
+  return `${minutes} min ${remainingSeconds} sek`;
+}
 
 
 // -----------------------------
@@ -135,7 +160,6 @@ function interact() {
     return;
   }
 
-  // Eksempel: 854+259 har et særligt flow
   if (key1 === "854+259" || key2 === "854+259") {
     gameState = "after_854_259";
 
@@ -148,7 +172,6 @@ function interact() {
     ]);
   }
 
-  // Eksempel: 418+951 har et andet flow
   else if (key1 === "418+951" || key2 === "418+951") {
     gameState = "after_418_951";
 
@@ -253,4 +276,23 @@ function showHint() {
       ])
     ]);
   }
+}
+
+
+// -----------------------------
+// EKSEMPEL PÅ SLUT-FLOW MED TID
+// (kald denne funktion når du synes spillet er færdigt)
+// -----------------------------
+
+function endGame() {
+  const tid = stopGameTimer();
+
+  flow([
+    () => playDialog([
+      { text: "Josephine: Du fangede Yetien!", sound: null }
+    ]),
+    () => playDialog([
+      { text: `Malthe: Du brugte ${tid}!`, sound: null }
+    ])
+  ]);
 }
