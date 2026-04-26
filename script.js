@@ -1,3 +1,7 @@
+const key = `${a}+${b}`;
+const altKey = `${b}+${a}`;
+const result = interactions[key] || interactions[altKey];
+
 const interactions = {
   "854+259": { dialog: ["Malthe: Feeedt!", "Josephine: Pas lige på med den der!"] },
   "418+951": { dialog: ["Malthe: Tænk at det virkede!", "Josephine: Bare det kan dreje rundt!"] }
@@ -10,10 +14,18 @@ const codes = {
 let dialogQueue = [];
 
 function interact() {
-  const a = document.getElementById("interactA").value.replace(/\s+/g, "");
-  const b = document.getElementById("interactB").value.replace(/\s+/g, "");
+  const a = document.getElementById("interactA").value.trim();
+  const b = document.getElementById("interactB").value.trim();
 
-  const key = a && b ? `${a}+${b}` : a;
+  // Hvis begge felter er udfyldt → kombination
+  let key = "";
+  if (a && b) {
+    key = `${a}+${b}`;
+  } else if (a) {
+    key = a;
+  } else if (b) {
+    key = b;
+  }
 
   const result = interactions[key];
 
@@ -26,6 +38,7 @@ function interact() {
     ]);
   }
 }
+
 
 function checkCode() {
   const input = document.getElementById("codeInput").value.replace(/\s+/g, "");
