@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fang Yetien!</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Fang Yetien!</h1>
+
+  <div class="panel">
+    <label>Udforsk</label>
+    <input id="interactInput" placeholder="fx 854 + 259">
+    <button onclick="interact()">OK</button>
+  </div>
+
+  <div class="panel">
+    <label>Kode</label>
+    <input id="codeInput" placeholder="fx 5287">
+    <button onclick="checkCode()">OK</button>
+  </div>
+
+  <button id="hintBtn" onclick="showHint()">?</button>
+
+  <div id="dialogArea">
+    <p id="dialogText"></p>
+    <button id="nextBtn" onclick="nextDialog()">Næste</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
