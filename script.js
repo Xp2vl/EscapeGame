@@ -110,12 +110,16 @@ document.addEventListener("input", e => {
 });
 
 // AUTO-CLEAR når man klikker i feltet
-document.addEventListener("focusin", e => {
+document.addEventListener("mousedown", e => {
   if (e.target.classList.contains("digit")) {
     e.target.value = "";
     e.target.classList.remove("filled");
+
+    // Sørger for at feltet får fokus EFTER clear
+    setTimeout(() => e.target.focus(), 0);
   }
 });
+
 
 // -----------------------------
 // INTERACTIONS
