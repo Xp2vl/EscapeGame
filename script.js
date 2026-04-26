@@ -1,10 +1,21 @@
 const interactions = {
-  "854+259": { dialog: ["Malthe: Feeedt!", "Josephine: Pas lige på med den der!"] },
-  "418+951": { dialog: ["Malthe: Tænk at det virkede!", "Josephine: Bare det kan dreje rundt!"] }
+  "854+259": 
+  { dialog: [
+  { text: "Malthe: Feeedt!", sound: "malthe_1.mp3" },
+  { text: "Josephine: Pas lige på med den der!", sound: "josefine_1.mp3" }
+] },
+  "418+951": 
+  { dialog: [
+    { text: "Malthe: Tænk at det virkede!", sound: null },
+    { text: "Josephine: Bare det kan dreje rundt!", sound: null }
+  ] }
 };
 
 const codes = {
-  "5287": { dialog: ["Josephine: Du løste koden!", "Malthe: Hvad har du fundet?"] }
+  "5287": { dialog: [
+    { text: "Josephine: Du løste koden!", sound: null },
+    { text: "Malthe: Hvad har du fundet?", sound: null }
+  ] }
 };
 
 let dialogQueue = [];
@@ -34,9 +45,9 @@ function interact() {
     playDialog(result.dialog);
   } else {
     playDialog([
-      "Malthe: Hmm… det virkede vist ikke.",
-      "Josephine: Prøv en anden kombination!"
-    ]);
+  { text: "Malthe: Hmm… det virkede vist ikke.", sound: null },
+  { text: "Josephine: Prøv en anden kombination!", sound: null }
+  ]);
   }
 }
 
@@ -45,12 +56,19 @@ function checkCode() {
   const input = document.getElementById("codeInput").value.replace(/\s+/g, "");
   const result = codes[input];
   if (result) playDialog(result.dialog);
-  else playDialog(["Josephine: Den kode passer vist ikke...", "Malthe: Prøv igen!"]);
+  else playDialog([
+  { text: "Josephine: Den kode passer vist ikke...", sound: null },
+  { text: "Malthe: Prøv igen!", sound: null }
+]);
+
 }
 
 // HINT
 function showHint() {
-  playDialog(["Malthe: Måske skal du kigge under kommoden?", "Josephine: Eller husk symbolerne!"]);
+ playDialog([
+  { text: "Malthe: Måske skal du kigge under kommoden?", sound: null },
+  { text: "Josephine: Eller husk symbolerne!", sound: null }
+]);
 }
 
 // DIALOGSYSTEM
@@ -64,5 +82,15 @@ function nextDialog() {
     document.getElementById("dialogText").innerText = "";
     return;
   }
-  document.getElementById("dialogText").innerText = dialogQueue.shift();
+
+  const line = dialogQueue.shift(); // ← nu får vi et objekt
+
+  // Vis tekst
+  document.getElementById("dialogText").innerText = line.text;
+
+  // Afspil lyd
+  if (line.sound) {
+    const audio = new Audio("assets/lyd/" + line.sound);
+    audio.play();
+  }
 }
