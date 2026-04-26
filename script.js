@@ -77,20 +77,45 @@ function get4() {
 }
 
 // -----------------------------
-// AUTOFOKUS (B)
+// AUTOFOKUS, BACKSPACE & AUTO-CLEAR
 // -----------------------------
-document.addEventListener("keyup", e => {
+document.addEventListener("keydown", e => {
   if (!e.target.classList.contains("digit")) return;
 
+  const inputs = [...document.querySelectorAll(".digit")];
+  const index = inputs.indexOf(e.target);
+
+  // BACKSPACE → hop tilbage
+  if (e.key === "Backspace" && e.target.value === "") {
+    if (index > 0) inputs[index - 1].focus();
+    return;
+  }
+});
+
+document.addEventListener("input", e => {
+  if (!e.target.classList.contains("digit")) return;
+
+  const inputs = [...document.querySelectorAll(".digit")];
+  const index = inputs.indexOf(e.target);
+
+  // Markér felt som udfyldt
   if (e.target.value.length === 1) {
-    const inputs = [...document.querySelectorAll(".digit")];
-    const index = inputs.indexOf(e.target);
+    e.target.classList.add("filled");
+
+    // Hop videre
     if (index < inputs.length - 1) {
       inputs[index + 1].focus();
     }
   }
 });
 
+// AUTO-CLEAR når man klikker i feltet
+document.addEventListener("focusin", e => {
+  if (e.target.classList.contains("digit")) {
+    e.target.value = "";
+    e.target.classList.remove("filled");
+  }
+});
 
 // -----------------------------
 // INTERACTIONS

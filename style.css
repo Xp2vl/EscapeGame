@@ -110,15 +110,19 @@ button {
 
 /* DIALOG */
 #dialogArea {
-  background: #f5deb3;
+  margin-top: 25px;
+  background-color: #f5deb3;
   border: 3px solid #8b5a2b;
   border-radius: 12px;
+  padding: 30px;
   width: 90%;
-  margin: 25px auto;
-  padding: 25px;
-  min-height: 180px;
-  font-size: 1.2em;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 200px;
+  font-size: 1.25em;
+  line-height: 1.4;
 }
+
 
 /* NÆSTE-KNAP */
 #nextBtn {
@@ -133,4 +137,27 @@ button {
   background: #ffcc66;
   color: #4a2e0f;
   box-shadow: 0 0 12px #ffcc66;
+}
+
+/* SMÅ ANIMATIONER */
+.digit {
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.digit:focus {
+  outline: none;
+  background: #ffe9b6;
+  transform: scale(1.08);
+}
+
+.digit.filled {
+  background: #fff3d1;
+}
+
+/* PLUS-TEGN */
+.plus {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #4a2e0f;
+  margin: 0 8px;
 }
