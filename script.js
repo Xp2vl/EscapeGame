@@ -29,11 +29,11 @@ const codes = {
 
 
 // -----------------------------
-// FLOW-MOTOR (du styrer alt)
+// FLOW-MOTOR
 // -----------------------------
 
 let dialogQueue = [];
-let nextAction = null; // ← DU bestemmer hvad der sker når spilleren trykker Næste
+let nextAction = null; // hvad der sker, når spilleren trykker "Næste"
 
 function playDialog(lines) {
   dialogQueue = lines;
@@ -42,7 +42,7 @@ function playDialog(lines) {
   const fullText = lines.map(l => l.text).join("\n");
   document.getElementById("dialogText").innerText = fullText;
 
-  // Afspil lyd på første linje
+  // Afspil lyd på første linje (hvis der er en)
   if (lines[0].sound) {
     const audio = new Audio("assets/lyd/" + lines[0].sound);
     audio.play();
@@ -56,12 +56,37 @@ function nextDialog() {
   // Deaktivér knappen
   document.getElementById("nextBtn").classList.remove("active");
 
-  // Hvis du har sat en handling → udfør den
+  // Hvis der er sat en handling, udfør den
   if (nextAction) {
     const action = nextAction;
     nextAction = null;
     action();
   }
+}
+
+// -----------------------------
+// FLOW-FUNKTION
+// -----------------------------
+
+function flow(steps) {
+  let index = 0;
+
+  function runNext() {
+    if (index < steps.length) {
+      const step = steps[index];
+      index++;
+
+      step();              // kør dette step
+      nextAction = runNext; // næste tryk på "Næste" → næste step
+    } else {
+      // Flow slut
+      nextAction = null;
+      console.log("Flow færdigt");
+    }
+  }
+
+  // Start flowet
+  runNext();
 }
 
 
@@ -98,24 +123,32 @@ function interact() {
 
   const result = interactions[key1] || interactions[key2];
 
-  if (result) {
-    // Vis dialogen
-    playDialog(result.dialog);
-
-    // Her bestemmer DU hvad der skal ske bagefter
-    nextAction = () => {
-      console.log("Udforsk-flow færdigt — klar til næste input");
-    };
-
-  } else {
-    playDialog([
-      { text: "Malthe: Hmm… det virkede vist ikke.", sound: null },
-      { text: "Josephine: Prøv en anden kombination!", sound: null }
+  if (!result) {
+    // Forkert kombination – enkelt flow
+    flow([
+      () => playDialog([
+        { text: "Malthe: Hmm… det virkede vist ikke.", sound: null },
+        { text: "Josephine: Prøv en anden kombination!", sound: null }
+      ])
     ]);
+    return;
+  }
 
-    nextAction = () => {
-      console.log("Forkert kombination — klar igen");
-    };
+  // Eksempel på forskelligt flow afhængigt af kombination
+  if (key1 === "854+259" || key2 === "854+259") {
+    // Her har du et flow med kort
+    flow([
+      () => playDialog(result.dialog),
+      () => showCardInstruction(12),
+      () => playDialog([
+        { text: "Malthe: Det kort var vigtigt!", sound: null }
+      ])
+    ]);
+  } else {
+    // Standard: kun dialog, ingen kort
+    flow([
+      () => playDialog(result.dialog)
+    ]);
   }
 }
 
@@ -128,22 +161,30 @@ function checkCode() {
   const input = document.getElementById("codeInput").value.replace(/\s+/g, "");
   const result = codes[input];
 
-  if (result) {
-    playDialog(result.dialog);
-
-    nextAction = () => {
-      console.log("Kode-flow færdigt — klar til næste input");
-    };
-
-  } else {
-    playDialog([
-      { text: "Josephine: Den kode passer vist ikke...", sound: null },
-      { text: "Malthe: Prøv igen!", sound: null }
+  if (!result) {
+    flow([
+      () => playDialog([
+        { text: "Josephine: Den kode passer vist ikke...", sound: null },
+        { text: "Malthe: Prøv igen!", sound: null }
+      ])
     ]);
+    return;
+  }
 
-    nextAction = () => {
-      console.log("Forkert kode — klar igen");
-    };
+  // Eksempel: korrekt kode giver dialog + kort + mere dialog
+  if (input === "5287") {
+    flow([
+      () => playDialog(result.dialog),
+      () => showCardInstruction(5),
+      () => playDialog([
+        { text: "Josephine: Det her bliver spændende!", sound: null }
+      ])
+    ]);
+  } else {
+    // fallback hvis du senere tilføjer flere koder
+    flow([
+      () => playDialog(result.dialog)
+    ]);
   }
 }
 
@@ -153,12 +194,10 @@ function checkCode() {
 // -----------------------------
 
 function showHint() {
-  playDialog([
-    { text: "Malthe: Måske skal du kigge under kommoden?", sound: null },
-    { text: "Josephine: Eller husk symbolerne!", sound: null }
+  flow([
+    () => playDialog([
+      { text: "Malthe: Måske skal du kigge under kommoden?", sound: null },
+      { text: "Josephine: Eller husk symbolerne!", sound: null }
+    ])
   ]);
-
-  nextAction = () => {
-    console.log("Hint læst — klar igen");
-  };
 }
