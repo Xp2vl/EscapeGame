@@ -143,6 +143,9 @@ button {
   opacity: 0.4;
   pointer-events: none;
   transition: 0.2s;
+  padding: 10px 16px;   /* samme som OK */
+  font-size: 1.1em !important;
+  border-radius: 10px;  /* samme som OK */
 }
 
 #nextBtn.active {
@@ -155,6 +158,11 @@ button {
 
 /* MOBIL — KOMPAKT MODE */
 @media (max-width: 390px) {
+  
+  #nextBtn {
+    padding: 6px 8px;
+    font-size: 0.85em !important;
+  }
 
   .explore-row,
   .code-row {
@@ -183,7 +191,12 @@ button {
 
 /* ULTRA-KOMPAKT MODE */
 @media (max-width: 350px) {
-
+  
+  #nextBtn {
+    padding: 5px 7px;
+    font-size: 0.75em !important;
+  }
+  
   .explore-row,
   .code-row {
     gap: 3px;
