@@ -16,7 +16,7 @@ html {
 #startScreen {
   position: fixed;
   inset: 0;
-  background: rgba(222, 184, 135, 0.95);
+  background: rgba(43, 43, 43, 0.95);
   display: flex;
   justify-content: center;
   align-items: center;
