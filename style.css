@@ -167,10 +167,9 @@ button {
   width: 100%;
   display: flex;
   justify-content: center;
-  overflow: hidden;
 }
 
 .explore-row {
   transform-origin: center;
-  transition: transform 0.15s ease;
+  transition: zoom 0.15s ease;
 }

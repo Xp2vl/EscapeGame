@@ -214,15 +214,13 @@ function scaleExploreRow() {
   const wrapperWidth = wrapper.offsetWidth;
   const rowWidth = row.scrollWidth;
 
-  // Hvis rækken er bredere end skærmen → skaler ned
   if (rowWidth > wrapperWidth) {
     const scale = wrapperWidth / rowWidth;
-    row.style.transform = `scale(${scale})`;
+    row.style.zoom = scale;
   } else {
-    row.style.transform = "scale(1)";
+    row.style.zoom = 1;
   }
 }
 
-// Kør ved load og ved resize
 window.addEventListener("load", scaleExploreRow);
 window.addEventListener("resize", scaleExploreRow);
