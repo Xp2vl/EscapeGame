@@ -79,15 +79,18 @@ function get4() {
 // -----------------------------
 // AUTOFOKUS (B)
 // -----------------------------
-document.addEventListener("input", e => {
+document.addEventListener("keyup", e => {
   if (!e.target.classList.contains("digit")) return;
 
   if (e.target.value.length === 1) {
     const inputs = [...document.querySelectorAll(".digit")];
     const index = inputs.indexOf(e.target);
-    if (index < inputs.length - 1) inputs[index + 1].focus();
+    if (index < inputs.length - 1) {
+      inputs[index + 1].focus();
+    }
   }
 });
+
 
 // -----------------------------
 // INTERACTIONS
