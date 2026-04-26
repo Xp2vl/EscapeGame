@@ -7,38 +7,57 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- STARTSKÆRM (FULD SKÆRM) -->
-<div id="startScreen">
-  <div id="startContent">
-    <h1>Fang Yetien!</h1>
-    <button id="startBtn" onclick="startGame()">Start spil</button>
-  </div>
-</div>
-
-<!-- SPILLET -->
-<div id="gameArea">
-
-  <div class="panel">
-    <label>Udforsk</label>
-    <input id="interactA" placeholder="fx854">
-    <input id="interactB" placeholder="fx259">
-    <button onclick="interact()">OK</button>
+  <!-- STARTSKÆRM (FULD SKÆRM) -->
+  <div id="startScreen">
+    <div id="startContent">
+      <h1>Fang Yetien!</h1>
+      <button id="startBtn" onclick="startGame()">Start spil</button>
+    </div>
   </div>
 
-  <div class="panel">
-    <label>Kode</label>
-    <input id="codeInput" placeholder="5287">
-    <button onclick="checkCode()">OK</button>
+  <!-- SPILLET -->
+  <div id="gameArea">
+
+    <!-- UDFORSK -->
+    <div class="panel panel-udforsk">
+      <label class="panel-title">Udforsk</label>
+      <div class="explore-row">
+        <!-- Første 3 cifre (A) -->
+        <input class="digit" id="interactA1" maxlength="1" inputmode="numeric">
+        <input class="digit" id="interactA2" maxlength="1" inputmode="numeric">
+        <input class="digit" id="interactA3" maxlength="1" inputmode="numeric">
+
+        <!-- Anden 3 cifre (B) -->
+        <input class="digit" id="interactB1" maxlength="1" inputmode="numeric">
+        <input class="digit" id="interactB2" maxlength="1" inputmode="numeric">
+        <input class="digit" id="interactB3" maxlength="1" inputmode="numeric">
+
+        <button onclick="interact()">OK</button>
+      </div>
+
+      <!-- Hint-knap der overlapper panelet -->
+      <button id="hintBtn" onclick="showHint()">?</button>
+    </div>
+
+    <!-- KODE -->
+    <div class="panel">
+      <label class="panel-title">Kode</label>
+      <div class="code-row">
+        <input class="digit" id="code1" maxlength="1" inputmode="numeric">
+        <input class="digit" id="code2" maxlength="1" inputmode="numeric">
+        <input class="digit" id="code3" maxlength="1" inputmode="numeric">
+        <input class="digit" id="code4" maxlength="1" inputmode="numeric">
+        <button onclick="checkCode()">OK</button>
+      </div>
+    </div>
+
+    <!-- DIALOG -->
+    <div id="dialogArea">
+      <p id="dialogText"></p>
+      <button id="nextBtn" onclick="nextDialog()">Næste</button>
+    </div>
+
   </div>
-
-  <button id="hintBtn" onclick="showHint()">?</button>
-
-  <div id="dialogArea">
-    <p id="dialogText"></p>
-    <button id="nextBtn" onclick="nextDialog()">Næste</button>
-  </div>
-
-</div>
 
   <script src="script.js"></script>
 </body>

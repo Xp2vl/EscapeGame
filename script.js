@@ -7,12 +7,11 @@ let startTime = null;
 let endTime = null;
 
 function startGame() {
-  document.getElementById("startScreen").style.display = "none";
-
+  const start = document.getElementById("startScreen");
   const game = document.getElementById("gameArea");
+
+  start.style.display = "none";
   game.style.display = "block";
-  game.style.position = "fixed";   // vigtigt
-  game.style.inset = "0";          // vigtigt
 
   startTime = Date.now();
   console.log("Timer startet");
@@ -28,7 +27,6 @@ function stopGameTimer() {
 
   return `${minutes} min ${remainingSeconds} sek`;
 }
-
 
 // -----------------------------
 // DIALOGDATA
@@ -59,7 +57,6 @@ const codes = {
   }
 };
 
-
 // -----------------------------
 // FLOW-MOTOR
 // -----------------------------
@@ -67,15 +64,13 @@ const codes = {
 let dialogQueue = [];
 let nextAction = null;
 
-// ⭐ NY VERSION MED LYD I RÆKKEFØLGE ⭐
+// NY VERSION MED LYD I RÆKKEFØLGE
 function playDialog(lines) {
   dialogQueue = lines;
 
-  // Vis hele teksten
   const fullText = lines.map(l => l.text).join("\n");
   document.getElementById("dialogText").innerText = fullText;
 
-  // Spil lydfiler i rækkefølge
   let index = 0;
 
   function playNextSound() {
@@ -95,7 +90,6 @@ function playDialog(lines) {
 
   playNextSound();
 
-  // Aktivér næste-knappen
   document.getElementById("nextBtn").classList.add("active");
 }
 
@@ -108,7 +102,6 @@ function nextDialog() {
     action();
   }
 }
-
 
 // -----------------------------
 // FLOW-FUNKTION
@@ -133,7 +126,6 @@ function flow(steps) {
   runNext();
 }
 
-
 // -----------------------------
 // HJÆLPEFUNKTION: "Tag kort X"
 // -----------------------------
@@ -144,14 +136,34 @@ function showCardInstruction(cardNumber) {
   ]);
 }
 
+// -----------------------------
+// HJÆLPEFUNKTIONER TIL INPUT
+// -----------------------------
+
+function getThreeDigitValue(prefix) {
+  const d1 = document.getElementById(prefix + "1").value.trim();
+  const d2 = document.getElementById(prefix + "2").value.trim();
+  const d3 = document.getElementById(prefix + "3").value.trim();
+  if (!d1 || !d2 || !d3) return "";
+  return d1 + d2 + d3;
+}
+
+function getFourDigitCode() {
+  const c1 = document.getElementById("code1").value.trim();
+  const c2 = document.getElementById("code2").value.trim();
+  const c3 = document.getElementById("code3").value.trim();
+  const c4 = document.getElementById("code4").value.trim();
+  if (!c1 || !c2 || !c3 || !c4) return "";
+  return c1 + c2 + c3 + c4;
+}
 
 // -----------------------------
 // UDFORSK
 // -----------------------------
 
 function interact() {
-  const a = document.getElementById("interactA").value.trim();
-  const b = document.getElementById("interactB").value.trim();
+  const a = getThreeDigitValue("interactA");
+  const b = getThreeDigitValue("interactB");
 
   let key1 = "";
   let key2 = "";
@@ -200,13 +212,12 @@ function interact() {
   }
 }
 
-
 // -----------------------------
 // KODE
 // -----------------------------
 
 function checkCode() {
-  const input = document.getElementById("codeInput").value.replace(/\s+/g, "");
+  const input = getFourDigitCode();
   const result = codes[input];
 
   if (!result) {
@@ -233,7 +244,6 @@ function checkCode() {
     ]);
   }
 }
-
 
 // -----------------------------
 // HINT (dynamisk baseret på state)
@@ -296,7 +306,6 @@ function showHint() {
     ]);
   }
 }
-
 
 // -----------------------------
 // SLUT-FLOW MED TID
