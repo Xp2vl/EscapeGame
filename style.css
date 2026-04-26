@@ -1,13 +1,15 @@
 /* GENERELT */
 body {
-  background: url('assets/ikoner/traevaeg.jpg');
-  background-size: cover;
-  background-position: center;
+  background: #2b2b2b;
   font-family: 'Comic Sans MS', sans-serif;
   color: #3b2a1a;
   text-align: center;
   margin: 0;
   padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+}
+
+html {
+  background: #2b2b2b;
 }
 
 /* FULD-SKÆRM STARTSKÆRM — VIRKER PÅ ALLE MOBILER */
@@ -52,6 +54,7 @@ body {
 
 /* GAMEAREA SKJULES HELT INDTIL START */
 #gameArea {
+  box-shadow: 0 0 40px rgba(0,0,0,0.4);
   display: none;
   background: #2b2b2b;
   min-height: 100vh;
@@ -62,15 +65,6 @@ body {
   position: relative;
   z-index: 1;
 }
-
-/* COMPUTER-VERSION */
-@media (min-width: 800px) {
-  #gameArea {
-    max-width: 800px;
-  }
-}
-
-
 
 /* PANELER */
 .panel {
@@ -108,10 +102,10 @@ button {
   right: 10px;
 
   background-color: #c49a6c;
-  font-size: 1.6em; /* mindre */
+  font-size: 1.4em;
   border-radius: 50%;
-  width: 48px;      /* mindre */
-  height: 48px;     /* mindre */
+  width: 42px;
+  height: 42px;
 
   display: flex;
   justify-content: center;
@@ -119,9 +113,6 @@ button {
 
   z-index: 10;
 }
-
-
-
 
 /* DIALOGBOKS */
 #dialogArea {
