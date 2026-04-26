@@ -53,15 +53,24 @@ body {
 /* GAMEAREA SKJULES HELT INDTIL START */
 #gameArea {
   display: none;
-  background: #2b2b2b; /* mørkegrå */
+  background: #2b2b2b;
   min-height: 100vh;
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
-  padding-top: 70px; /* så hint-knappen ikke overlapper */
+  padding-top: 70px;
   position: relative;
   z-index: 1;
 }
+
+/* COMPUTER-VERSION */
+@media (min-width: 800px) {
+  #gameArea {
+    max-width: 800px;
+  }
+}
+
+
 
 /* PANELER */
 .panel {
@@ -99,10 +108,10 @@ button {
   right: 10px;
 
   background-color: #c49a6c;
-  font-size: 2em;
+  font-size: 1.6em; /* mindre */
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 48px;      /* mindre */
+  height: 48px;     /* mindre */
 
   display: flex;
   justify-content: center;
@@ -110,6 +119,7 @@ button {
 
   z-index: 10;
 }
+
 
 
 
