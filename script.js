@@ -201,3 +201,28 @@ function showHint() {
     ])
   ]);
 }
+
+// -----------------------------
+// AUTOMATISK SKALERING AF EXPLORE-RÆKKEN
+// -----------------------------
+function scaleExploreRow() {
+  const wrapper = document.querySelector(".explore-row-wrapper");
+  const row = document.querySelector(".explore-row");
+
+  if (!wrapper || !row) return;
+
+  const wrapperWidth = wrapper.offsetWidth;
+  const rowWidth = row.scrollWidth;
+
+  // Hvis rækken er bredere end skærmen → skaler ned
+  if (rowWidth > wrapperWidth) {
+    const scale = wrapperWidth / rowWidth;
+    row.style.transform = `scale(${scale})`;
+  } else {
+    row.style.transform = "scale(1)";
+  }
+}
+
+// Kør ved load og ved resize
+window.addEventListener("load", scaleExploreRow);
+window.addEventListener("resize", scaleExploreRow);

@@ -161,3 +161,16 @@ button {
   color: #4a2e0f;
   margin: 0 8px;
 }
+
+/* AUTOMATISK SKALERING AF EXPLORE-RÆKKEN */
+.explore-row-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.explore-row {
+  transform-origin: center;
+  transition: transform 0.15s ease;
+}
