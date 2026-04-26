@@ -162,14 +162,28 @@ button {
   margin: 0 8px;
 }
 
-/* AUTOMATISK SKALERING AF EXPLORE-RÆKKEN */
-.explore-row-wrapper {
-  width: 100%;
+.explore-row {
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 6px;
+  max-width: 100%;
 }
 
-.explore-row {
-  transform-origin: center;
-  transition: zoom 0.15s ease;
+@media (max-width: 380px) {
+  .digit {
+    width: 28px;
+    height: 36px;
+    font-size: 1.1em;
+  }
+
+  .plus {
+    font-size: 1.4em;
+    margin: 0 4px;
+  }
+
+  .explore-row button {
+    padding: 6px 10px;
+    font-size: 0.9em;
+  }
 }

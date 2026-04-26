@@ -201,26 +201,3 @@ function showHint() {
     ])
   ]);
 }
-
-// -----------------------------
-// AUTOMATISK SKALERING AF EXPLORE-RÆKKEN
-// -----------------------------
-function scaleExploreRow() {
-  const wrapper = document.querySelector(".explore-row-wrapper");
-  const row = document.querySelector(".explore-row");
-
-  if (!wrapper || !row) return;
-
-  const wrapperWidth = wrapper.offsetWidth;
-  const rowWidth = row.scrollWidth;
-
-  if (rowWidth > wrapperWidth) {
-    const scale = wrapperWidth / rowWidth;
-    row.style.zoom = scale;
-  } else {
-    row.style.zoom = 1;
-  }
-}
-
-window.addEventListener("load", scaleExploreRow);
-window.addEventListener("resize", scaleExploreRow);
