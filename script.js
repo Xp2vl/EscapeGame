@@ -1,7 +1,3 @@
-const key = `${a}+${b}`;
-const altKey = `${b}+${a}`;
-const result = interactions[key] || interactions[altKey];
-
 const interactions = {
   "854+259": { dialog: ["Malthe: Feeedt!", "Josephine: Pas lige på med den der!"] },
   "418+951": { dialog: ["Malthe: Tænk at det virkede!", "Josephine: Bare det kan dreje rundt!"] }
@@ -17,15 +13,29 @@ function interact() {
   const a = document.getElementById("interactA").value.trim();
   const b = document.getElementById("interactB").value.trim();
 
-  // Hvis begge felter er udfyldt → kombination
   let key = "";
+  let altKey = "";
+
   if (a && b) {
     key = `${a}+${b}`;
+    altKey = `${b}+${a}`;
   } else if (a) {
     key = a;
   } else if (b) {
     key = b;
   }
+
+  const result = interactions[key] || interactions[altKey];
+
+  if (result) {
+    playDialog(result.dialog);
+  } else {
+    playDialog([
+      "Malthe: Hmm… det virkede vist ikke.",
+      "Josephine: Prøv en anden kombination!"
+    ]);
+  }
+}
 
   const result = interactions[key];
 
