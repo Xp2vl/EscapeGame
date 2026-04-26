@@ -42,11 +42,12 @@ html, body {
 
 /* PANELER */
 .panel {
+  width: 100%;
+  box-sizing: border-box; /* vigtig! */
+  padding: 16px;
   background: #deb887;
   border: 3px solid #8b5a2b;
   border-radius: 12px;
-  padding: 20px;
-  width: 90%;
   margin: 20px auto;
   position: relative;
 }
@@ -171,6 +172,9 @@ button {
 }
 
 @media (max-width: 380px) {
+  .panel {
+    padding: 12px;
+  }
   .digit {
     width: 28px;
     height: 36px;
