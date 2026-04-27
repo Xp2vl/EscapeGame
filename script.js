@@ -220,6 +220,45 @@ function getNextNerfReaction() {
   return reaction;
 }
 
+function playErrorDialog(lines) {
+  dialogActive = true;
+  let i = 0;
+
+  const dialogArea = document.getElementById("dialogArea");
+
+  dialogArea.style.display = "block"; // vis dialogen
+
+  function showLine() {
+    const line = lines[i];
+    dialogText.textContent = line.text;
+
+    if (line.sound) {
+      const audio = new Audio("assets/lyd/" + line.sound);
+      audio.onended = () => {
+        i++;
+        if (i < lines.length) showLine();
+        else endErrorDialog();
+      };
+      audio.play();
+    } else {
+      i++;
+      if (i < lines.length) showLine();
+      else endErrorDialog();
+    }
+  }
+
+  function endErrorDialog() {
+    dialogActive = false;
+    nextBtn.classList.add("active");
+    nextBtn.onclick = () => {
+      nextBtn.classList.remove("active");
+      dialogArea.style.display = "none"; // LUK dialogen uden nextStep()
+    };
+  }
+
+  showLine();
+}
+
 
 // ---------------------------------------------------------
 // 11) HYBRID-LOGIK FOR UDFORSK
@@ -259,12 +298,11 @@ if (
 }
 
   // ⭐ 4) FEJL-REAKTION
-  playDialog([
-    { text: "Malthe: Hmm… det virkede vist ikke.", sound: null },
-    { text: "Josephine: Prøv en anden kombination!", sound: null }
-  ]);
+playErrorDialog([
+  { text: "Malthe: Hmm… det virkede vist ikke.", sound: null },
+  { text: "Josephine: Prøv en anden kombination!", sound: null }
+]);
 }
-
 
 // ---------------------------------------------------------
 // 12) HYBRID-LOGIK FOR KODE
@@ -288,12 +326,11 @@ function checkCode() {
     return;
   }
 
-  playDialog([
-    { text: "Josephine: Den kode passer vist ikke...", sound: null },
-    { text: "Malthe: Prøv igen!", sound: null }
-  ]);
+playErrorDialog([
+  { text: "Josephine: Den kode passer vist ikke...", sound: null },
+  { text: "Malthe: Prøv igen!", sound: null }
+]);
 }
-
 
 // ---------------------------------------------------------
 // 13) HINT-SYSTEM
