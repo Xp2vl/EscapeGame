@@ -115,6 +115,47 @@ function get4() {
   return c1 + c2 + c3 + c4;
 }
 
+// ---------------------------------------------------------
+// AUTOFOKUS, BACKSPACE & AUTO-CLEAR (STABIL VERSION)
+// ---------------------------------------------------------
+
+// Auto-clear når feltet får fokus (kun hvis der står noget i forvejen)
+document.addEventListener("focusin", e => {
+  if (!e.target.classList.contains("digit")) return;
+
+  if (e.target.value !== "") {
+    e.target.value = "";
+    e.target.classList.remove("filled");
+  }
+});
+
+// Autofokus fremad når man skriver et tal
+document.addEventListener("input", e => {
+  if (!e.target.classList.contains("digit")) return;
+
+  const inputs = [...document.querySelectorAll(".digit")];
+  const index = inputs.indexOf(e.target);
+
+  if (e.target.value.length === 1) {
+    e.target.classList.add("filled");
+
+    if (index < inputs.length - 1) {
+      inputs[index + 1].focus();
+    }
+  }
+});
+
+// Backspace hopper tilbage
+document.addEventListener("keydown", e => {
+  if (!e.target.classList.contains("digit")) return;
+
+  const inputs = [...document.querySelectorAll(".digit")];
+  const index = inputs.indexOf(e.target);
+
+  if (e.key === "Backspace" && e.target.value === "") {
+    if (index > 0) inputs[index - 1].focus();
+  }
+});
 
 // ---------------------------------------------------------
 // 7) DINE EKSISTERENDE INTERACTIONS (3-CIFRET)
