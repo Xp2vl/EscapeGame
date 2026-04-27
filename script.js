@@ -42,7 +42,7 @@ function playDialogControlled(lines, onFinishSounds) {
   dialogActive = true;
 
   // ⭐ Vis al tekst på én gang
-  dialogText.textContent = lines.map(l => l.text).join("\n");
+  dialogText.innerHTML = lines.map(l => l.text).join("");
 
   // ⭐ Afspil lyde i rækkefølge
   let i = 0;
@@ -403,9 +403,9 @@ flowSteps = [
     type: "dialog",
     run: () => playDialogControlled([
       { text: "Malthe: Hej! Vi har brug for din hjælp!", sound: "malthe_intro1.mp3" },
-      { text: "\nJosephine: Der er noget mystisk i skoven...", sound: "josephine_intro1.mp3" },
-      { text: "\nMalthe: Vi tror Yetien er på spil!", sound: "malthe_intro2.mp3" },
-      { text: "\n\nTag kort 2", sound: null }
+      { text: "<br>Josephine: Der er noget mystisk i skoven...", sound: "josephine_intro1.mp3" },
+      { text: "<br>Malthe: Vi tror Yetien er på spil!", sound: "malthe_intro2.mp3" },
+      { text: "<br><br>Tag kort 2", sound: null }
     ], () => {
       nextBtn.classList.add("active");
       nextBtn.onclick = () => {
