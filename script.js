@@ -220,13 +220,38 @@ function getNextNerfReaction() {
   return reaction;
 }
 
+
+// ---------------------------------------------------------
+// FEJL-REAKTIONER I LOOP (5 STK)
+// ---------------------------------------------------------
+
+const errorReactions = [
+  [{ text: "Malthe: Det var ikke helt rigtigt...", sound: null }],
+  [{ text: "Josephine: Nope, prøv igen!", sound: null }],
+  [{ text: "Malthe: Hmm… det der virkede ikke.", sound: null }],
+  [{ text: "Josephine: Det må være en anden kombination.", sound: null }],
+  [{ text: "Malthe: Du skal nok finde den!", sound: null }]
+];
+
+let errorIndex = 0;
+
+function getNextErrorReaction() {
+  const r = errorReactions[errorIndex];
+  errorIndex = (errorIndex + 1) % errorReactions.length;
+  return r;
+}
+
+
+// ---------------------------------------------------------
+// FEJL-DIALOG (STOPPER FLOWET)
+// ---------------------------------------------------------
+
 function playErrorDialog(lines) {
   dialogActive = true;
   let i = 0;
 
   const dialogArea = document.getElementById("dialogArea");
-
-  dialogArea.style.display = "block"; // vis dialogen
+  dialogArea.style.display = "block";
 
   function showLine() {
     const line = lines[i];
@@ -252,7 +277,7 @@ function playErrorDialog(lines) {
     nextBtn.classList.add("active");
     nextBtn.onclick = () => {
       nextBtn.classList.remove("active");
-      dialogArea.style.display = "none"; // LUK dialogen uden nextStep()
+      dialogArea.style.display = "none";
     };
   }
 
@@ -271,7 +296,7 @@ function interact() {
   let key1 = A && B ? `${A}+${B}` : A || B;
   let key2 = A && B ? `${B}+${A}` : "";
 
-  // ⭐ 1) NERF-GUN (global kode 625)
+  // ⭐ 1) NERF-GUN
   if (A === nerfCode || B === nerfCode) {
     playDialog(getNextNerfReaction());
     return;
@@ -284,25 +309,23 @@ function interact() {
     return;
   }
 
-  // ⭐ 3) FLOW-SPECIFIK UDFORSK-KODE
-const correct = flowExploreCodes[flowIndex];
+  // ⭐ 3) FLOW-KODE
+  const correct = flowExploreCodes[flowIndex];
 
-if (
-  flowSteps[flowIndex].type === "explore" &&
-  correct &&
-  (correct.includes(key1) || correct.includes(key2))
-) {
-  hideExplorePanel();
-  nextStep();
-  return;
+  if (
+    flowSteps[flowIndex].type === "explore" &&
+    correct &&
+    (correct.includes(key1) || correct.includes(key2))
+  ) {
+    hideExplorePanel();
+    nextStep();
+    return;
+  }
+
+  // ⭐ 4) FEJL-REAKTION I LOOP
+  playErrorDialog(getNextErrorReaction());
 }
 
-  // ⭐ 4) FEJL-REAKTION
-playErrorDialog([
-  { text: "Malthe: Hmm… det virkede vist ikke.", sound: null },
-  { text: "Josephine: Prøv en anden kombination!", sound: null }
-]);
-}
 
 // ---------------------------------------------------------
 // 12) HYBRID-LOGIK FOR KODE
@@ -326,11 +349,10 @@ function checkCode() {
     return;
   }
 
-playErrorDialog([
-  { text: "Josephine: Den kode passer vist ikke...", sound: null },
-  { text: "Malthe: Prøv igen!", sound: null }
-]);
+  // ⭐ FEJL-REAKTION I LOOP
+  playErrorDialog(getNextErrorReaction());
 }
+
 
 // ---------------------------------------------------------
 // 13) HINT-SYSTEM
