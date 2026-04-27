@@ -53,10 +53,14 @@ html, body {
 .game-title,
 #startScreen h1 {
   font-family: 'Comic Neue', sans-serif;
-  font-weight: 900; /* ← den nye, kraftige vægt */
+  font-weight: 900;
   font-size: 2em;
   color: #f5deb3;
-  text-shadow: 2px 2px 0 #8b5a2b;
+  text-shadow:
+    2px 2px 0 #8b5a2b,
+    -2px 2px 0 #8b5a2b,
+    2px -2px 0 #8b5a2b,
+    -2px -2px 0 #8b5a2b;
   margin-top: 0;
   margin-bottom: 10px;
 }
