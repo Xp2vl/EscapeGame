@@ -3,7 +3,7 @@ html, body {
   background: #2b2b2b;
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Patrick Hand', sans-serif;
   color: #3b2a1a;
   text-align: center;
 }
@@ -47,6 +47,18 @@ html, body {
   margin-top: 0;
   margin-bottom: 10px;
   font-weight: bold;
+}
+
+/* OVERSKRIFTER MED COMIC NEUE */
+.game-title,
+#startScreen h1 {
+  font-family: 'Comic Neue', sans-serif;
+  font-weight: 700;
+  font-size: 2em;
+  color: #f5deb3;
+  text-shadow: 2px 2px 0 #8b5a2b;
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 
 /* PANELER (Udforsk + Kode) */
