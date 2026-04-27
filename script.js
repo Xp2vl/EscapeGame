@@ -403,9 +403,9 @@ flowSteps = [
     type: "dialog",
     run: () => playDialogControlled([
       { text: "Malthe: Hej! Vi har brug for din hjælp!", sound: "malthe_intro1.mp3" },
-      { text: "Josephine: Der er noget mystisk i skoven...", sound: "josephine_intro1.mp3" },
-      { text: "Malthe: Vi tror Yetien er på spil!", sound: "malthe_intro2.mp3" },
-      { text: "Josephine: Tag kort 2 — så starter eventyret!", sound: "josephine_intro2.mp3" }
+      { text: "<br>Josephine: Der er noget mystisk i skoven...", sound: "josephine_intro1.mp3" },
+      { text: "<br>Malthe: Vi tror Yetien er på spil!", sound: "malthe_intro2.mp3" },
+      { text: "<br><br>Tag kort 2", sound: null }
     ], () => {
       nextBtn.classList.add("active");
       nextBtn.onclick = () => {
