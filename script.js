@@ -1,64 +1,103 @@
-// -----------------------------
-// START & TIMER
-// -----------------------------
-let gameState = "start";
-let startTime = null;
+// ---------------------------------------------------------
+// 1) GLOBAL GAME STATE
+// ---------------------------------------------------------
+
+let flowSteps = [];      // Hele spillets lineære flow
+let flowIndex = 0;       // Hvilket step spilleren er i
+let dialogActive = false; // Bruges til at blokere hint midt i dialog
+
+
+// ---------------------------------------------------------
+// 2) START SPIL
+// ---------------------------------------------------------
 
 function startGame() {
   document.getElementById("startScreen").style.display = "none";
   document.getElementById("gameArea").style.display = "block";
-  startTime = Date.now();
+  runStep(); // Start første step i flowet
 }
 
-// -----------------------------
-// DIALOGSYSTEM
-// -----------------------------
-let nextAction = null;
+
+// ---------------------------------------------------------
+// 3) FLOW-MOTOR (LINEÆRT FLOW)
+// ---------------------------------------------------------
+
+function runStep() {
+  const step = flowSteps[flowIndex];
+  if (step) step(); // Kør det aktuelle step
+}
+
+function nextStep() {
+  flowIndex++;
+  runStep();
+}
+
+
+// ---------------------------------------------------------
+// 4) DIALOGSYSTEM (UNDERSTØTTER FLERE LYDFILER)
+// ---------------------------------------------------------
 
 function playDialog(lines) {
-  document.getElementById("dialogText").innerText =
-    lines.map(l => l.text).join("\n");
+  dialogActive = true;
+  let i = 0;
 
-  let index = 0;
+  function showLine() {
+    const line = lines[i];
+    dialogText.textContent = line.text;
 
-  function playNext() {
-    if (index >= lines.length) return;
-    const line = lines[index++];
     if (line.sound) {
       const audio = new Audio("assets/lyd/" + line.sound);
-      audio.onended = playNext;
+      audio.onended = () => {
+        i++;
+        if (i < lines.length) showLine();
+        else endDialog();
+      };
       audio.play();
-    } else playNext();
-  }
-
-  playNext();
-  document.getElementById("nextBtn").classList.add("active");
-}
-
-function nextDialog() {
-  document.getElementById("nextBtn").classList.remove("active");
-  if (nextAction) {
-    const a = nextAction;
-    nextAction = null;
-    a();
-  }
-}
-
-function flow(steps) {
-  let i = 0;
-  function run() {
-    if (i < steps.length) {
-      const step = steps[i++];
-      step();
-      nextAction = run;
+    } else {
+      i++;
+      if (i < lines.length) showLine();
+      else endDialog();
     }
   }
-  run();
+
+  function endDialog() {
+    dialogActive = false;
+    nextBtn.classList.add("active");
+    nextBtn.onclick = () => {
+      nextBtn.classList.remove("active");
+      nextStep();
+    };
+  }
+
+  showLine();
 }
 
-// -----------------------------
-// INPUT HJÆLPERE
-// -----------------------------
+
+// ---------------------------------------------------------
+// 5) PANEL-STYRING (VIS/SKJUL UDFORSK & KODE)
+// ---------------------------------------------------------
+
+function showExplorePanel() {
+  document.querySelector(".panel-udforsk").style.display = "block";
+}
+
+function hideExplorePanel() {
+  document.querySelector(".panel-udforsk").style.display = "none";
+}
+
+function showCodePanel() {
+  document.querySelector(".panel:nth-of-type(2)").style.display = "block";
+}
+
+function hideCodePanel() {
+  document.querySelector(".panel:nth-of-type(2)").style.display = "none";
+}
+
+
+// ---------------------------------------------------------
+// 6) INPUT HJÆLPERE (3-CIFRET & 4-CIFRET)
+// ---------------------------------------------------------
+
 function get3(prefix) {
   const d1 = document.getElementById(prefix + "1").value;
   const d2 = document.getElementById(prefix + "2").value;
@@ -76,51 +115,11 @@ function get4() {
   return c1 + c2 + c3 + c4;
 }
 
-// -----------------------------
-// AUTOFOKUS, BACKSPACE & AUTO-CLEAR (STABIL VERSION)
-// -----------------------------
 
-// Auto-clear når feltet får fokus (kun hvis der står noget i forvejen)
-document.addEventListener("focusin", e => {
-  if (!e.target.classList.contains("digit")) return;
+// ---------------------------------------------------------
+// 7) DINE EKSISTERENDE INTERACTIONS (3-CIFRET)
+// ---------------------------------------------------------
 
-  if (e.target.value !== "") {
-    e.target.value = "";
-    e.target.classList.remove("filled");
-  }
-});
-
-// Autofokus fremad når man skriver et tal
-document.addEventListener("input", e => {
-  if (!e.target.classList.contains("digit")) return;
-
-  const inputs = [...document.querySelectorAll(".digit")];
-  const index = inputs.indexOf(e.target);
-
-  if (e.target.value.length === 1) {
-    e.target.classList.add("filled");
-
-    if (index < inputs.length - 1) {
-      inputs[index + 1].focus();
-    }
-  }
-});
-
-// Backspace hopper tilbage
-document.addEventListener("keydown", e => {
-  if (!e.target.classList.contains("digit")) return;
-
-  const inputs = [...document.querySelectorAll(".digit")];
-  const index = inputs.indexOf(e.target);
-
-  if (e.key === "Backspace" && e.target.value === "") {
-    if (index > 0) inputs[index - 1].focus();
-  }
-});
-
-// -----------------------------
-// INTERACTIONS
-// -----------------------------
 const interactions = {
   "854+259": {
     dialog: [
@@ -136,33 +135,11 @@ const interactions = {
   }
 };
 
-function interact() {
-  const A = get3("A");
-  const B = get3("B");
 
-  let key1 = A && B ? `${A}+${B}` : A || B;
-  let key2 = A && B ? `${B}+${A}` : "";
+// ---------------------------------------------------------
+// 8) DINE EKSISTERENDE KODER (4-CIFRET)
+// ---------------------------------------------------------
 
-  const result = interactions[key1] || interactions[key2];
-
-  if (!result) {
-    flow([
-      () => playDialog([
-        { text: "Malthe: Hmm… det virkede vist ikke.", sound: null },
-        { text: "Josephine: Prøv en anden kombination!", sound: null }
-      ])
-    ]);
-    return;
-  }
-
-  flow([
-    () => playDialog(result.dialog)
-  ]);
-}
-
-// -----------------------------
-// KODE (A)
-// -----------------------------
 const codes = {
   "5287": {
     dialog: [
@@ -172,32 +149,136 @@ const codes = {
   }
 };
 
+
+// ---------------------------------------------------------
+// 9) HYBRID-LOGIK FOR UDFORSK (KAN ALTID BRUGES)
+// ---------------------------------------------------------
+
+function interact() {
+  const A = get3("A");
+  const B = get3("B");
+
+  let key1 = A && B ? `${A}+${B}` : A || B;
+  let key2 = A && B ? `${B}+${A}` : "";
+
+  const result = interactions[key1] || interactions[key2];
+
+  // Hvis der er en rigtig interaction → vis dialog
+  if (result) {
+    playDialog(result.dialog);
+    return;
+  }
+
+  // Hvis vi er i et Udforsk-step → progression
+  if (flowSteps[flowIndex].type === "explore") {
+    hideExplorePanel();
+    nextStep();
+    return;
+  }
+
+  // Ellers → sjov fejlreaktion
+  playDialog([
+    { text: "Malthe: Hmm… det virkede vist ikke.", sound: null },
+    { text: "Josephine: Prøv en anden kombination!", sound: null }
+  ]);
+}
+
+
+// ---------------------------------------------------------
+// 10) HYBRID-LOGIK FOR KODE (KAN ALTID BRUGES)
+// ---------------------------------------------------------
+
 function checkCode() {
   const code = get4();
   const result = codes[code];
 
-  if (!result) {
-    flow([
-      () => playDialog([
-        { text: "Josephine: Den kode passer vist ikke...", sound: null },
-        { text: "Malthe: Prøv igen!", sound: null }
-      ])
-    ]);
+  // Hvis koden findes → vis dialog
+  if (result) {
+    playDialog(result.dialog);
+
+    // Hvis vi er i et Kode-step → progression
+    if (flowSteps[flowIndex].type === "code") {
+      hideCodePanel();
+      nextStep();
+    }
     return;
   }
 
-  flow([
-    () => playDialog(result.dialog)
+  // Forkert kode
+  playDialog([
+    { text: "Josephine: Den kode passer vist ikke...", sound: null },
+    { text: "Malthe: Prøv igen!", sound: null }
   ]);
 }
 
-// -----------------------------
-// HINT
-// -----------------------------
+
+// ---------------------------------------------------------
+// 11) HINT-SYSTEM (FØLGER FLOWINDEX)
+// ---------------------------------------------------------
+
+const hints = [
+  [
+    { text: "Malthe: Kig på tallene igen!", sound: null }
+  ],
+  [
+    { text: "Josephine: Måske skal du prøve en anden kombination?", sound: null }
+  ],
+  [
+    { text: "Malthe: Du er tæt på!", sound: null }
+  ]
+  // Tilføj flere hints i samme stil
+];
+
 function showHint() {
-  flow([
-    () => playDialog([
-      { text: "Malthe: Måske skal du prøve at taste nogle tal?", sound: null }
-    ])
+  if (dialogActive) return;
+  playDialog(hints[flowIndex] || [
+    { text: "Malthe: Jeg har ikke flere hints!", sound: null }
   ]);
 }
+
+
+// ---------------------------------------------------------
+// 12) NERF-GUN (KAN ALTID BRUGES)
+// ---------------------------------------------------------
+
+function shoot() {
+  const reactions = [
+    [
+      { text: "Malthe: AV! Pas nu på!", sound: "malthe_av.mp3" }
+    ],
+    [
+      { text: "Josephine: Det hjælper altså ikke!", sound: "josephine_nohelp.mp3" }
+    ],
+    [
+      { text: "Malthe: Du ramte væggen!", sound: "malthe_wall.mp3" }
+    ]
+  ];
+
+  const r = reactions[Math.floor(Math.random() * reactions.length)];
+  playDialog(r);
+}
+
+
+// ---------------------------------------------------------
+// 13) DIT LINEÆRE FLOW (DU KAN SELV UDVIDE DET)
+// ---------------------------------------------------------
+
+flowSteps = [
+  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
+  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
+  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
+
+  Object.assign(() => { showCodePanel(); }, { type: "code" }),
+
+  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
+  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
+  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
+  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
+
+  Object.assign(() => { showCodePanel(); }, { type: "code" }),
+
+  () => playDialog([
+    { text: "Malthe: Du fangede Yetien!", sound: "malthe_win.mp3" },
+    { text: "Josephine: Godt gået!", sound: "josephine_win.mp3" }
+  ])
+];
