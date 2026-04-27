@@ -35,42 +35,37 @@ function nextStep() {
 
 
 // ---------------------------------------------------------
-// 4) DIALOGSYSTEM (UNDERSTØTTER FLERE LYDFILER)
+// 4) NYT DIALOGSYSTEM (VIS ALT + DU STYRER NÆSTE)
 // ---------------------------------------------------------
 
-function playDialog(lines) {
+function playDialogControlled(lines, onFinishSounds) {
   dialogActive = true;
+
+  // ⭐ Vis al tekst på én gang
+  dialogText.textContent = lines.map(l => l.text).join("\n");
+
+  // ⭐ Afspil lyde i rækkefølge
   let i = 0;
 
-  function showLine() {
+  function playNext() {
+    if (i >= lines.length) {
+      if (onFinishSounds) onFinishSounds();
+      return;
+    }
+
     const line = lines[i];
-    dialogText.textContent = line.text;
+    i++;
 
     if (line.sound) {
       const audio = new Audio("assets/lyd/" + line.sound);
-      audio.onended = () => {
-        i++;
-        if (i < lines.length) showLine();
-        else endDialog();
-      };
+      audio.onended = playNext;
       audio.play();
     } else {
-      i++;
-      if (i < lines.length) showLine();
-      else endDialog();
+      playNext();
     }
   }
 
-  function endDialog() {
-    dialogActive = false;
-    nextBtn.classList.add("active");
-    nextBtn.onclick = () => {
-      nextBtn.classList.remove("active");
-      nextStep();
-    };
-  }
-
-  showLine();
+  playNext();
 }
 
 
@@ -185,7 +180,7 @@ const codes = {
 
 
 // ---------------------------------------------------------
-// 9) FLOW-SPECIFIKKE KODER (RYKKET 1 STEP FREM)
+// 9) FLOW-SPECIFIKKE KODER (RYKKET 1 FREM PGA INTRO)
 // ---------------------------------------------------------
 
 const flowExploreCodes = {
@@ -298,14 +293,26 @@ function interact() {
 
   // ⭐ 1) NERF-GUN
   if (A === nerfCode || B === nerfCode) {
-    playDialog(getNextNerfReaction());
+    playDialogControlled(getNextNerfReaction(), () => {
+      nextBtn.classList.add("active");
+      nextBtn.onclick = () => {
+        nextBtn.classList.remove("active");
+        document.getElementById("dialogArea").style.display = "none";
+      };
+    });
     return;
   }
 
   // ⭐ 2) BONUS-INTERACTIONS
   const result = interactions[key1] || interactions[key2];
   if (result) {
-    playDialog(result.dialog);
+    playDialogControlled(result.dialog, () => {
+      nextBtn.classList.add("active");
+      nextBtn.onclick = () => {
+        nextBtn.classList.remove("active");
+        document.getElementById("dialogArea").style.display = "none";
+      };
+    });
     return;
   }
 
@@ -335,7 +342,15 @@ function checkCode() {
   const code = get4();
 
   const result = codes[code];
-  if (result) playDialog(result.dialog);
+  if (result) {
+    playDialogControlled(result.dialog, () => {
+      nextBtn.classList.add("active");
+      nextBtn.onclick = () => {
+        nextBtn.classList.remove("active");
+        document.getElementById("dialogArea").style.display = "none";
+      };
+    });
+  }
 
   const correct = flowCodeCodes[flowIndex];
 
@@ -349,7 +364,6 @@ function checkCode() {
     return;
   }
 
-  // ⭐ FEJL-REAKTION I LOOP
   playErrorDialog(getNextErrorReaction());
 }
 
@@ -366,9 +380,15 @@ const hints = [
 
 function showHint() {
   if (dialogActive) return;
-  playDialog(hints[flowIndex] || [
+  playDialogControlled(hints[flowIndex] || [
     { text: "Malthe: Jeg har ikke flere hints!", sound: null }
-  ]);
+  ], () => {
+    nextBtn.classList.add("active");
+    nextBtn.onclick = () => {
+      nextBtn.classList.remove("active");
+      document.getElementById("dialogArea").style.display = "none";
+    };
+  });
 }
 
 
@@ -378,15 +398,21 @@ function showHint() {
 
 flowSteps = [
 
-  // ⭐ INTRO-DIALOG (step 0)
+  // ⭐ INTRO-DIALOG
   {
     type: "dialog",
-    run: () => playDialog([
+    run: () => playDialogControlled([
       { text: "Malthe: Hej! Vi har brug for din hjælp!", sound: "malthe_intro1.mp3" },
       { text: "Josephine: Der er noget mystisk i skoven...", sound: "josephine_intro1.mp3" },
       { text: "Malthe: Vi tror Yetien er på spil!", sound: "malthe_intro2.mp3" },
-      { text: "<b>Tag Kort 2</b>", sound: null }
-    ])
+      { text: "Josephine: Tag kort 2 — så starter eventyret!", sound: "josephine_intro2.mp3" }
+    ], () => {
+      nextBtn.classList.add("active");
+      nextBtn.onclick = () => {
+        nextBtn.classList.remove("active");
+        nextStep();
+      };
+    })
   },
 
   // ⭐ Første rigtige step (kort 2)
@@ -405,11 +431,18 @@ flowSteps = [
 
   { type: "code", run: () => showCodePanel() },
 
+  // ⭐ SLUT-DIALOG
   {
     type: "dialog",
-    run: () => playDialog([
+    run: () => playDialogControlled([
       { text: "Malthe: Du fangede Yetien!", sound: "malthe_win.mp3" },
       { text: "Josephine: Godt gået!", sound: "josephine_win.mp3" }
-    ])
+    ], () => {
+      nextBtn.classList.add("active");
+      nextBtn.onclick = () => {
+        nextBtn.classList.remove("active");
+        nextStep();
+      };
+    })
   }
 ];
