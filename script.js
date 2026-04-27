@@ -2,9 +2,9 @@
 // 1) GLOBAL GAME STATE
 // ---------------------------------------------------------
 
-let flowSteps = [];      // Hele spillets lineære flow
-let flowIndex = 0;       // Hvilket step spilleren er i
-let dialogActive = false; // Bruges til at blokere hint midt i dialog
+let flowSteps = [];
+let flowIndex = 0;
+let dialogActive = false;
 
 
 // ---------------------------------------------------------
@@ -14,7 +14,7 @@ let dialogActive = false; // Bruges til at blokere hint midt i dialog
 function startGame() {
   document.getElementById("startScreen").style.display = "none";
   document.getElementById("gameArea").style.display = "block";
-  runStep(); // Start første step i flowet
+  runStep();
 }
 
 
@@ -24,7 +24,8 @@ function startGame() {
 
 function runStep() {
   const step = flowSteps[flowIndex];
-  if (step) step(); // Kør det aktuelle step
+  if (!step) return;
+  step.run();
 }
 
 function nextStep() {
@@ -74,7 +75,7 @@ function playDialog(lines) {
 
 
 // ---------------------------------------------------------
-// 5) PANEL-STYRING (VIS/SKJUL UDFORSK & KODE)
+// 5) PANEL-STYRING
 // ---------------------------------------------------------
 
 function showExplorePanel() {
@@ -95,7 +96,7 @@ function hideCodePanel() {
 
 
 // ---------------------------------------------------------
-// 6) INPUT HJÆLPERE (3-CIFRET & 4-CIFRET)
+// 6) INPUT HJÆLPERE
 // ---------------------------------------------------------
 
 function get3(prefix) {
@@ -115,12 +116,12 @@ function get4() {
   return c1 + c2 + c3 + c4;
 }
 
+
 // ---------------------------------------------------------
-// AUTOFOKUS, BACKSPACE & AUTO-CLEAR (STABIL VERSION)
+// AUTOFOKUS, BACKSPACE & AUTO-CLEAR
 // ---------------------------------------------------------
 
-// Auto-clear når feltet får fokus (kun hvis der står noget i forvejen)
-document.addEventListener("focusin", e => {
+document.addEventListener("mousedown", e => {
   if (!e.target.classList.contains("digit")) return;
 
   if (e.target.value !== "") {
@@ -129,36 +130,28 @@ document.addEventListener("focusin", e => {
   }
 });
 
-// Autofokus fremad når man skriver et tal
 document.addEventListener("input", e => {
   if (!e.target.classList.contains("digit")) return;
-
   const inputs = [...document.querySelectorAll(".digit")];
   const index = inputs.indexOf(e.target);
-
   if (e.target.value.length === 1) {
     e.target.classList.add("filled");
-
-    if (index < inputs.length - 1) {
-      inputs[index + 1].focus();
-    }
+    if (index < inputs.length - 1) inputs[index + 1].focus();
   }
 });
 
-// Backspace hopper tilbage
 document.addEventListener("keydown", e => {
   if (!e.target.classList.contains("digit")) return;
-
   const inputs = [...document.querySelectorAll(".digit")];
   const index = inputs.indexOf(e.target);
-
-  if (e.key === "Backspace" && e.target.value === "") {
-    if (index > 0) inputs[index - 1].focus();
+  if (e.key === "Backspace" && e.target.value === "" && index > 0) {
+    inputs[index - 1].focus();
   }
 });
 
+
 // ---------------------------------------------------------
-// 7) DINE EKSISTERENDE INTERACTIONS (3-CIFRET)
+// 7) BONUS-INTERACTIONS (3-CIFRET)
 // ---------------------------------------------------------
 
 const interactions = {
@@ -178,7 +171,7 @@ const interactions = {
 
 
 // ---------------------------------------------------------
-// 8) DINE EKSISTERENDE KODER (4-CIFRET)
+// 8) BONUS-KODER (4-CIFRET)
 // ---------------------------------------------------------
 
 const codes = {
@@ -192,7 +185,44 @@ const codes = {
 
 
 // ---------------------------------------------------------
-// 9) HYBRID-LOGIK FOR UDFORSK (KAN ALTID BRUGES)
+// 9) FLOW-SPECIFIKKE KODER
+// ---------------------------------------------------------
+
+const flowExploreCodes = {
+  0: ["854+259", "259+854"],
+  1: ["418+951", "951+418"]
+};
+
+const flowCodeCodes = {
+  3: "5287"
+};
+
+
+// ---------------------------------------------------------
+// 10) NERF-GUN (GLOBAL KODE 625, LOOP MED 5 REAKTIONER)
+// ---------------------------------------------------------
+
+const nerfCode = "625";
+
+const nerfReactions = [
+  [{ text: "Malthe: AV! Ikke i hovedet!", sound: "nerf1.mp3" }],
+  [{ text: "Josephine: Seriøst? Nu igen?", sound: "nerf2.mp3" }],
+  [{ text: "Malthe: Du ramte væggen… flot.", sound: "nerf3.mp3" }],
+  [{ text: "Josephine: Den der gjorde faktisk lidt ondt!", sound: "nerf4.mp3" }],
+  [{ text: "Malthe: Stop! Jeg overgiver mig!", sound: "nerf5.mp3" }]
+];
+
+let nerfIndex = 0;
+
+function getNextNerfReaction() {
+  const reaction = nerfReactions[nerfIndex];
+  nerfIndex = (nerfIndex + 1) % nerfReactions.length;
+  return reaction;
+}
+
+
+// ---------------------------------------------------------
+// 11) HYBRID-LOGIK FOR UDFORSK
 // ---------------------------------------------------------
 
 function interact() {
@@ -202,22 +232,33 @@ function interact() {
   let key1 = A && B ? `${A}+${B}` : A || B;
   let key2 = A && B ? `${B}+${A}` : "";
 
-  const result = interactions[key1] || interactions[key2];
+  // ⭐ 1) NERF-GUN (global kode 625)
+  if (A === nerfCode || B === nerfCode) {
+    playDialog(getNextNerfReaction());
+    return;
+  }
 
-  // Hvis der er en rigtig interaction → vis dialog
+  // ⭐ 2) BONUS-INTERACTIONS
+  const result = interactions[key1] || interactions[key2];
   if (result) {
     playDialog(result.dialog);
     return;
   }
 
-  // Hvis vi er i et Udforsk-step → progression
-  if (flowSteps[flowIndex].type === "explore") {
-    hideExplorePanel();
-    nextStep();
-    return;
-  }
+  // ⭐ 3) FLOW-SPECIFIK UDFORSK-KODE
+const correct = flowExploreCodes[flowIndex];
 
-  // Ellers → sjov fejlreaktion
+if (
+  flowSteps[flowIndex].type === "explore" &&
+  correct &&
+  (correct.includes(key1) || correct.includes(key2))
+) {
+  hideExplorePanel();
+  nextStep();
+  return;
+}
+
+  // ⭐ 4) FEJL-REAKTION
   playDialog([
     { text: "Malthe: Hmm… det virkede vist ikke.", sound: null },
     { text: "Josephine: Prøv en anden kombination!", sound: null }
@@ -226,26 +267,27 @@ function interact() {
 
 
 // ---------------------------------------------------------
-// 10) HYBRID-LOGIK FOR KODE (KAN ALTID BRUGES)
+// 12) HYBRID-LOGIK FOR KODE
 // ---------------------------------------------------------
 
 function checkCode() {
   const code = get4();
+
   const result = codes[code];
+  if (result) playDialog(result.dialog);
 
-  // Hvis koden findes → vis dialog
-  if (result) {
-    playDialog(result.dialog);
+  const correct = flowCodeCodes[flowIndex];
 
-    // Hvis vi er i et Kode-step → progression
-    if (flowSteps[flowIndex].type === "code") {
-      hideCodePanel();
-      nextStep();
-    }
+  if (
+    flowSteps[flowIndex].type === "code" &&
+    correct &&
+    code === correct
+  ) {
+    hideCodePanel();
+    nextStep();
     return;
   }
 
-  // Forkert kode
   playDialog([
     { text: "Josephine: Den kode passer vist ikke...", sound: null },
     { text: "Malthe: Prøv igen!", sound: null }
@@ -254,20 +296,13 @@ function checkCode() {
 
 
 // ---------------------------------------------------------
-// 11) HINT-SYSTEM (FØLGER FLOWINDEX)
+// 13) HINT-SYSTEM
 // ---------------------------------------------------------
 
 const hints = [
-  [
-    { text: "Malthe: Kig på tallene igen!", sound: null }
-  ],
-  [
-    { text: "Josephine: Måske skal du prøve en anden kombination?", sound: null }
-  ],
-  [
-    { text: "Malthe: Du er tæt på!", sound: null }
-  ]
-  // Tilføj flere hints i samme stil
+  [{ text: "Malthe: Kig på tallene igen!", sound: null }],
+  [{ text: "Josephine: Måske skal du prøve en anden kombination?", sound: null }],
+  [{ text: "Malthe: Du er tæt på!", sound: null }]
 ];
 
 function showHint() {
@@ -279,47 +314,28 @@ function showHint() {
 
 
 // ---------------------------------------------------------
-// 12) NERF-GUN (KAN ALTID BRUGES)
-// ---------------------------------------------------------
-
-function shoot() {
-  const reactions = [
-    [
-      { text: "Malthe: AV! Pas nu på!", sound: "malthe_av.mp3" }
-    ],
-    [
-      { text: "Josephine: Det hjælper altså ikke!", sound: "josephine_nohelp.mp3" }
-    ],
-    [
-      { text: "Malthe: Du ramte væggen!", sound: "malthe_wall.mp3" }
-    ]
-  ];
-
-  const r = reactions[Math.floor(Math.random() * reactions.length)];
-  playDialog(r);
-}
-
-
-// ---------------------------------------------------------
-// 13) DIT LINEÆRE FLOW (DU KAN SELV UDVIDE DET)
+// 14) DIT LINEÆRE FLOW
 // ---------------------------------------------------------
 
 flowSteps = [
-  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
-  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
-  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
+  { type: "explore", run: () => showExplorePanel() },
+  { type: "explore", run: () => showExplorePanel() },
+  { type: "explore", run: () => showExplorePanel() },
 
-  Object.assign(() => { showCodePanel(); }, { type: "code" }),
+  { type: "code", run: () => showCodePanel() },
 
-  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
-  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
-  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
-  Object.assign(() => { showExplorePanel(); }, { type: "explore" }),
+  { type: "explore", run: () => showExplorePanel() },
+  { type: "explore", run: () => showExplorePanel() },
+  { type: "explore", run: () => showExplorePanel() },
+  { type: "explore", run: () => showExplorePanel() },
 
-  Object.assign(() => { showCodePanel(); }, { type: "code" }),
+  { type: "code", run: () => showCodePanel() },
 
-  () => playDialog([
-    { text: "Malthe: Du fangede Yetien!", sound: "malthe_win.mp3" },
-    { text: "Josephine: Godt gået!", sound: "josephine_win.mp3" }
-  ])
+  {
+    type: "dialog",
+    run: () => playDialog([
+      { text: "Malthe: Du fangede Yetien!", sound: "malthe_win.mp3" },
+      { text: "Josephine: Godt gået!", sound: "josephine_win.mp3" }
+    ])
+  }
 ];
