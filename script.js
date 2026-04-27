@@ -185,16 +185,16 @@ const codes = {
 
 
 // ---------------------------------------------------------
-// 9) FLOW-SPECIFIKKE KODER
+// 9) FLOW-SPECIFIKKE KODER (RYKKET 1 STEP FREM)
 // ---------------------------------------------------------
 
 const flowExploreCodes = {
-  0: ["854+259", "259+854"],
-  1: ["418+951", "951+418"]
+  1: ["854+259", "259+854"],
+  2: ["418+951", "951+418"]
 };
 
 const flowCodeCodes = {
-  3: "5287"
+  4: "5287"
 };
 
 
@@ -373,11 +373,26 @@ function showHint() {
 
 
 // ---------------------------------------------------------
-// 14) DIT LINEÆRE FLOW
+// 14) DIT LINEÆRE FLOW (MED INTRO-DIALOG)
 // ---------------------------------------------------------
 
 flowSteps = [
+
+  // ⭐ INTRO-DIALOG (step 0)
+  {
+    type: "dialog",
+    run: () => playDialog([
+      { text: "Malthe: Hej! Vi har brug for din hjælp!", sound: "malthe_intro1.mp3" },
+      { text: "Josephine: Der er noget mystisk i skoven...", sound: "josephine_intro1.mp3" },
+      { text: "Malthe: Vi tror Yetien er på spil!", sound: "malthe_intro2.mp3" },
+      { text: "<b>Tag Kort 2</b>", sound: null }
+    ])
+  },
+
+  // ⭐ Første rigtige step (kort 2)
   { type: "explore", run: () => showExplorePanel() },
+
+  // Resten af dine steps
   { type: "explore", run: () => showExplorePanel() },
   { type: "explore", run: () => showExplorePanel() },
 
