@@ -73,6 +73,40 @@ function playDialogControlled(lines, onFinishSounds) {
 
 
 // ---------------------------------------------------------
+// NY FUNKTION: DIALOG MED PAUSE (dialog → NÆSTE → tekst → NÆSTE → videre)
+// ---------------------------------------------------------
+
+// dialog1 = første blok (børnene taler)
+// dialog2 = anden blok (fx "Tag kort 2")
+// Bruges som et flow-step: type: "dialog2"
+function runDialogPause(dialog1, dialog2) {
+
+  // FASE 1: Første dialogblok
+  playDialogControlled(dialog1, () => {
+
+    // Når lydene er færdige → aktiver NÆSTE
+    nextBtn.classList.add("active");
+    nextBtn.onclick = () => {
+      nextBtn.classList.remove("active");
+
+      // FASE 2: Instruktionen
+      playDialogControlled(dialog2, () => {
+
+        // Når instruktionen er vist → aktiver NÆSTE igen
+        nextBtn.classList.add("active");
+        nextBtn.onclick = () => {
+          nextBtn.classList.remove("active");
+
+          // Nu går vi videre i flowet
+          nextStep();
+        };
+      });
+    };
+  });
+}
+
+
+// ---------------------------------------------------------
 // 5) PANEL-STYRING
 // ---------------------------------------------------------
 
@@ -392,22 +426,20 @@ function showHint() {
 
 flowSteps = [
 
-  // INTRO-DIALOG
+  // INTRO-DIALOG MED PAUSE (dialog2)
   {
-    type: "dialog",
-    run: () => playDialogControlled([
-      { text: "Malthe: Yes, lad os så fange en Yeti.", sound: "Malthe_1.mp3" },
-      { text: "<br>Josephine: Kunne det være en ide at vi holder vagt?", sound: "Josephine_1.mp3" },
-      { text: "<br>Malthe: God ide Jose, oppe fra udkigsposten?", sound: null },
-      { text: "<br>Josephine: Ja, vi kan sagtens hjælpe deroppefra.", sound: null },
-      { text: "<br><br>Tag kort 2", sound: null }
-    ], () => {
-      nextBtn.classList.add("active");
-      nextBtn.onclick = () => {
-        nextBtn.classList.remove("active");
-        nextStep();
-      };
-    })
+    type: "dialog2",
+    run: () => runDialogPause(
+      [
+        { text: "Malthe: Yes, lad os så fange en Yeti.", sound: "Malthe_1.mp3" },
+        { text: "<br>Josephine: Kunne det være en ide at vi holder vagt?", sound: "Josephine_1.mp3" },
+        { text: "<br>Malthe: God ide Jose, oppe fra udkigsposten?", sound: null },
+        { text: "<br>Josephine: Ja, vi kan sagtens hjælpe deroppefra.", sound: null }
+      ],
+      [
+        { text: "<br><br>Tag kort 2", sound: null }
+      ]
+    )
   },
 
   // Første rigtige step (kort 2)
@@ -426,18 +458,17 @@ flowSteps = [
 
   { type: "code", run: () => showCodePanel() },
 
-  // SLUT-DIALOG
+  // SLUT-DIALOG MED PAUSE (dialog2)
   {
-    type: "dialog",
-    run: () => playDialogControlled([
-      { text: "Malthe: Du fangede Yetien!", sound: "malthe_win.mp3" },
-      { text: "<br>Josephine: Godt gået!", sound: "josephine_win.mp3" }
-    ], () => {
-      nextBtn.classList.add("active");
-      nextBtn.onclick = () => {
-        nextBtn.classList.remove("active");
-        nextStep();
-      };
-    })
+    type: "dialog2",
+    run: () => runDialogPause(
+      [
+        { text: "Malthe: Du fangede Yetien!", sound: "malthe_win.mp3" },
+        { text: "<br>Josephine: Godt gået!", sound: "josephine_win.mp3" }
+      ],
+      [
+        { text: "<br><br>Tak for spillet!", sound: null }
+      ]
+    )
   }
 ];
