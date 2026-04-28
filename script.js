@@ -189,18 +189,27 @@ const interactions = {
       { text: "<br>Josephine: Pas lige på med den der!", sound: "Josephine_1.mp3" }
     ]
   },
-  "854": {
-    dialog2: [
+"854": {
+  dialog2: {
+    first: [
       { text: "Malthe: Sejt en NerfGun, men hvor finder vi skumpilene til den?", sound: "Malthe_1.mp3" },
-      { text: "<br>Josephine: Måske i nogle af de andre skuffer...?", sound: "Josephine_1.mp3" }
+      { text: "Josephine: Måske i nogle af de andre skuffer...?", sound: "Josephine_1.mp3" }
+    ],
+    second: [
+      { text: "<br><br>Tag kort 05", sound: null }
     ]
-  },
-  "259": {
-    dialog: [
-      { text: "Malthe: Sejt en NerfGun, men hvor finder vi skumpilene til den?", sound: "Malthe_1.mp3" },
-      { text: "<br>Josephine: Måske i nogle af de andre skuffer...?", sound: "Josephine_1.mp3" }
+  }
+},
+"259": {
+  dialog2: {
+    first: [
+      { text: "Malthe: Der er godt nok mange skumpile i den skuffe der.", sound: "Malthe_1.mp3" }
+    ],
+    second: [
+      { text: "<br><br>Tag kort 05", sound: null }
     ]
-  },
+  }
+},
   "418+951": {
     dialog: [
       { text: "Malthe: Tænk at det virkede!", sound: null },
