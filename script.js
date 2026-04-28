@@ -94,7 +94,7 @@ function runDialogPause(dialog1, dialog2) {
       // FASE 2: Instruktionen
       playDialogControlled(dialog2, () => {
 
-        // ⭐ NYT: Ingen ekstra NÆSTE
+        // NYT: Ingen ekstra NÆSTE
         // Vi går direkte videre i flowet
         nextStep();
       });
@@ -190,6 +190,12 @@ const interactions = {
     ]
   },
   "854": {
+    dialog2: [
+      { text: "Malthe: Sejt en NerfGun, men hvor finder vi skumpilene til den?", sound: "Malthe_1.mp3" },
+      { text: "<br>Josephine: Måske i nogle af de andre skuffer...?", sound: "Josephine_1.mp3" }
+    ]
+  },
+  "259": {
     dialog: [
       { text: "Malthe: Sejt en NerfGun, men hvor finder vi skumpilene til den?", sound: "Malthe_1.mp3" },
       { text: "<br>Josephine: Måske i nogle af de andre skuffer...?", sound: "Josephine_1.mp3" }
@@ -224,12 +230,13 @@ const codes = {
 
 const flowExploreCodes = {
   1: ["854"],
-  2: ["854+259", "259+854"],
-  3: ["418+951", "951+418"]
+  2: ["259"],
+  3: ["854+259", "259+854"],
+  4: ["418+951", "951+418"]
 };
 
 const flowCodeCodes = {
-  4: "5287"
+  5: "5287"
 };
 
 
@@ -341,12 +348,26 @@ function interact() {
 
   // 2) BONUS-INTERACTIONS
   const result = interactions[key1] || interactions[key2];
+
   if (result) {
+
+  // ⭐ Hvis det er en dialog2 → brug runDialogPause med first/second
+  if (result.dialog2) {
+    runDialogPause(
+      result.dialog2.first,
+      result.dialog2.second
+    );
+    return;
+  }
+
+  // ⭐ Ellers brug normal dialog
+  if (result.dialog) {
     playDialogControlled(result.dialog, () => {
       dialogActive = false;
     });
     return;
   }
+}
 
   // 3) FLOW-KODE
   const correct = flowExploreCodes[flowIndex];
