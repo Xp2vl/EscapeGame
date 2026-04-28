@@ -397,7 +397,7 @@ flowSteps = [
     type: "dialog",
     run: () => playDialogControlled([
       { text: "Malthe: Yes, lad os så fange en Yeti.", sound: "Malthe_1.mp3" },
-      { text: "<br>Josephine: Kunne det være en ide at vi holder vagt?", sound: "josephine_1.mp3" },
+      { text: "<br>Josephine: Kunne det være en ide at vi holder vagt?", sound: "Josephine_1.mp3" },
       { text: "<br>Malthe: God ide Jose, oppe fra udkigsposten?", sound: null },
       { text: "<br>Josephine: Ja, vi kan sagtens hjælpe deroppefra.", sound: null },
       { text: "<br><br>Tag kort 2", sound: null }
