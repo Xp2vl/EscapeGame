@@ -301,9 +301,8 @@ function interact() {
   // 1) NERF-GUN
   if (A === nerfCode || B === nerfCode) {
     playDialogControlled(getNextNerfReaction(), () => {
-      dialogActive = false;
-      document.getElementById("dialogArea").style.display = "none";
-    });
+    dialogActive = false;
+});
     return;
   }
 
@@ -312,7 +311,6 @@ function interact() {
   if (result) {
     playDialogControlled(result.dialog, () => {
       dialogActive = false;
-      document.getElementById("dialogArea").style.display = "none";
     });
     return;
   }
@@ -346,7 +344,6 @@ function checkCode() {
   if (result) {
     playDialogControlled(result.dialog, () => {
       dialogActive = false;
-      document.getElementById("dialogArea").style.display = "none";
     });
   }
 
@@ -382,7 +379,6 @@ function showHint() {
     { text: "Malthe: Jeg har ikke flere hints!", sound: null }
   ], () => {
     dialogActive = false;
-    document.getElementById("dialogArea").style.display = "none";
   });
 }
 
