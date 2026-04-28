@@ -41,7 +41,7 @@ function nextStep() {
 function playDialogControlled(lines, onFinishSounds) {
   dialogActive = true;
 
-  // Vis al tekst på én gang
+  // Du styrer selv linjeskift med <br>
   dialogText.innerHTML = lines.map(l => l.text).join("");
 
   // Afspil lyde i rækkefølge
@@ -153,19 +153,19 @@ const interactions = {
   "854+259": {
     dialog: [
       { text: "Malthe: Feeedt!", sound: "Malthe_1.mp3" },
-      { text: "Josephine: Pas lige på med den der!", sound: "Josephine_1.mp3" }
+      { text: "<br>Josephine: Pas lige på med den der!", sound: "Josephine_1.mp3" }
     ]
   },
   "854": {
     dialog: [
       { text: "Malthe: Sejt en NerfGun, men hvor finder vi skumpilene til den?", sound: "Malthe_1.mp3" },
-      { text: "Josephine: Måske i nogle af de andre skuffer...?", sound: "Josephine_1.mp3" }
+      { text: "<br>Josephine: Måske i nogle af de andre skuffer...?", sound: "Josephine_1.mp3" }
     ]
   },
   "418+951": {
     dialog: [
       { text: "Malthe: Tænk at det virkede!", sound: null },
-      { text: "Josephine: Bare det kan dreje rundt!", sound: null }
+      { text: "<br>Josephine: Bare det kan dreje rundt!", sound: null }
     ]
   }
 };
@@ -179,14 +179,14 @@ const codes = {
   "5287": {
     dialog: [
       { text: "Josephine: Du løste koden!", sound: null },
-      { text: "Malthe: Hvad har du fundet?", sound: null }
+      { text: "<br>Malthe: Hvad har du fundet?", sound: null }
     ]
   }
 };
 
 
 // ---------------------------------------------------------
-// 9) FLOW-SPECIFIKKE KODER (RYKKET 1 FREM PGA INTRO)
+// 9) FLOW-SPECIFIKKE KODER
 // ---------------------------------------------------------
 
 const flowExploreCodes = {
@@ -201,7 +201,7 @@ const flowCodeCodes = {
 
 
 // ---------------------------------------------------------
-// 10) NERF-GUN (GLOBAL KODE 625, LOOP MED 5 REAKTIONER)
+// 10) NERF-GUN
 // ---------------------------------------------------------
 
 const nerfCode = "625";
@@ -224,7 +224,7 @@ function getNextNerfReaction() {
 
 
 // ---------------------------------------------------------
-// FEJL-REAKTIONER I LOOP (5 STK)
+// FEJL-REAKTIONER
 // ---------------------------------------------------------
 
 const errorReactions = [
@@ -245,7 +245,7 @@ function getNextErrorReaction() {
 
 
 // ---------------------------------------------------------
-// FEJL-DIALOG (STOPPER FLOWET)
+// FEJL-DIALOG
 // ---------------------------------------------------------
 
 function playErrorDialog(lines) {
@@ -301,11 +301,8 @@ function interact() {
   // 1) NERF-GUN
   if (A === nerfCode || B === nerfCode) {
     playDialogControlled(getNextNerfReaction(), () => {
-      nextBtn.classList.add("active");
-      nextBtn.onclick = () => {
-        nextBtn.classList.remove("active");
-        document.getElementById("dialogArea").style.display = "none";
-      };
+      dialogActive = false;
+      document.getElementById("dialogArea").style.display = "none";
     });
     return;
   }
@@ -314,11 +311,8 @@ function interact() {
   const result = interactions[key1] || interactions[key2];
   if (result) {
     playDialogControlled(result.dialog, () => {
-      nextBtn.classList.add("active");
-      nextBtn.onclick = () => {
-        nextBtn.classList.remove("active");
-        document.getElementById("dialogArea").style.display = "none";
-      };
+      dialogActive = false;
+      document.getElementById("dialogArea").style.display = "none";
     });
     return;
   }
@@ -336,7 +330,7 @@ function interact() {
     return;
   }
 
-  // 4) FEJL-REAKTION I LOOP
+  // 4) FEJL-REAKTION
   playErrorDialog(getNextErrorReaction());
 }
 
@@ -351,11 +345,8 @@ function checkCode() {
   const result = codes[code];
   if (result) {
     playDialogControlled(result.dialog, () => {
-      nextBtn.classList.add("active");
-      nextBtn.onclick = () => {
-        nextBtn.classList.remove("active");
-        document.getElementById("dialogArea").style.display = "none";
-      };
+      dialogActive = false;
+      document.getElementById("dialogArea").style.display = "none";
     });
   }
 
@@ -390,17 +381,14 @@ function showHint() {
   playDialogControlled(hints[flowIndex] || [
     { text: "Malthe: Jeg har ikke flere hints!", sound: null }
   ], () => {
-    nextBtn.classList.add("active");
-    nextBtn.onclick = () => {
-      nextBtn.classList.remove("active");
-      document.getElementById("dialogArea").style.display = "none";
-    };
+    dialogActive = false;
+    document.getElementById("dialogArea").style.display = "none";
   });
 }
 
 
 // ---------------------------------------------------------
-// 14) DIT LINEÆRE FLOW (MED INTRO-DIALOG)
+// 14) DIT LINEÆRE FLOW
 // ---------------------------------------------------------
 
 flowSteps = [
@@ -444,7 +432,7 @@ flowSteps = [
     type: "dialog",
     run: () => playDialogControlled([
       { text: "Malthe: Du fangede Yetien!", sound: "malthe_win.mp3" },
-      { text: "Josephine: Godt gået!", sound: "josephine_win.mp3" }
+      { text: "<br>Josephine: Godt gået!", sound: "josephine_win.mp3" }
     ], () => {
       nextBtn.classList.add("active");
       nextBtn.onclick = () => {
