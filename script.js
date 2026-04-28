@@ -79,6 +79,8 @@ function playDialogControlled(lines, onFinishSounds) {
 // dialog1 = første blok (børnene taler)
 // dialog2 = anden blok (fx "Tag kort 2")
 // Bruges som et flow-step: type: "dialog2"
+// // FASE 1: Første dialogblok
+
 function runDialogPause(dialog1, dialog2) {
 
   // FASE 1: Første dialogblok
@@ -92,19 +94,13 @@ function runDialogPause(dialog1, dialog2) {
       // FASE 2: Instruktionen
       playDialogControlled(dialog2, () => {
 
-        // Når instruktionen er vist → aktiver NÆSTE igen
-        nextBtn.classList.add("active");
-        nextBtn.onclick = () => {
-          nextBtn.classList.remove("active");
-
-          // Nu går vi videre i flowet
-          nextStep();
-        };
+        // ⭐ NYT: Ingen ekstra NÆSTE
+        // Vi går direkte videre i flowet
+        nextStep();
       });
     };
   });
 }
-
 
 // ---------------------------------------------------------
 // 5) PANEL-STYRING
