@@ -41,6 +41,9 @@ function nextStep() {
 function playDialogControlled(lines, onFinishSounds) {
   dialogActive = true;
 
+  // ⭐ Dialogboksen skal ALTID vises
+  document.getElementById("dialogArea").style.display = "block";
+
   // Du styrer selv linjeskift med <br>
   dialogText.innerHTML = lines.map(l => l.text).join("");
 
@@ -301,8 +304,8 @@ function interact() {
   // 1) NERF-GUN
   if (A === nerfCode || B === nerfCode) {
     playDialogControlled(getNextNerfReaction(), () => {
-    dialogActive = false;
-});
+      dialogActive = false;
+    });
     return;
   }
 
