@@ -41,10 +41,10 @@ function nextStep() {
 function playDialogControlled(lines, onFinishSounds) {
   dialogActive = true;
 
-  // ⭐ Vis al tekst på én gang
+  // Vis al tekst på én gang
   dialogText.innerHTML = lines.map(l => l.text).join("");
 
-  // ⭐ Afspil lyde i rækkefølge
+  // Afspil lyde i rækkefølge
   let i = 0;
 
   function playNext() {
@@ -154,6 +154,12 @@ const interactions = {
     dialog: [
       { text: "Malthe: Feeedt!", sound: "Malthe_1.mp3" },
       { text: "Josephine: Pas lige på med den der!", sound: "Josephine_1.mp3" }
+    ]
+  },
+  "854": {
+    dialog: [
+      { text: "Malthe: Sejt en NerfGun, men hvor finder vi skumpilene til den?", sound: "Malthe_1.mp3" },
+      { text: "Josephine: Måske i nogle af de andre skuffer...?", sound: "Josephine_1.mp3" }
     ]
   },
   "418+951": {
@@ -291,7 +297,7 @@ function interact() {
   let key1 = A && B ? `${A}+${B}` : A || B;
   let key2 = A && B ? `${B}+${A}` : "";
 
-  // ⭐ 1) NERF-GUN
+  // 1) NERF-GUN
   if (A === nerfCode || B === nerfCode) {
     playDialogControlled(getNextNerfReaction(), () => {
       nextBtn.classList.add("active");
@@ -303,7 +309,7 @@ function interact() {
     return;
   }
 
-  // ⭐ 2) BONUS-INTERACTIONS
+  // 2) BONUS-INTERACTIONS
   const result = interactions[key1] || interactions[key2];
   if (result) {
     playDialogControlled(result.dialog, () => {
@@ -316,7 +322,7 @@ function interact() {
     return;
   }
 
-  // ⭐ 3) FLOW-KODE
+  // 3) FLOW-KODE
   const correct = flowExploreCodes[flowIndex];
 
   if (
@@ -329,7 +335,7 @@ function interact() {
     return;
   }
 
-  // ⭐ 4) FEJL-REAKTION I LOOP
+  // 4) FEJL-REAKTION I LOOP
   playErrorDialog(getNextErrorReaction());
 }
 
@@ -398,13 +404,14 @@ function showHint() {
 
 flowSteps = [
 
-  // ⭐ INTRO-DIALOG
+  // INTRO-DIALOG
   {
     type: "dialog",
     run: () => playDialogControlled([
-      { text: "Malthe: Hej! Vi har brug for din hjælp!", sound: "malthe_intro1.mp3" },
-      { text: "<br>Josephine: Der er noget mystisk i skoven...", sound: "josephine_intro1.mp3" },
-      { text: "<br>Malthe: Vi tror Yetien er på spil!", sound: "malthe_intro2.mp3" },
+      { text: "Malthe: Yes, lad os så fange en Yeti.", sound: "malthe_intro1.mp3" },
+      { text: "<br>Josephine: Kunne det være en ide at vi holder vagt?", sound: "josephine_intro1.mp3" },
+      { text: "<br>Malthe: God ide Jose, oppe fra udkigsposten?", sound: "malthe_intro2.mp3" },
+      { text: "<br>Josephine: Ja, vi kan sagtens hjælpe deroppefra.", sound: "malthe_intro2.mp3" },
       { text: "<br><br>Tag kort 2", sound: null }
     ], () => {
       nextBtn.classList.add("active");
@@ -415,7 +422,7 @@ flowSteps = [
     })
   },
 
-  // ⭐ Første rigtige step (kort 2)
+  // Første rigtige step (kort 2)
   { type: "explore", run: () => showExplorePanel() },
 
   // Resten af dine steps
@@ -431,7 +438,7 @@ flowSteps = [
 
   { type: "code", run: () => showCodePanel() },
 
-  // ⭐ SLUT-DIALOG
+  // SLUT-DIALOG
   {
     type: "dialog",
     run: () => playDialogControlled([
