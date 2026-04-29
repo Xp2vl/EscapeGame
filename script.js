@@ -540,7 +540,8 @@ flowSteps = [
   { type: "explore", run: () => showExplorePanel() },
   { type: "explore", run: () => showExplorePanel() },
   { type: "explore", run: () => showExplorePanel() },
-
+  { type: "explore", run: () => showExplorePanel() },
+ 
   { type: "code", run: () => showCodePanel() },
 
   { type: "explore", run: () => showExplorePanel() },
