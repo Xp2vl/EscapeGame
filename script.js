@@ -6,7 +6,6 @@ let flowSteps = [];
 let flowIndex = 0;
 let dialogActive = false;
 
-
 // ---------------------------------------------------------
 // 2) NÆSTE-KNAP STYRING (NYT)
 // ---------------------------------------------------------
@@ -25,7 +24,6 @@ function hideNextButton() {
 // Skjul knappen fra start
 hideNextButton();
 
-
 // ---------------------------------------------------------
 // 3) START SPIL
 // ---------------------------------------------------------
@@ -35,7 +33,6 @@ function startGame() {
   document.getElementById("gameArea").style.display = "block";
   runStep();
 }
-
 
 // ---------------------------------------------------------
 // 4) FLOW-MOTOR (LINEÆRT FLOW)
@@ -51,7 +48,6 @@ function nextStep() {
   flowIndex++;
   runStep();
 }
-
 
 // ---------------------------------------------------------
 // 5) NYT DIALOGSYSTEM (VIS ALT + DU STYRER NÆSTE)
@@ -88,7 +84,6 @@ function playDialogControlled(lines, onFinishSounds) {
   playNext();
 }
 
-
 // ---------------------------------------------------------
 // 6) DIALOG MED PAUSE (dialog2)
 // ---------------------------------------------------------
@@ -108,7 +103,6 @@ function runDialogPause(dialog1, dialog2) {
     };
   });
 }
-
 
 // ---------------------------------------------------------
 // 7) PANEL-STYRING
@@ -132,7 +126,6 @@ function hideCodePanel() {
   document.querySelector(".panel:nth-of-type(2)").style.display = "none";
 }
 
-
 // ---------------------------------------------------------
 // 8) INPUT HJÆLPERE
 // ---------------------------------------------------------
@@ -153,7 +146,6 @@ function get4() {
   if (!c1 || !c2 || !c3 || !c4) return "";
   return c1 + c2 + c3 + c4;
 }
-
 
 // ---------------------------------------------------------
 // 9) AUTOFOKUS, BACKSPACE, OVERSKRIVNING & AUTO-CLEAR
@@ -209,7 +201,6 @@ document.addEventListener("keydown", e => {
   }
 });
 
-
 // ---------------------------------------------------------
 // 10) RESET + AUTO-FOKUS (kun hvis dialog ikke er aktiv)
 // ---------------------------------------------------------
@@ -227,7 +218,6 @@ function resetDigitFields() {
 
   if (inputs.length > 0) inputs[0].focus();
 }
-
 
 // ---------------------------------------------------------
 // 11) BONUS-INTERACTIONS (3-CIFRET)
@@ -262,7 +252,7 @@ const interactions = {
       first: [
         { text: "Malthe: Feeedt!", sound: "Malthe_1.mp3" },
         { text: "<br>Josephine: Pas lige på med ikke at ødelægge noget med den der", sound: "Josephine_1.mp3" },
-        { text: "Malthe: Der ligger noget under kommoden", sound: "Malthe_1.mp3" }
+        { text: "<br>Malthe: Der ligger noget under kommoden", sound: "Malthe_1.mp3" }
       ],
       second: [
          { text: "<b>Tag kort 05</b>", sound: null },
@@ -278,7 +268,6 @@ const interactions = {
     ]
   }
 };
-
 
 // ---------------------------------------------------------
 // 12) BONUS-KODER (4-CIFRET)
@@ -300,7 +289,6 @@ const codes = {
   }
 };
 
-
 // ---------------------------------------------------------
 // 13) FLOW-SPECIFIKKE KODER
 // ---------------------------------------------------------
@@ -315,7 +303,6 @@ const flowExploreCodes = {
 const flowCodeCodes = {
   5: "5287"
 };
-
 
 // ---------------------------------------------------------
 // 14) NERF-GUN (uden NÆSTE)
@@ -339,7 +326,6 @@ function getNextNerfReaction() {
   return reaction;
 }
 
-
 // ---------------------------------------------------------
 // 15) FEJL-REAKTIONER
 // ---------------------------------------------------------
@@ -359,7 +345,6 @@ function getNextErrorReaction() {
   errorIndex = (errorIndex + 1) % errorReactions.length;
   return r;
 }
-
 
 // ---------------------------------------------------------
 // 16) FEJL-DIALOG (uden NÆSTE)
@@ -400,7 +385,6 @@ function playErrorDialog(lines) {
 
   showLine();
 }
-
 
 // ---------------------------------------------------------
 // 17) HYBRID-LOGIK FOR UDFORSK
@@ -465,7 +449,6 @@ function interact() {
   playErrorDialog(getNextErrorReaction());
 }
 
-
 // ---------------------------------------------------------
 // 18) HYBRID-LOGIK FOR KODE
 // ---------------------------------------------------------
@@ -498,7 +481,6 @@ function checkCode() {
   playErrorDialog(getNextErrorReaction());
 }
 
-
 // ---------------------------------------------------------
 // 19) HINT-SYSTEM
 // ---------------------------------------------------------
@@ -522,7 +504,6 @@ function showHint() {
     resetDigitFields();
   });
 }
-
 
 // ---------------------------------------------------------
 // 20) DIT LINEÆRE FLOW
