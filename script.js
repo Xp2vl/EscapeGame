@@ -8,7 +8,26 @@ let dialogActive = false;
 
 
 // ---------------------------------------------------------
-// 2) START SPIL
+// 2) NÆSTE-KNAP STYRING (NYT)
+// ---------------------------------------------------------
+
+function showNextButton() {
+  nextBtn.style.display = "block";
+  nextBtn.classList.add("active");
+}
+
+function hideNextButton() {
+  nextBtn.style.display = "none";
+  nextBtn.classList.remove("active");
+  nextBtn.onclick = null;
+}
+
+// Skjul knappen fra start
+hideNextButton();
+
+
+// ---------------------------------------------------------
+// 3) START SPIL
 // ---------------------------------------------------------
 
 function startGame() {
@@ -19,7 +38,7 @@ function startGame() {
 
 
 // ---------------------------------------------------------
-// 3) FLOW-MOTOR (LINEÆRT FLOW)
+// 4) FLOW-MOTOR (LINEÆRT FLOW)
 // ---------------------------------------------------------
 
 function runStep() {
@@ -35,7 +54,7 @@ function nextStep() {
 
 
 // ---------------------------------------------------------
-// 4) NYT DIALOGSYSTEM (VIS ALT + DU STYRER NÆSTE)
+// 5) NYT DIALOGSYSTEM (VIS ALT + DU STYRER NÆSTE)
 // ---------------------------------------------------------
 
 function playDialogControlled(lines, onFinishSounds) {
@@ -71,16 +90,17 @@ function playDialogControlled(lines, onFinishSounds) {
 
 
 // ---------------------------------------------------------
-// DIALOG MED PAUSE (dialog2)
+// 6) DIALOG MED PAUSE (dialog2)
 // ---------------------------------------------------------
 
 function runDialogPause(dialog1, dialog2) {
 
   playDialogControlled(dialog1, () => {
 
-    nextBtn.classList.add("active");
+    showNextButton();
+
     nextBtn.onclick = () => {
-      nextBtn.classList.remove("active");
+      hideNextButton();
 
       playDialogControlled(dialog2, () => {
         nextStep();
@@ -91,7 +111,7 @@ function runDialogPause(dialog1, dialog2) {
 
 
 // ---------------------------------------------------------
-// 5) PANEL-STYRING
+// 7) PANEL-STYRING
 // ---------------------------------------------------------
 
 function showExplorePanel() {
@@ -114,7 +134,7 @@ function hideCodePanel() {
 
 
 // ---------------------------------------------------------
-// 6) INPUT HJÆLPERE
+// 8) INPUT HJÆLPERE
 // ---------------------------------------------------------
 
 function get3(prefix) {
@@ -136,7 +156,7 @@ function get4() {
 
 
 // ---------------------------------------------------------
-// AUTOFOKUS, BACKSPACE, OVERSKRIVNING & AUTO-CLEAR
+// 9) AUTOFOKUS, BACKSPACE, OVERSKRIVNING & AUTO-CLEAR
 // ---------------------------------------------------------
 
 document.addEventListener("mousedown", e => {
@@ -154,14 +174,12 @@ document.addEventListener("input", e => {
   const inputs = [...document.querySelectorAll(".digit")];
   const index = inputs.indexOf(e.target);
 
-  // ⭐ Overskrivning
   if (e.target.value.length > 1) {
     e.target.value = e.target.value.slice(-1);
   }
 
   e.target.classList.add("filled");
 
-  // ⭐ Auto-hop
   if (index < inputs.length - 1) {
     inputs[index + 1].focus();
   }
@@ -175,7 +193,6 @@ document.addEventListener("keydown", e => {
 
   if (e.key === "Backspace") {
 
-    // Første tryk → slet tal
     if (e.target.value !== "") {
       e.target.value = "";
       e.target.classList.remove("filled");
@@ -183,7 +200,6 @@ document.addEventListener("keydown", e => {
       return;
     }
 
-    // Andet tryk → hop tilbage
     if (index > 0) {
       inputs[index - 1].focus();
       inputs[index - 1].value = "";
@@ -195,7 +211,7 @@ document.addEventListener("keydown", e => {
 
 
 // ---------------------------------------------------------
-// RESET + AUTO-FOKUS (kun hvis dialog ikke er aktiv)
+// 10) RESET + AUTO-FOKUS (kun hvis dialog ikke er aktiv)
 // ---------------------------------------------------------
 
 function resetDigitFields() {
@@ -214,7 +230,7 @@ function resetDigitFields() {
 
 
 // ---------------------------------------------------------
-// 7) BONUS-INTERACTIONS (3-CIFRET)
+// 11) BONUS-INTERACTIONS (3-CIFRET)
 // ---------------------------------------------------------
 
 const interactions = {
@@ -255,7 +271,7 @@ const interactions = {
 
 
 // ---------------------------------------------------------
-// 8) BONUS-KODER (4-CIFRET)
+// 12) BONUS-KODER (4-CIFRET)
 // ---------------------------------------------------------
 
 const codes = {
@@ -269,7 +285,7 @@ const codes = {
 
 
 // ---------------------------------------------------------
-// 9) FLOW-SPECIFIKKE KODER
+// 13) FLOW-SPECIFIKKE KODER
 // ---------------------------------------------------------
 
 const flowExploreCodes = {
@@ -285,7 +301,7 @@ const flowCodeCodes = {
 
 
 // ---------------------------------------------------------
-// 10) NERF-GUN
+// 14) NERF-GUN (uden NÆSTE)
 // ---------------------------------------------------------
 
 const nerfCode = "625";
@@ -308,7 +324,7 @@ function getNextNerfReaction() {
 
 
 // ---------------------------------------------------------
-// FEJL-REAKTIONER
+// 15) FEJL-REAKTIONER
 // ---------------------------------------------------------
 
 const errorReactions = [
@@ -329,7 +345,7 @@ function getNextErrorReaction() {
 
 
 // ---------------------------------------------------------
-// FEJL-DIALOG (uden NÆSTE)
+// 16) FEJL-DIALOG (uden NÆSTE)
 // ---------------------------------------------------------
 
 function playErrorDialog(lines) {
@@ -361,12 +377,7 @@ function playErrorDialog(lines) {
   function endErrorDialog() {
     dialogActive = false;
 
-    // ❌ Ingen NÆSTE-knap
-    nextBtn.classList.remove("active");
-    nextBtn.onclick = null;
-
-    // ⭐ Dialogboksen forbliver synlig
-    // ⭐ Felter nulstilles
+    hideNextButton();
     resetDigitFields();
   }
 
@@ -375,7 +386,7 @@ function playErrorDialog(lines) {
 
 
 // ---------------------------------------------------------
-// 11) HYBRID-LOGIK FOR UDFORSK
+// 17) HYBRID-LOGIK FOR UDFORSK
 // ---------------------------------------------------------
 
 function interact() {
@@ -385,16 +396,17 @@ function interact() {
   let key1 = A && B ? `${A}+${B}` : A || B;
   let key2 = A && B ? `${B}+${A}` : "";
 
-  // 1) NERF-GUN (ingen NÆSTE)
+  hideNextButton();
+
   if (A === nerfCode || B === nerfCode) {
     playDialogControlled(getNextNerfReaction(), () => {
       dialogActive = false;
+      hideNextButton();
       resetDigitFields();
     });
     return;
   }
 
-  // 2) BONUS-INTERACTIONS
   const result = interactions[key1] || interactions[key2];
 
   if (result) {
@@ -411,13 +423,13 @@ function interact() {
     if (result.dialog) {
       playDialogControlled(result.dialog, () => {
         dialogActive = false;
+        hideNextButton();
         resetDigitFields();
       });
       return;
     }
   }
 
-  // 3) FLOW-KODE
   const correct = flowExploreCodes[flowIndex];
 
   if (
@@ -430,22 +442,24 @@ function interact() {
     return;
   }
 
-  // 4) FEJL-REAKTION
   playErrorDialog(getNextErrorReaction());
 }
 
 
 // ---------------------------------------------------------
-// 12) HYBRID-LOGIK FOR KODE
+// 18) HYBRID-LOGIK FOR KODE
 // ---------------------------------------------------------
 
 function checkCode() {
   const code = get4();
 
+  hideNextButton();
+
   const result = codes[code];
   if (result) {
     playDialogControlled(result.dialog, () => {
       dialogActive = false;
+      hideNextButton();
       resetDigitFields();
     });
   }
@@ -467,7 +481,7 @@ function checkCode() {
 
 
 // ---------------------------------------------------------
-// 13) HINT-SYSTEM
+// 19) HINT-SYSTEM
 // ---------------------------------------------------------
 
 const hints = [
@@ -478,17 +492,21 @@ const hints = [
 
 function showHint() {
   if (dialogActive) return;
+
+  hideNextButton();
+
   playDialogControlled(hints[flowIndex] || [
     { text: "Malthe: Jeg har ikke flere hints!", sound: null }
   ], () => {
     dialogActive = false;
+    hideNextButton();
     resetDigitFields();
   });
 }
 
 
 // ---------------------------------------------------------
-// 14) DIT LINEÆRE FLOW
+// 20) DIT LINEÆRE FLOW
 // ---------------------------------------------------------
 
 flowSteps = [
