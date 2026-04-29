@@ -266,15 +266,15 @@ const interactions = {
       ],
       second: [
          { text: "Tag kort 05", sound: null },
-         { text: "Tag kort 06", sound: null }
+         { text: "<br>Tag kort 06", sound: null }
       ]
     }
   },
 
-  "418+951": {
+  "244+962": {
     dialog: [
-      { text: "Malthe: Tænk at det virkede!", sound: null },
-      { text: "<br>Josephine: Bare det kan dreje rundt!", sound: null }
+      { text: "Tag kort 07", sound: null },
+      { text: "<br>Tag kort 08", sound: null }
     ]
   }
 };
@@ -286,10 +286,17 @@ const interactions = {
 
 const codes = {
   "5287": {
-    dialog: [
-      { text: "Josephine: Du løste koden!", sound: null },
-      { text: "<br>Malthe: Hvad har du fundet?", sound: null }
-    ]
+    dialog2: {
+      first: [
+        { text: "Tag kort 09", sound: null },
+        { text: "<br><br>Josephine: Du løste koden til den låste skuffe, var det så der jeg havde gemt den?", sound: null },
+        { text: "<br>Malthe: Hvad har du fundet?", sound: null },
+        { text: "<br>Josephine: Det er da drejehåndtaget til tyggegummiautomaten!", sound: null }
+      ],
+      second: [
+         { text: "Tag kort 10", sound: null },
+      ]
+    }
   }
 };
 
@@ -302,7 +309,7 @@ const flowExploreCodes = {
   1: ["854"], //Step 2
   2: ["259"], //Step 3
   3: ["854+259", "259+854"], //Step 4
-  4: ["418+951", "951+418"] //Step 5
+  4: ["244+962", "962+244"] //Step 5
 };
 
 const flowCodeCodes = {
@@ -534,7 +541,7 @@ flowSteps = [
         { text: "<br>Josephine: Der er sikkert noget du kan bruge i kommoden", sound: null }
       ],
       [
-        { text: "Tag kort 2", sound: null }
+        { text: "<b>Tag kort 2</b>", sound: null }
       ]
     )
   },
