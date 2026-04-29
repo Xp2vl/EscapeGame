@@ -41,13 +41,9 @@ function nextStep() {
 function playDialogControlled(lines, onFinishSounds) {
   dialogActive = true;
 
-  // ⭐ Dialogboksen skal ALTID vises
   document.getElementById("dialogArea").style.display = "block";
-
-  // Du styrer selv linjeskift med <br>
   dialogText.innerHTML = lines.map(l => l.text).join("");
 
-  // Afspil lyde i rækkefølge
   let i = 0;
 
   function playNext() {
@@ -73,41 +69,31 @@ function playDialogControlled(lines, onFinishSounds) {
 
 
 // ---------------------------------------------------------
-// NY FUNKTION: DIALOG MED PAUSE (dialog → NÆSTE → tekst → NÆSTE → videre)
+// DIALOG MED PAUSE
 // ---------------------------------------------------------
-
-// dialog1 = første blok (børnene taler)
-// dialog2 = anden blok (fx "Tag kort 2")
-// Bruges som et flow-step: type: "dialog2"
-// // FASE 1: Første dialogblok
 
 function runDialogPause(dialog1, dialog2) {
 
-  // FASE 1: Første dialogblok
   playDialogControlled(dialog1, () => {
 
-    // Når lydene er færdige → aktiver NÆSTE
     nextBtn.classList.add("active");
     nextBtn.onclick = () => {
       nextBtn.classList.remove("active");
 
-      // FASE 2: Instruktionen
       playDialogControlled(dialog2, () => {
-
-        // NYT: Ingen ekstra NÆSTE
-        // Vi går direkte videre i flowet
         nextStep();
       });
     };
   });
 }
 
+
 // ---------------------------------------------------------
 // 5) PANEL-STYRING
 // ---------------------------------------------------------
 
 function showExplorePanel() {
-  resetDigitFields();
+  resetDigitFields();   // ⭐ NYT
   document.querySelector(".panel-udforsk").style.display = "block";
 }
 
@@ -116,7 +102,7 @@ function hideExplorePanel() {
 }
 
 function showCodePanel() {
-  resetDigitFields();
+  resetDigitFields();   // ⭐ NYT
   document.querySelector(".panel:nth-of-type(2)").style.display = "block";
 }
 
@@ -179,13 +165,27 @@ document.addEventListener("keydown", e => {
   }
 });
 
+
+// ---------------------------------------------------------
+// ⭐ NY: RESET + AUTO-FOKUS (kun hvis dialog ikke er aktiv)
+// ---------------------------------------------------------
+
 function resetDigitFields() {
   const inputs = document.querySelectorAll(".digit");
+
   inputs.forEach(input => {
     input.value = "";
     input.classList.remove("filled");
   });
+
+  // ⭐ Ingen auto-fokus hvis dialogen er åben
+  const dialogArea = document.getElementById("dialogArea");
+  if (dialogArea.style.display === "block") return;
+
+  // ⭐ Auto-fokus på første felt
+  if (inputs.length > 0) inputs[0].focus();
 }
+
 
 // ---------------------------------------------------------
 // 7) BONUS-INTERACTIONS (3-CIFRET)
@@ -198,27 +198,27 @@ const interactions = {
       { text: "<br>Josephine: Pas lige på med den der!", sound: "Josephine_1.mp3" }
     ]
   },
-"854": {
-  dialog2: {
-    first: [
-      { text: "Malthe: Sejt en NerfGun, men hvor finder vi skumpilene til den?", sound: "Malthe_1.mp3" },
-      { text: "Josephine: Måske i nogle af de andre skuffer...?", sound: "Josephine_1.mp3" }
-    ],
-    second: [
-      { text: "Tag kort 04", sound: null }
-    ]
-  }
-},
-"259": {
-  dialog2: {
-    first: [
-      { text: "Malthe: Der er godt nok mange skumpile i den skuffe der.", sound: "Malthe_1.mp3" }
-    ],
-    second: [
-      { text: "Tag kort 05", sound: null }
-    ]
-  }
-},
+  "854": {
+    dialog2: {
+      first: [
+        { text: "Malthe: Sejt en NerfGun, men hvor finder vi skumpilene til den?", sound: "Malthe_1.mp3" },
+        { text: "Josephine: Måske i nogle af de andre skuffer...?", sound: "Josephine_1.mp3" }
+      ],
+      second: [
+        { text: "Tag kort 04", sound: null }
+      ]
+    }
+  },
+  "259": {
+    dialog2: {
+      first: [
+        { text: "Malthe: Der er godt nok mange skumpile i den skuffe der.", sound: "Malthe_1.mp3" }
+      ],
+      second: [
+        { text: "Tag kort 05", sound: null }
+      ]
+    }
+  },
   "418+951": {
     dialog: [
       { text: "Malthe: Tænk at det virkede!", sound: null },
@@ -338,6 +338,7 @@ function playErrorDialog(lines) {
     nextBtn.onclick = () => {
       nextBtn.classList.remove("active");
       dialogArea.style.display = "none";
+      resetDigitFields();   // ⭐ NYT
     };
   }
 
@@ -360,6 +361,7 @@ function interact() {
   if (A === nerfCode || B === nerfCode) {
     playDialogControlled(getNextNerfReaction(), () => {
       dialogActive = false;
+      resetDigitFields();   // ⭐ NYT
     });
     return;
   }
@@ -369,23 +371,23 @@ function interact() {
 
   if (result) {
 
-  // ⭐ Hvis det er en dialog2 → brug runDialogPause med first/second
-  if (result.dialog2) {
-    runDialogPause(
-      result.dialog2.first,
-      result.dialog2.second
-    );
-    return;
-  }
+    if (result.dialog2) {
+      runDialogPause(
+        result.dialog2.first,
+        result.dialog2.second
+      );
+      resetDigitFields();   // ⭐ NYT
+      return;
+    }
 
-  // ⭐ Ellers brug normal dialog
-  if (result.dialog) {
-    playDialogControlled(result.dialog, () => {
-      dialogActive = false;
-    });
-    return;
+    if (result.dialog) {
+      playDialogControlled(result.dialog, () => {
+        dialogActive = false;
+        resetDigitFields();   // ⭐ NYT
+      });
+      return;
+    }
   }
-}
 
   // 3) FLOW-KODE
   const correct = flowExploreCodes[flowIndex];
@@ -416,6 +418,7 @@ function checkCode() {
   if (result) {
     playDialogControlled(result.dialog, () => {
       dialogActive = false;
+      resetDigitFields();   // ⭐ NYT
     });
   }
 
@@ -451,6 +454,7 @@ function showHint() {
     { text: "Malthe: Jeg har ikke flere hints!", sound: null }
   ], () => {
     dialogActive = false;
+    resetDigitFields();   // ⭐ NYT
   });
 }
 
@@ -461,7 +465,6 @@ function showHint() {
 
 flowSteps = [
 
-  // INTRO-DIALOG MED PAUSE (dialog2)
   {
     type: "dialog2",
     run: () => runDialogPause(
@@ -477,10 +480,7 @@ flowSteps = [
     )
   },
 
-  // Første rigtige step (kort 2)
   { type: "explore", run: () => showExplorePanel() },
-
-  // Resten af dine steps
   { type: "explore", run: () => showExplorePanel() },
   { type: "explore", run: () => showExplorePanel() },
 
@@ -493,7 +493,6 @@ flowSteps = [
 
   { type: "code", run: () => showCodePanel() },
 
-  // SLUT-DIALOG MED PAUSE (dialog2)
   {
     type: "dialog2",
     run: () => runDialogPause(
