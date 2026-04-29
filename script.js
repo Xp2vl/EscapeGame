@@ -241,7 +241,7 @@ const interactions = {
         { text: "<br>Josephine: Måske i nogle af de andre skuffer", sound: "Josephine_1.mp3" }
       ],
       second: [
-        { text: "Tag kort 03", sound: null }
+        { text: "<b>Tag kort 03</b>", sound: null }
       ]
     }
   },
@@ -252,7 +252,7 @@ const interactions = {
         { text: "Malthe: Der er godt nok mange skumpile i den skuffe", sound: "Malthe_1.mp3" }
       ],
       second: [
-        { text: "Tag kort 04", sound: null }
+        { text: "<b>Tag kort 04</b>", sound: null }
       ]
     }
   },
@@ -265,16 +265,16 @@ const interactions = {
         { text: "Malthe: Der ligger noget under kommoden", sound: "Malthe_1.mp3" }
       ],
       second: [
-         { text: "Tag kort 05", sound: null },
-         { text: "<br>Tag kort 06", sound: null }
+         { text: "<b>Tag kort 05</b>", sound: null },
+         { text: "<br><b>Tag kort 06</b>", sound: null }
       ]
     }
   },
 
   "244+962": {
     dialog: [
-      { text: "Tag kort 07", sound: null },
-      { text: "<br>Tag kort 08", sound: null }
+      { text: "<b>Tag kort 07</b>", sound: null },
+      { text: "<br><b>Tag kort 08</b>", sound: null }
     ]
   }
 };
@@ -288,13 +288,13 @@ const codes = {
   "5287": {
     dialog2: {
       first: [
-        { text: "Tag kort 09", sound: null },
+        { text: "<b>Tag kort 09</b>", sound: null },
         { text: "<br><br>Josephine: Du løste koden til den låste skuffe, var det så der jeg havde gemt den?", sound: null },
         { text: "<br>Malthe: Hvad har du fundet?", sound: null },
         { text: "<br>Josephine: Det er da drejehåndtaget til tyggegummiautomaten!", sound: null }
       ],
       second: [
-         { text: "Tag kort 10", sound: null },
+         { text: "<b>Tag kort 10</b>", sound: null },
       ]
     }
   }
