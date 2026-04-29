@@ -426,7 +426,6 @@ function interact() {
     correct &&
     (correct.includes(key1) || correct.includes(key2))
   ) {
-    hideExplorePanel();
     nextStep();
     return;
   }
@@ -485,7 +484,6 @@ function checkCode() {
     correct &&
     code === correct
   ) {
-    hideCodePanel();
     nextStep();
     return;
   }
