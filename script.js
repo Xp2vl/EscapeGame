@@ -41,7 +41,9 @@ function nextStep() {
 function playDialogControlled(lines, onFinishSounds) {
   dialogActive = true;
 
-  document.getElementById("dialogArea").style.display = "block";
+  const dialogArea = document.getElementById("dialogArea");
+  dialogArea.style.display = "block";
+
   dialogText.innerHTML = lines.map(l => l.text).join("");
 
   let i = 0;
@@ -69,7 +71,7 @@ function playDialogControlled(lines, onFinishSounds) {
 
 
 // ---------------------------------------------------------
-// DIALOG MED PAUSE
+// DIALOG MED PAUSE (dialog2)
 // ---------------------------------------------------------
 
 function runDialogPause(dialog1, dialog2) {
@@ -93,7 +95,7 @@ function runDialogPause(dialog1, dialog2) {
 // ---------------------------------------------------------
 
 function showExplorePanel() {
-  resetDigitFields();   // ⭐ NYT
+  resetDigitFields();
   document.querySelector(".panel-udforsk").style.display = "block";
 }
 
@@ -102,7 +104,7 @@ function hideExplorePanel() {
 }
 
 function showCodePanel() {
-  resetDigitFields();   // ⭐ NYT
+  resetDigitFields();
   document.querySelector(".panel:nth-of-type(2)").style.display = "block";
 }
 
@@ -134,7 +136,7 @@ function get4() {
 
 
 // ---------------------------------------------------------
-// AUTOFOKUS, BACKSPACE & AUTO-CLEAR
+// AUTOFOKUS, BACKSPACE, OVERSKRIVNING & AUTO-CLEAR
 // ---------------------------------------------------------
 
 document.addEventListener("mousedown", e => {
@@ -148,26 +150,52 @@ document.addEventListener("mousedown", e => {
 
 document.addEventListener("input", e => {
   if (!e.target.classList.contains("digit")) return;
+
   const inputs = [...document.querySelectorAll(".digit")];
   const index = inputs.indexOf(e.target);
-  if (e.target.value.length === 1) {
-    e.target.classList.add("filled");
-    if (index < inputs.length - 1) inputs[index + 1].focus();
+
+  // ⭐ Overskrivning
+  if (e.target.value.length > 1) {
+    e.target.value = e.target.value.slice(-1);
+  }
+
+  e.target.classList.add("filled");
+
+  // ⭐ Auto-hop
+  if (index < inputs.length - 1) {
+    inputs[index + 1].focus();
   }
 });
 
 document.addEventListener("keydown", e => {
   if (!e.target.classList.contains("digit")) return;
+
   const inputs = [...document.querySelectorAll(".digit")];
   const index = inputs.indexOf(e.target);
-  if (e.key === "Backspace" && e.target.value === "" && index > 0) {
-    inputs[index - 1].focus();
+
+  if (e.key === "Backspace") {
+
+    // Første tryk → slet tal
+    if (e.target.value !== "") {
+      e.target.value = "";
+      e.target.classList.remove("filled");
+      e.preventDefault();
+      return;
+    }
+
+    // Andet tryk → hop tilbage
+    if (index > 0) {
+      inputs[index - 1].focus();
+      inputs[index - 1].value = "";
+      inputs[index - 1].classList.remove("filled");
+      e.preventDefault();
+    }
   }
 });
 
 
 // ---------------------------------------------------------
-// ⭐ NY: RESET + AUTO-FOKUS (kun hvis dialog ikke er aktiv)
+// RESET + AUTO-FOKUS (kun hvis dialog ikke er aktiv)
 // ---------------------------------------------------------
 
 function resetDigitFields() {
@@ -178,11 +206,9 @@ function resetDigitFields() {
     input.classList.remove("filled");
   });
 
-  // ⭐ Ingen auto-fokus hvis dialogen er åben
   const dialogArea = document.getElementById("dialogArea");
   if (dialogArea.style.display === "block") return;
 
-  // ⭐ Auto-fokus på første felt
   if (inputs.length > 0) inputs[0].focus();
 }
 
@@ -303,7 +329,7 @@ function getNextErrorReaction() {
 
 
 // ---------------------------------------------------------
-// FEJL-DIALOG
+// FEJL-DIALOG (uden NÆSTE)
 // ---------------------------------------------------------
 
 function playErrorDialog(lines) {
@@ -334,12 +360,14 @@ function playErrorDialog(lines) {
 
   function endErrorDialog() {
     dialogActive = false;
-    nextBtn.classList.add("active");
-    nextBtn.onclick = () => {
-      nextBtn.classList.remove("active");
-      dialogArea.style.display = "none";
-      resetDigitFields();   // ⭐ NYT
-    };
+
+    // ❌ Ingen NÆSTE-knap
+    nextBtn.classList.remove("active");
+    nextBtn.onclick = null;
+
+    // ⭐ Dialogboksen forbliver synlig
+    // ⭐ Felter nulstilles
+    resetDigitFields();
   }
 
   showLine();
@@ -357,11 +385,11 @@ function interact() {
   let key1 = A && B ? `${A}+${B}` : A || B;
   let key2 = A && B ? `${B}+${A}` : "";
 
-  // 1) NERF-GUN
+  // 1) NERF-GUN (ingen NÆSTE)
   if (A === nerfCode || B === nerfCode) {
     playDialogControlled(getNextNerfReaction(), () => {
       dialogActive = false;
-      resetDigitFields();   // ⭐ NYT
+      resetDigitFields();
     });
     return;
   }
@@ -376,14 +404,14 @@ function interact() {
         result.dialog2.first,
         result.dialog2.second
       );
-      resetDigitFields();   // ⭐ NYT
+      resetDigitFields();
       return;
     }
 
     if (result.dialog) {
       playDialogControlled(result.dialog, () => {
         dialogActive = false;
-        resetDigitFields();   // ⭐ NYT
+        resetDigitFields();
       });
       return;
     }
@@ -418,7 +446,7 @@ function checkCode() {
   if (result) {
     playDialogControlled(result.dialog, () => {
       dialogActive = false;
-      resetDigitFields();   // ⭐ NYT
+      resetDigitFields();
     });
   }
 
@@ -454,7 +482,7 @@ function showHint() {
     { text: "Malthe: Jeg har ikke flere hints!", sound: null }
   ], () => {
     dialogActive = false;
-    resetDigitFields();   // ⭐ NYT
+    resetDigitFields();
   });
 }
 
