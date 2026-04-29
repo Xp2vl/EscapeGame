@@ -12,12 +12,12 @@ let dialogActive = false;
 // ---------------------------------------------------------
 
 function showNextButton() {
-  nextBtn.style.display = "block";
+  nextBtn.style.visibility = "visible";   // gør knappen synlig
   nextBtn.classList.add("active");
 }
 
 function hideNextButton() {
-  nextBtn.style.display = "none";
+  nextBtn.style.visibility = "hidden";    // skjul knappen men behold pladsen
   nextBtn.classList.remove("active");
   nextBtn.onclick = null;
 }
