@@ -6,6 +6,7 @@ let flowSteps = [];
 let flowIndex = 0;
 let dialogActive = false;
 
+
 // ---------------------------------------------------------
 // 2) NÆSTE-KNAP STYRING (NYT)
 // ---------------------------------------------------------
@@ -24,6 +25,7 @@ function hideNextButton() {
 // Skjul knappen fra start
 hideNextButton();
 
+
 // ---------------------------------------------------------
 // 3) START SPIL
 // ---------------------------------------------------------
@@ -33,6 +35,7 @@ function startGame() {
   document.getElementById("gameArea").style.display = "block";
   runStep();
 }
+
 
 // ---------------------------------------------------------
 // 4) FLOW-MOTOR (LINEÆRT FLOW)
@@ -48,6 +51,7 @@ function nextStep() {
   flowIndex++;
   runStep();
 }
+
 
 // ---------------------------------------------------------
 // 5) NYT DIALOGSYSTEM (VIS ALT + DU STYRER NÆSTE)
@@ -84,6 +88,7 @@ function playDialogControlled(lines, onFinishSounds) {
   playNext();
 }
 
+
 // ---------------------------------------------------------
 // 6) DIALOG MED PAUSE (dialog2)
 // ---------------------------------------------------------
@@ -103,6 +108,7 @@ function runDialogPause(dialog1, dialog2) {
     };
   });
 }
+
 
 // ---------------------------------------------------------
 // 7) PANEL-STYRING
@@ -126,6 +132,7 @@ function hideCodePanel() {
   document.querySelector(".panel:nth-of-type(2)").style.display = "none";
 }
 
+
 // ---------------------------------------------------------
 // 8) INPUT HJÆLPERE
 // ---------------------------------------------------------
@@ -146,6 +153,7 @@ function get4() {
   if (!c1 || !c2 || !c3 || !c4) return "";
   return c1 + c2 + c3 + c4;
 }
+
 
 // ---------------------------------------------------------
 // 9) AUTOFOKUS, BACKSPACE, OVERSKRIVNING & AUTO-CLEAR
@@ -201,6 +209,7 @@ document.addEventListener("keydown", e => {
   }
 });
 
+
 // ---------------------------------------------------------
 // 10) RESET + AUTO-FOKUS (kun hvis dialog ikke er aktiv)
 // ---------------------------------------------------------
@@ -219,6 +228,7 @@ function resetDigitFields() {
   if (inputs.length > 0) inputs[0].focus();
 }
 
+
 // ---------------------------------------------------------
 // 11) BONUS-INTERACTIONS (3-CIFRET)
 // ---------------------------------------------------------
@@ -231,7 +241,7 @@ const interactions = {
         { text: "<br>Josephine: Måske i nogle af de andre skuffer", sound: "Josephine_1.mp3" }
       ],
       second: [
-        { text: "<b>Tag kort 03</b>", sound: null }
+        { text: "Tag kort 03", sound: null }
       ]
     }
   },
@@ -242,7 +252,7 @@ const interactions = {
         { text: "Malthe: Der er godt nok mange skumpile i den skuffe", sound: "Malthe_1.mp3" }
       ],
       second: [
-        { text: "<b>Tag kort 04</b>", sound: null }
+        { text: "Tag kort 04", sound: null }
       ]
     }
   },
@@ -252,22 +262,23 @@ const interactions = {
       first: [
         { text: "Malthe: Feeedt!", sound: "Malthe_1.mp3" },
         { text: "<br>Josephine: Pas lige på med ikke at ødelægge noget med den der", sound: "Josephine_1.mp3" },
-        { text: "<br>Malthe: Der ligger noget under kommoden", sound: "Malthe_1.mp3" }
+        { text: "Malthe: Der ligger noget under kommoden", sound: "Malthe_1.mp3" }
       ],
       second: [
-         { text: "<b>Tag kort 05</b>", sound: null },
-         { text: "<br><b>Tag kort 06</b>", sound: null }
+         { text: "Tag kort 05", sound: null },
+         { text: "<br>Tag kort 06", sound: null }
       ]
     }
   },
 
   "244+962": {
     dialog: [
-      { text: "<b>Tag kort 07</b>", sound: null },
-      { text: "<br><b>Tag kort 08</b>", sound: null }
+      { text: "Tag kort 07", sound: null },
+      { text: "<br>Tag kort 08", sound: null }
     ]
   }
 };
+
 
 // ---------------------------------------------------------
 // 12) BONUS-KODER (4-CIFRET)
@@ -275,19 +286,13 @@ const interactions = {
 
 const codes = {
   "5287": {
-    dialog2: {
-      first: [
-        { text: "<b>Tag kort 09</b>", sound: null },
-        { text: "<br><br>Josephine: Du løste koden til den låste skuffe, var det så der jeg havde gemt den?", sound: null },
-        { text: "<br>Malthe: Hvad har du fundet?", sound: null },
-        { text: "<br>Josephine: Det er da drejehåndtaget til tyggegummiautomaten!", sound: null }
-      ],
-      second: [
-         { text: "<b>Tag kort 10</b>", sound: null },
-      ]
-    }
+    dialog: [
+      { text: "Josephine: Du løste koden!", sound: null },
+      { text: "<br>Malthe: Hvad har du fundet?", sound: null }
+    ]
   }
 };
+
 
 // ---------------------------------------------------------
 // 13) FLOW-SPECIFIKKE KODER
@@ -303,6 +308,7 @@ const flowExploreCodes = {
 const flowCodeCodes = {
   5: "5287"
 };
+
 
 // ---------------------------------------------------------
 // 14) NERF-GUN (uden NÆSTE)
@@ -326,6 +332,7 @@ function getNextNerfReaction() {
   return reaction;
 }
 
+
 // ---------------------------------------------------------
 // 15) FEJL-REAKTIONER
 // ---------------------------------------------------------
@@ -345,6 +352,7 @@ function getNextErrorReaction() {
   errorIndex = (errorIndex + 1) % errorReactions.length;
   return r;
 }
+
 
 // ---------------------------------------------------------
 // 16) FEJL-DIALOG (uden NÆSTE)
@@ -385,6 +393,7 @@ function playErrorDialog(lines) {
 
   showLine();
 }
+
 
 // ---------------------------------------------------------
 // 17) HYBRID-LOGIK FOR UDFORSK
@@ -449,6 +458,7 @@ function interact() {
   playErrorDialog(getNextErrorReaction());
 }
 
+
 // ---------------------------------------------------------
 // 18) HYBRID-LOGIK FOR KODE
 // ---------------------------------------------------------
@@ -481,6 +491,7 @@ function checkCode() {
   playErrorDialog(getNextErrorReaction());
 }
 
+
 // ---------------------------------------------------------
 // 19) HINT-SYSTEM
 // ---------------------------------------------------------
@@ -505,6 +516,7 @@ function showHint() {
   });
 }
 
+
 // ---------------------------------------------------------
 // 20) DIT LINEÆRE FLOW
 // ---------------------------------------------------------
@@ -522,7 +534,7 @@ flowSteps = [
         { text: "<br>Josephine: Der er sikkert noget du kan bruge i kommoden", sound: null }
       ],
       [
-        { text: "<b>Tag kort 2</b>", sound: null }
+        { text: "Tag kort 2", sound: null }
       ]
     )
   },
