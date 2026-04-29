@@ -234,33 +234,43 @@ function resetDigitFields() {
 // ---------------------------------------------------------
 
 const interactions = {
-  "854+259": {
-    dialog: [
-      { text: "Malthe: Feeedt!", sound: "Malthe_1.mp3" },
-      { text: "<br>Josephine: Pas lige på med den der!", sound: "Josephine_1.mp3" }
-    ]
-  },
   "854": {
     dialog2: {
       first: [
         { text: "Malthe: Sejt en NerfGun, men hvor finder vi skumpilene til den?", sound: "Malthe_1.mp3" },
-        { text: "Josephine: Måske i nogle af de andre skuffer...?", sound: "Josephine_1.mp3" }
+        { text: "<br>Josephine: Måske i nogle af de andre skuffer", sound: "Josephine_1.mp3" }
+      ],
+      second: [
+        { text: "Tag kort 03", sound: null }
+      ]
+    }
+  },
+  
+  "259": {
+    dialog2: {
+      first: [
+        { text: "Malthe: Der er godt nok mange skumpile i den skuffe", sound: "Malthe_1.mp3" }
       ],
       second: [
         { text: "Tag kort 04", sound: null }
       ]
     }
   },
-  "259": {
+  
+  "854+259": {
     dialog2: {
       first: [
-        { text: "Malthe: Der er godt nok mange skumpile i den skuffe der.", sound: "Malthe_1.mp3" }
+        { text: "Malthe: Feeedt!", sound: "Malthe_1.mp3" },
+        { text: "<br>Josephine: Pas lige på med ikke at ødelægge noget med den der", sound: "Josephine_1.mp3" },
+        { text: "Malthe: Der ligger noget under kommoden", sound: "Malthe_1.mp3" }
       ],
       second: [
-        { text: "Tag kort 05", sound: null }
+         { text: "Tag kort 05", sound: null },
+         { text: "Tag kort 06", sound: null }
       ]
     }
   },
+
   "418+951": {
     dialog: [
       { text: "Malthe: Tænk at det virkede!", sound: null },
@@ -515,13 +525,14 @@ flowSteps = [
     type: "dialog2",
     run: () => runDialogPause(
       [
-        { text: "Malthe: Yes, lad os så fange en Yeti.", sound: "Malthe_1.mp3" },
+        { text: "Malthe: Yes, lad os så fange en Yeti", sound: "Malthe_1.mp3" },
         { text: "<br>Josephine: Kunne det være en ide at vi holder vagt?", sound: "Josephine_1.mp3" },
         { text: "<br>Malthe: God ide Jose, oppe fra udkigsposten?", sound: null },
-        { text: "<br>Josephine: Ja, vi kan sagtens hjælpe deroppefra.", sound: null }
+        { text: "<br>Josephine: Ja, vi kan sagtens hjælpe deroppefra", sound: null },
+        { text: "<br>Josephine: Der er sikkert noget du kan bruge i kommoden", sound: null }
       ],
       [
-        { text: "<br><br>Tag kort 2", sound: null }
+        { text: "Tag kort 2", sound: null }
       ]
     )
   },
