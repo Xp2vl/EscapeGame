@@ -107,6 +107,7 @@ function runDialogPause(dialog1, dialog2) {
 // ---------------------------------------------------------
 
 function showExplorePanel() {
+  resetDigitFields();
   document.querySelector(".panel-udforsk").style.display = "block";
 }
 
@@ -115,6 +116,7 @@ function hideExplorePanel() {
 }
 
 function showCodePanel() {
+  resetDigitFields();
   document.querySelector(".panel:nth-of-type(2)").style.display = "block";
 }
 
@@ -177,6 +179,13 @@ document.addEventListener("keydown", e => {
   }
 });
 
+function resetDigitFields() {
+  const inputs = document.querySelectorAll(".digit");
+  inputs.forEach(input => {
+    input.value = "";
+    input.classList.remove("filled");
+  });
+}
 
 // ---------------------------------------------------------
 // 7) BONUS-INTERACTIONS (3-CIFRET)
@@ -196,7 +205,7 @@ const interactions = {
       { text: "Josephine: Måske i nogle af de andre skuffer...?", sound: "Josephine_1.mp3" }
     ],
     second: [
-      { text: "<br><br>Tag kort 05", sound: null }
+      { text: "Tag kort 04", sound: null }
     ]
   }
 },
@@ -206,7 +215,7 @@ const interactions = {
       { text: "Malthe: Der er godt nok mange skumpile i den skuffe der.", sound: "Malthe_1.mp3" }
     ],
     second: [
-      { text: "<br><br>Tag kort 05", sound: null }
+      { text: "Tag kort 05", sound: null }
     ]
   }
 },
