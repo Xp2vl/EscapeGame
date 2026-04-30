@@ -483,7 +483,6 @@ function checkCode() {
     correct &&
     code === correct
   ) {
-    hideCodePanel();
     nextStep();
     return;
   }
