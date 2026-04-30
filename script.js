@@ -216,12 +216,12 @@ function resetDigitFields() {
     input.classList.remove("filled");
   });
 
-  // Kun auto-fokus hvis dialog IKKE er aktiv
   if (!dialogActive && inputs.length > 0) {
-    inputs[0].blur();   // sikrer at mobilen ikke åbner tastatur
+    inputs[0].blur();
     inputs[0].focus();
   }
 }
+
 
 // ---------------------------------------------------------
 // 11) BONUS-INTERACTIONS (3-CIFRET)
@@ -402,15 +402,20 @@ function interact() {
   hideNextButton();
 
   // NERF
-  if (A === nerfCode || B === nerfCode) {
+if (A === nerfCode || B === nerfCode) {
+
     dialogActive = true;
+
     playDialogControlled(getNextNerfReaction(), () => {
-      dialogActive = false;
-      hideNextButton();
-      resetDigitFields();
-      });
+
+        dialogActive = false;     // ← NU virker det
+        hideNextButton();
+        resetDigitFields();       // ← NU nulstilles felterne
+    });
+
     return;
-  }
+}
+
 
   // FLOW
   const correct = flowExploreCodes[flowIndex];
