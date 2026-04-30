@@ -102,9 +102,8 @@ function runDialogPause(dialog1, dialog2) {
       hideNextButton();
 
       playDialogControlled(dialog2, () => {
-        dialogActive = false;                 // ← dialog er helt færdig
-        document.getElementById("dialogArea").style.display = "none";
-        nextStep();                           // ← flowet videre her
+        dialogActive = false;     // dialog færdig
+        nextStep();               // videre i flowet
       });
     };
   });
@@ -116,20 +115,16 @@ function runDialogPause(dialog1, dialog2) {
 
 function showExplorePanel() {
   resetDigitFields();
-  document.querySelector(".panel-udforsk").style.display = "block";
 }
 
 function hideExplorePanel() {
-  document.querySelector(".panel-udforsk").style.display = "none";
 }
 
 function showCodePanel() {
   resetDigitFields();
-  document.querySelector(".panel:nth-of-type(2)").style.display = "block";
 }
 
 function hideCodePanel() {
-  document.querySelector(".panel:nth-of-type(2)").style.display = "none";
 }
 
 
@@ -222,12 +217,8 @@ function resetDigitFields() {
     input.classList.remove("filled");
   });
 
-  const dialogArea = document.getElementById("dialogArea");
-  if (dialogArea.style.display === "block") return;
-
   if (inputs.length > 0) inputs[0].focus();
 }
-
 
 // ---------------------------------------------------------
 // 11) BONUS-INTERACTIONS (3-CIFRET)
@@ -362,8 +353,7 @@ function playErrorDialog(lines) {
   dialogActive = true;
   let i = 0;
 
-  const dialogArea = document.getElementById("dialogArea");
-  dialogArea.style.display = "block";
+  // dialogArea.style.display = "block";  ← FJERN DENNE LINJE
 
   function showLine() {
     const line = lines[i];
@@ -388,19 +378,17 @@ function playErrorDialog(lines) {
     dialogActive = false;
     hideNextButton();
     resetDigitFields();
-    document.getElementById("dialogArea").style.display = "none";
   }
 
   showLine();
 }
-
 
 // ---------------------------------------------------------
 // 17) HYBRID-LOGIK FOR UDFORSK
 // ---------------------------------------------------------
 
 function interact() {
-  if (dialogActive) return;   // ← ingen input mens dialog kører
+  if (dialogActive) return;
 
   const A = get3("A");
   const B = get3("B");
@@ -416,12 +404,11 @@ function interact() {
       dialogActive = false;
       hideNextButton();
       resetDigitFields();
-      document.getElementById("dialogArea").style.display = "none";
     });
     return;
   }
 
-  // FLOW-KODE (før bonus)
+  // FLOW
   const correct = flowExploreCodes[flowIndex];
 
   if (
@@ -433,16 +420,12 @@ function interact() {
     return;
   }
 
-  // BONUS-INTERACTIONS
+  // BONUS
   const result = interactions[key1] || interactions[key2];
 
   if (result) {
-
     if (result.dialog2) {
-      runDialogPause(
-        result.dialog2.first,
-        result.dialog2.second
-      );
+      runDialogPause(result.dialog2.first, result.dialog2.second);
       resetDigitFields();
       return;
     }
@@ -452,7 +435,6 @@ function interact() {
         dialogActive = false;
         hideNextButton();
         resetDigitFields();
-        document.getElementById("dialogArea").style.display = "none";
       });
       return;
     }
@@ -462,31 +444,27 @@ function interact() {
   playErrorDialog(getNextErrorReaction());
 }
 
-
 // ---------------------------------------------------------
 // 18) HYBRID-LOGIK FOR KODE
 // ---------------------------------------------------------
 
 function checkCode() {
-  if (dialogActive) return;   // ← ingen input mens dialog kører
+  if (dialogActive) return;
 
   const code = get4();
 
   hideNextButton();
 
-  // BONUS-KODE (4-cifret)
   const result = codes[code];
   if (result) {
     playDialogControlled(result.dialog, () => {
       dialogActive = false;
       hideNextButton();
       resetDigitFields();
-      document.getElementById("dialogArea").style.display = "none";
     });
-    return;                   // ← vigtigt: ingen flow/fejl bagefter
+    return;
   }
 
-  // FLOW-KODE
   const correct = flowCodeCodes[flowIndex];
 
   if (
@@ -498,10 +476,8 @@ function checkCode() {
     return;
   }
 
-  // FEJL
   playErrorDialog(getNextErrorReaction());
 }
-
 
 // ---------------------------------------------------------
 // 19) HINT-SYSTEM
@@ -524,10 +500,9 @@ function showHint() {
     dialogActive = false;
     hideNextButton();
     resetDigitFields();
-    document.getElementById("dialogArea").style.display = "none";
+    // INGEN display = "none" her
   });
 }
-
 
 // ---------------------------------------------------------
 // 20) DIT LINEÆRE FLOW
