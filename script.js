@@ -400,13 +400,16 @@ function interact() {
 
   // NERF
   if (A === nerfCode || B === nerfCode) {
+    dialogActive = true; // lås input
     playDialogControlled(getNextNerfReaction(), () => {
-      dialogActive = false;
-      hideNextButton();
-      resetDigitFields();
-    });
+        // FRIGIV input igen
+        dialogActive = false;
+        hideNextButton();
+        resetDigitFields();
+      });
     return;
   }
+
 
   // FLOW
   const correct = flowExploreCodes[flowIndex];
