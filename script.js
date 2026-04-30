@@ -266,15 +266,15 @@ const interactions = {
       ],
       second: [
          { text: "Tag kort 05", sound: null },
-         { text: "<br>Tag kort 06", sound: null }
+         { text: "Tag kort 06", sound: null }
       ]
     }
   },
 
-  "244+962": {
+  "418+951": {
     dialog: [
-      { text: "Tag kort 07", sound: null },
-      { text: "<br>Tag kort 08", sound: null }
+      { text: "Malthe: Tænk at det virkede!", sound: null },
+      { text: "<br>Josephine: Bare det kan dreje rundt!", sound: null }
     ]
   }
 };
@@ -302,7 +302,7 @@ const flowExploreCodes = {
   1: ["854"], //Step 2
   2: ["259"], //Step 3
   3: ["854+259", "259+854"], //Step 4
-  4: ["244+962", "962+244"] //Step 5
+  4: ["418+951", "951+418"] //Step 5
 };
 
 const flowCodeCodes = {
@@ -408,7 +408,7 @@ function interact() {
 
   hideNextButton();
 
-  // 1) NERF-KODE FØRST
+  // 1) NERF-KODE
   if (A === nerfCode || B === nerfCode) {
     playDialogControlled(getNextNerfReaction(), () => {
       dialogActive = false;
@@ -418,7 +418,7 @@ function interact() {
     return;
   }
 
-  // 2) FLOW-KODE (VIGTIGT: SKAL TJEKKES FØR BONUS-INTERACTIONS)
+  // 2) FLOW-KODE (SKAL KOMME FØR BONUS!)
   const correct = flowExploreCodes[flowIndex];
 
   if (
@@ -430,7 +430,7 @@ function interact() {
     return;
   }
 
-  // 3) BONUS-INTERACTIONS (kun hvis det IKKE var en flow-kode)
+  // 3) BONUS-INTERACTIONS
   const result = interactions[key1] || interactions[key2];
 
   if (result) {
@@ -458,7 +458,6 @@ function interact() {
   playErrorDialog(getNextErrorReaction());
 }
 
-
 // ---------------------------------------------------------
 // 18) HYBRID-LOGIK FOR KODE
 // ---------------------------------------------------------
@@ -484,6 +483,7 @@ function checkCode() {
     correct &&
     code === correct
   ) {
+    hideCodePanel();
     nextStep();
     return;
   }
@@ -544,7 +544,7 @@ flowSteps = [
   { type: "explore", run: () => showExplorePanel() }, // Step 4
   { type: "explore", run: () => showExplorePanel() }, // Step 5
  
-  { type: "code", run: () => showCodePanel() }, // Step 6
+  { type: "code", run: () => showCodePanel() }, // Step
 
   { type: "explore", run: () => showExplorePanel() },
   { type: "explore", run: () => showExplorePanel() },
