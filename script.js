@@ -95,6 +95,8 @@ function playDialogControlled(lines, onFinishSounds) {
 
 function runDialogPause(dialog1, dialog2) {
 
+  dialogActive = true; // ← Lås input
+
   playDialogControlled(dialog1, () => {
 
     showNextButton();
@@ -103,12 +105,13 @@ function runDialogPause(dialog1, dialog2) {
       hideNextButton();
 
       playDialogControlled(dialog2, () => {
-        nextStep();
+
+        dialogActive = false;   // ← Lås op igen
+        nextStep();             // ← Flowet rykker videre her
       });
     };
   });
 }
-
 
 // ---------------------------------------------------------
 // 7) PANEL-STYRING
@@ -400,6 +403,7 @@ function playErrorDialog(lines) {
 // ---------------------------------------------------------
 
 function interact() {
+  if (dialogActive) return;  // ← Stop input mens dialog kører
   const A = get3("A");
   const B = get3("B");
 
@@ -463,6 +467,7 @@ function interact() {
 // ---------------------------------------------------------
 
 function checkCode() {
+  if (dialogActive) return;  // ← Stop input mens dialog kører
   const code = get4();
 
   hideNextButton();
