@@ -401,21 +401,26 @@ function interact() {
 
   hideNextButton();
 
-  // NERF
+// NERF (helt uden dialogsystem)
 if (A === nerfCode || B === nerfCode) {
 
-    dialogActive = true;
+    const reaction = getNextNerfReaction()[0]; // én linje
 
-    playDialogControlled(getNextNerfReaction(), () => {
+    // Vis teksten i dialogboksen
+    dialogText.innerHTML = reaction.text;
 
-        dialogActive = false;     // ← NU virker det
-        hideNextButton();
-        resetDigitFields();       // ← NU nulstilles felterne
-    });
+    // Spil lyden uden at vente på noget
+    if (reaction.sound) {
+        const audio = new Audio("assets/lyd/" + reaction.sound);
+        audio.play(); // ingen onended, ingen callback
+    }
 
+    // Nulstil felterne med det samme
+    resetDigitFields();
+
+    // Spillet fortsætter helt normalt
     return;
 }
-
 
   // FLOW
   const correct = flowExploreCodes[flowIndex];
