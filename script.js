@@ -58,7 +58,6 @@ function nextStep() {
 // ---------------------------------------------------------
 
 function playDialogControlled(lines, onFinishSounds) {
-  dialogActive = true;
 
   const dialogArea = document.getElementById("dialogArea");
   dialogArea.style.display = "block";
@@ -217,7 +216,11 @@ function resetDigitFields() {
     input.classList.remove("filled");
   });
 
-  if (inputs.length > 0) inputs[0].focus();
+  // Kun auto-fokus hvis dialog IKKE er aktiv
+  if (!dialogActive && inputs.length > 0) {
+    inputs[0].blur();   // sikrer at mobilen ikke åbner tastatur
+    inputs[0].focus();
+  }
 }
 
 // ---------------------------------------------------------
@@ -400,16 +403,14 @@ function interact() {
 
   // NERF
   if (A === nerfCode || B === nerfCode) {
-    dialogActive = true; // lås input
+    dialogActive = true;
     playDialogControlled(getNextNerfReaction(), () => {
-        // FRIGIV input igen
-        dialogActive = false;
-        hideNextButton();
-        resetDigitFields();
+      dialogActive = false;
+      hideNextButton();
+      resetDigitFields();
       });
     return;
   }
-
 
   // FLOW
   const correct = flowExploreCodes[flowIndex];
