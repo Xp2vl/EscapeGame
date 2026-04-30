@@ -88,14 +88,11 @@ function playDialogControlled(lines, onFinishSounds) {
   playNext();
 }
 
-
 // ---------------------------------------------------------
 // 6) DIALOG MED PAUSE (dialog2)
 // ---------------------------------------------------------
 
 function runDialogPause(dialog1, dialog2) {
-
-  dialogActive = true; // ← Lås input
 
   playDialogControlled(dialog1, () => {
 
@@ -105,9 +102,9 @@ function runDialogPause(dialog1, dialog2) {
       hideNextButton();
 
       playDialogControlled(dialog2, () => {
-
-        dialogActive = false;   // ← Lås op igen
-        nextStep();             // ← Flowet rykker videre her
+        dialogActive = false;                 // ← dialog er helt færdig
+        document.getElementById("dialogArea").style.display = "none";
+        nextStep();                           // ← flowet videre her
       });
     };
   });
@@ -389,9 +386,9 @@ function playErrorDialog(lines) {
 
   function endErrorDialog() {
     dialogActive = false;
-
     hideNextButton();
     resetDigitFields();
+    document.getElementById("dialogArea").style.display = "none";
   }
 
   showLine();
@@ -403,7 +400,8 @@ function playErrorDialog(lines) {
 // ---------------------------------------------------------
 
 function interact() {
-  if (dialogActive) return;  // ← Stop input mens dialog kører
+  if (dialogActive) return;   // ← ingen input mens dialog kører
+
   const A = get3("A");
   const B = get3("B");
 
@@ -412,17 +410,18 @@ function interact() {
 
   hideNextButton();
 
-  // 1) NERF-KODE
+  // NERF
   if (A === nerfCode || B === nerfCode) {
     playDialogControlled(getNextNerfReaction(), () => {
       dialogActive = false;
       hideNextButton();
       resetDigitFields();
+      document.getElementById("dialogArea").style.display = "none";
     });
     return;
   }
 
-  // 2) FLOW-KODE (SKAL KOMME FØR BONUS!)
+  // FLOW-KODE (før bonus)
   const correct = flowExploreCodes[flowIndex];
 
   if (
@@ -434,7 +433,7 @@ function interact() {
     return;
   }
 
-  // 3) BONUS-INTERACTIONS
+  // BONUS-INTERACTIONS
   const result = interactions[key1] || interactions[key2];
 
   if (result) {
@@ -453,34 +452,41 @@ function interact() {
         dialogActive = false;
         hideNextButton();
         resetDigitFields();
+        document.getElementById("dialogArea").style.display = "none";
       });
       return;
     }
   }
 
-  // 4) FEJL
+  // FEJL
   playErrorDialog(getNextErrorReaction());
 }
+
 
 // ---------------------------------------------------------
 // 18) HYBRID-LOGIK FOR KODE
 // ---------------------------------------------------------
 
 function checkCode() {
-  if (dialogActive) return;  // ← Stop input mens dialog kører
+  if (dialogActive) return;   // ← ingen input mens dialog kører
+
   const code = get4();
 
   hideNextButton();
 
+  // BONUS-KODE (4-cifret)
   const result = codes[code];
   if (result) {
     playDialogControlled(result.dialog, () => {
       dialogActive = false;
       hideNextButton();
       resetDigitFields();
+      document.getElementById("dialogArea").style.display = "none";
     });
+    return;                   // ← vigtigt: ingen flow/fejl bagefter
   }
 
+  // FLOW-KODE
   const correct = flowCodeCodes[flowIndex];
 
   if (
@@ -492,6 +498,7 @@ function checkCode() {
     return;
   }
 
+  // FEJL
   playErrorDialog(getNextErrorReaction());
 }
 
@@ -517,6 +524,7 @@ function showHint() {
     dialogActive = false;
     hideNextButton();
     resetDigitFields();
+    document.getElementById("dialogArea").style.display = "none";
   });
 }
 
