@@ -271,7 +271,7 @@ const interactions = {
     }
   },
   
-  "854+259": {
+  "384+464": {
     dialog2: {
       first: [
         { text: "Malthe: Feeedt!", sound: "Malthe_1.mp3" },
@@ -292,16 +292,19 @@ const interactions = {
     ]
   },
  
-  "854": {
+  "625+415": {
     dialog2: {
       first: [
-        { text: "<b>Tag kort 09</b>", sound: null }
+        { text: "<b>Tag kort 11</b>", sound: null }
       ],
       second: [
-        { text: "Josephine: Anden del", sound: null }
+        { text: "Malthe: ååårh ja, du ramte den lige i smasken og i første forsøg.", sound: null },
+        { text: "<br>Josephine: Det er bedre end dig Malthe!", sound: null },
+        { text: "<br>Malthe: Jeg kunne også sagtens ramme Yetien, hvis jeg stod så tæt på.", sound: null },
+        { text: "<br>Josephine: Som om...", sound: null }
       ],
       third: [
-        { text: "Tag kort 03", sound: null }
+        { text: "<b>Tag kort 12</b>", sound: null }
       ]
     }
   }
@@ -320,11 +323,11 @@ const codes = {
       ],
       second: [
         { text: "Josephine: Du løste koden til den låste skuffe, var det så der jeg havde gemt den?", sound: null },
-        { text: "Malthe: Hvad har du fundet?", sound: null },
-        { text: "Josephine: Det er da drejehåndtaget til tyggegummiautomaten!", sound: null }
+        { text: "<br>Malthe: Hvad har du fundet?", sound: null },
+        { text: "<br>Josephine: Det er da drejehåndtaget til tyggegummiautomaten!", sound: null }
       ],
       third: [
-        { text: "Tag kort 10", sound: null }
+        { text: "<b>Tag kort 10</b>", sound: null }
       ]
     }
   }
@@ -338,7 +341,7 @@ const codes = {
 const flowExploreCodes = {
   1: ["854"], //Step 2
   2: ["259"], //Step 3
-  3: ["854+259", "259+854"], //Step 4
+  3: ["384+464", "464+384"], //Step 4
   4: ["244+962", "962+244"] //Step 5
 };
 
