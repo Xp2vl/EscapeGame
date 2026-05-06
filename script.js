@@ -303,7 +303,27 @@ const interactions = {
         { text: "<b>Tag kort 12</b>", sound: null }
       ]
     }
+  },
+
+  "689+348": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 13</b>", sound: null },
+        { text: "<br><b>Tag kort 14</b>", sound: null }
+      ],
+      second: [
+        { text: "Josephine: Det da også rigtigt, Yeti figuren skal stå på piedestalen.", sound: null },
+        { text: "<br>Malthe: Godt set.", sound: null },
+        { text: "<br>Josephine: Helt sikkert.", sound: null }
+      ],
+      third: [
+        { text: "<b>Tag kort 15</b>", sound: null },
+        { text: "<br><b>Tag kort 16</b>", sound: null },
+        { text: "<br><b>Tag kort 17</b>", sound: null }
+      ]
+    }
   }
+
 };
 
 
@@ -326,9 +346,20 @@ const codes = {
         { text: "<b>Tag kort 10</b>", sound: null }
       ]
     }
+  },
+
+  "1482": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 18</b>", sound: null }
+      ],
+      second: [
+        { text: "Josephine: Du fik værktøjskassen op, FEDT.", sound: null },
+        { text: "<br>Malthe: Er der noget brugbart i den?", sound: null }
+      ]
+    }
   }
 };
-
 
 // ---------------------------------------------------------
 // 13) FLOW-SPECIFIKKE KODER
@@ -339,13 +370,14 @@ const flowExploreCodes = {
   2: ["259"], //Step 3
   3: ["384+464", "464+384"], //Step 4
   4: ["244+962", "962+244"], //Step 5
-  6: ["625+415", "415+625"] //Step 7
+  6: ["625+415", "415+625"], //Step 7
+  7: ["689+348", "348+689"] //Step 8 
 };
 
 const flowCodeCodes = {
-  5: "5287" //Step 6
+  5: "5287", //Step 6
+  8: "1482" //Step 9
 };
-
 
 // ---------------------------------------------------------
 // 14) NERF-GUN (uden NÆSTE)
@@ -604,10 +636,13 @@ flowSteps = [
   { type: "explore", run: () => showExplorePanel() }, // Step 4
   { type: "explore", run: () => showExplorePanel() }, // Step 5
  
-  { type: "code", run: () => showCodePanel() }, // Step
+  { type: "code", run: () => showCodePanel() }, // Step 6
 
-  { type: "explore", run: () => showExplorePanel() },
-  { type: "explore", run: () => showExplorePanel() },
+  { type: "explore", run: () => showExplorePanel() }, // Step 7
+  { type: "explore", run: () => showExplorePanel() }, // Step 8
+
+  { type: "code", run: () => showCodePanel() }, // Step 9
+  
   { type: "explore", run: () => showExplorePanel() },
   { type: "explore", run: () => showExplorePanel() },
 
