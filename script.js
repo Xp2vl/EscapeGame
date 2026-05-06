@@ -91,38 +91,37 @@ function playDialogControlled(lines, onFinishSounds) {
 // 6) DIALOG MED PAUSE (dialog2)
 // ---------------------------------------------------------
 
-function runDialogPause(dialog1, dialog2, dialog3 = null) {
+function runDialogPause(...dialogParts) {
+  // dialogParts er et array af dialog arrays
+  // fx [first, second, third, fourth, fifth]
 
-  playDialogControlled(dialog1, () => {
+  let index = 0;
 
-    showNextButton();
+  function playPart() {
+    const part = dialogParts[index];
 
-    nextBtn.onclick = () => {
-      hideNextButton();
+    playDialogControlled(part, () => {
 
-      playDialogControlled(dialog2, () => {
+      index++;
 
-        if (dialog3) {
+      // Hvis der er flere dele → vis NÆSTE
+      if (index < dialogParts.length) {
+        showNextButton();
+        nextBtn.onclick = () => {
+          hideNextButton();
+          playPart();
+        };
+      } else {
+        // Sidste del → afslut
+        dialogActive = false;
+        nextStep();
+      }
+    });
+  }
 
-          showNextButton();
-
-          nextBtn.onclick = () => {
-            hideNextButton();
-
-            playDialogControlled(dialog3, () => {
-              dialogActive = false;
-              nextStep();
-            });
-          };
-
-        } else {
-          dialogActive = false;
-          nextStep();
-        }
-      });
-    };
-  });
+  playPart();
 }
+
 
 // ---------------------------------------------------------
 // 7) PANEL-STYRING
@@ -322,8 +321,61 @@ const interactions = {
         { text: "<br><b>Tag kort 17</b>", sound: null }
       ]
     }
-  }
+  },
 
+  "522+158": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 19</b>", sound: null }
+      ],
+      second: [
+        { text: "Malthe: Der er godt nok mange penge i den sparegris!", sound: null },
+        { text: "<br>Josephine: Det er fra når jeg hjælper mormor med rengøring.", sound: null },
+        { text: "<br>Malthe: Okay... Det skulle jeg have mere for...", sound: null }
+      ],
+      third: [
+        { text: "<b>Tag kort 20</b>", sound: null }
+      ]
+    }
+  },
+
+  "816+527": {
+    dialog: [
+      { text: "<b>Tag kort 21</b>", sound: null }
+    ]
+  },
+
+  "252+952": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 22</b>", sound: null }
+      ],
+      second: [
+        { text: "Malthe: Hvad skal vi med de kæmpe tyggegummier?", sound: null },
+        { text: "<br>Josephine: De smager ikke godt særlig længe!", sound: null },
+        { text: "<br>Malthe: Jeg tror den kødædende plante kan li' dem.", sound: null }
+      ],
+      third: [
+        { text: "<b>Tag kort 23</b>", sound: null }
+      ]
+    }
+  },
+ 
+  "598+324": {
+    dialog2: {
+      first: [
+        { text: "Malthe: Er det bare mig eller ligner det at den vokser?", sound: null },
+        { text: "<br>Josephine: Den vokser sygt meget hurtigt...", sound: null },
+        { text: "<br>Malthe: Det da for vildt, af 1 tyggegummi.. Hva' er det for noget tyggegummi?", sound: null },
+        { text: "<br>Josephine: Det ved jeg ikke, men jeg tror det er for gammelt.", sound: null },
+        { text: "<br>Malthe: Og jeg var lige ved at spise et også.", sound: null }
+      ],
+      second: [
+        { text: "<b>Tag kort 24</b>", sound: null }
+      ]
+    }
+  }
+   
 };
 
 
@@ -371,7 +423,11 @@ const flowExploreCodes = {
   3: ["384+464", "464+384"], //Step 4
   4: ["244+962", "962+244"], //Step 5
   6: ["625+415", "415+625"], //Step 7
-  7: ["689+348", "348+689"] //Step 8 
+  7: ["689+348", "348+689"], //Step 8
+  9: ["522+158", "158+522"], //Step 10
+  10: ["816+527", "527+816"], //Step 11
+  11: ["252+952", "952+252"], //Step 12 
+  12: ["598+324", "324+598"] //Step 13
 };
 
 const flowCodeCodes = {
@@ -479,7 +535,7 @@ function interact() {
 // NERF (men IKKE hvis det er 625+415 eller 415+625)
 if (
   (A === nerfCode || B === nerfCode) &&
-  !( (A === "625" && B === "415") || (A === "415" && B === "625") )
+  !((A === "625" && B === "415") || (A === "415" && B === "625"))
 ) {
 
     const reaction = getNextNerfReaction()[0];
@@ -513,13 +569,21 @@ const result = interactions[key1] || interactions[key2];
 if (result) {
   if (result.dialog2) {
     runDialogPause(
-      result.dialog2.first,
-      result.dialog2.second,
-      result.dialog2.third || null
+      ...Object.values(result.dialog2)
     );
     resetDigitFields();
     return;
   }
+
+  if (result.dialog) {
+    playDialogControlled(result.dialog, () => {
+      dialogActive = false;
+      hideNextButton();
+      resetDigitFields();
+    });
+    return;
+  }
+}
 
   if (result.dialog) {
     playDialogControlled(result.dialog, () => {
@@ -547,30 +611,28 @@ function checkCode() {
 
   hideNextButton();
 
-  const result = codes[code];
+const result = codes[code];
 
-  if (result) {
-    if (result.dialog2) {
-      runDialogPause(
-        result.dialog2.first,
-        result.dialog2.second,
-        result.dialog2.third || null
-      );
-      resetDigitFields();
-      return;
-    }
-
-    if (result.dialog) {
-      playDialogControlled(result.dialog, () => {
-        dialogActive = false;
-        hideNextButton();
-        resetDigitFields();
-      });
-      return;
-    }
+if (result) {
+  if (result.dialog2) {
+    runDialogPause(
+      ...Object.values(result.dialog2)
+    );
+    resetDigitFields();
+    return;
   }
 
-  const correct = flowCodeCodes[flowIndex];
+  if (result.dialog) {
+    playDialogControlled(result.dialog, () => {
+      dialogActive = false;
+      hideNextButton();
+      resetDigitFields();
+    });
+    return;
+  }
+}
+
+const correct = flowCodeCodes[flowIndex];
 
   if (
     flowSteps[flowIndex].type === "code" &&
@@ -642,7 +704,7 @@ flowSteps = [
   { type: "explore", run: () => showExplorePanel() }, // Step 8
 
   { type: "code", run: () => showCodePanel() }, // Step 9
-  
+
   { type: "explore", run: () => showExplorePanel() },
   { type: "explore", run: () => showExplorePanel() },
 
