@@ -705,8 +705,10 @@ flowSteps = [
 
   { type: "code", run: () => showCodePanel() }, // Step 9
 
-  { type: "explore", run: () => showExplorePanel() },
-  { type: "explore", run: () => showExplorePanel() },
+  { type: "explore", run: () => showExplorePanel() }, // Step 10
+  { type: "explore", run: () => showExplorePanel() }, // Step 11
+  { type: "explore", run: () => showExplorePanel() }, // Step 12
+  { type: "explore", run: () => showExplorePanel() }, // Step 13
 
   { type: "code", run: () => showCodePanel() },
 
