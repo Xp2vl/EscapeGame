@@ -90,9 +90,9 @@ function playDialogControlled(lines, onFinishSounds) {
 // ---------------------------------------------------------
 // 6) DIALOG MED PAUSE (dialog2)
 // ---------------------------------------------------------
+function runDialogPause(dialog1, dialog2, dialog3 = null) {
 
-function runDialogPause(dialog1, dialog2) {
-
+  // Første del
   playDialogControlled(dialog1, () => {
 
     showNextButton();
@@ -100,9 +100,29 @@ function runDialogPause(dialog1, dialog2) {
     nextBtn.onclick = () => {
       hideNextButton();
 
+      // Anden del
       playDialogControlled(dialog2, () => {
-        dialogActive = false;     // dialog færdig
-        nextStep();               // videre i flowet
+
+        // Hvis der er en tredje del
+        if (dialog3) {
+
+          showNextButton();
+
+          nextBtn.onclick = () => {
+            hideNextButton();
+
+            // Tredje del
+            playDialogControlled(dialog3, () => {
+              dialogActive = false;
+              nextStep();
+            });
+          };
+
+        } else {
+          // Ingen tredje del → afslut
+          dialogActive = false;
+          nextStep();
+        }
       });
     };
   });
@@ -235,7 +255,7 @@ const interactions = {
         { text: "<br>Josephine: Måske i nogle af de andre skuffer", sound: "Josephine_1.mp3" }
       ],
       second: [
-        { text: "Tag kort 03", sound: null }
+        { text: "<b>Tag kort 03</b>", sound: null }
       ]
     }
   },
@@ -246,7 +266,7 @@ const interactions = {
         { text: "Malthe: Der er godt nok mange skumpile i den skuffe", sound: "Malthe_1.mp3" }
       ],
       second: [
-        { text: "Tag kort 04", sound: null }
+        { text: "<b>Tag kort 04</b>", sound: null }
       ]
     }
   },
@@ -256,20 +276,34 @@ const interactions = {
       first: [
         { text: "Malthe: Feeedt!", sound: "Malthe_1.mp3" },
         { text: "<br>Josephine: Pas lige på med ikke at ødelægge noget med den der", sound: "Josephine_1.mp3" },
-        { text: "Malthe: Der ligger noget under kommoden", sound: "Malthe_1.mp3" }
+        { text: "<br>Malthe: Der ligger noget under kommoden", sound: "Malthe_1.mp3" }
       ],
       second: [
-         { text: "Tag kort 05", sound: null },
-         { text: "Tag kort 06", sound: null }
+         { text: "<b>Tag kort 05</b>", sound: null },
+         { text: "<br><b>Tag kort 06</b>", sound: null }
       ]
     }
   },
 
-  "418+951": {
+  "244+962": {
     dialog: [
-      { text: "Malthe: Tænk at det virkede!", sound: null },
-      { text: "<br>Josephine: Bare det kan dreje rundt!", sound: null }
+      { text: "<b>Tag kort 07</b>", sound: null },
+      { text: "<br><b>Tag kort 08</b>", sound: null }
     ]
+  },
+ 
+  "854": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 09</b>", sound: null }
+      ],
+      second: [
+        { text: "Josephine: Anden del", sound: null }
+      ],
+      third: [
+        { text: "Tag kort 03", sound: null }
+      ]
+    }
   }
 };
 
@@ -280,10 +314,19 @@ const interactions = {
 
 const codes = {
   "5287": {
-    dialog: [
-      { text: "Josephine: Du løste koden!", sound: null },
-      { text: "<br>Malthe: Hvad har du fundet?", sound: null }
-    ]
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 09</b>", sound: null }
+      ],
+      second: [
+        { text: "Josephine: Du løste koden til den låste skuffe, var det så der jeg havde gemt den?", sound: null },
+        { text: "Malthe: Hvad har du fundet?", sound: null },
+        { text: "Josephine: Det er da drejehåndtaget til tyggegummiautomaten!", sound: null }
+      ],
+      third: [
+        { text: "Tag kort 10", sound: null }
+      ]
+    }
   }
 };
 
@@ -296,7 +339,7 @@ const flowExploreCodes = {
   1: ["854"], //Step 2
   2: ["259"], //Step 3
   3: ["854+259", "259+854"], //Step 4
-  4: ["418+951", "951+418"] //Step 5
+  4: ["244+962", "962+244"] //Step 5
 };
 
 const flowCodeCodes = {
@@ -437,12 +480,15 @@ if (A === nerfCode || B === nerfCode) {
   // BONUS
   const result = interactions[key1] || interactions[key2];
 
-  if (result) {
-    if (result.dialog2) {
-      runDialogPause(result.dialog2.first, result.dialog2.second);
-      resetDigitFields();
-      return;
-    }
+if (result.dialog2) {
+  runDialogPause(
+    result.dialog2.first,
+    result.dialog2.second,
+    result.dialog2.third || null
+  );
+  resetDigitFields();
+  return;
+}
 
     if (result.dialog) {
       playDialogControlled(result.dialog, () => {
