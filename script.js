@@ -501,7 +501,6 @@ if (result.dialog2) {
       });
       return;
     }
-  }
 
   // FEJL
   playErrorDialog(getNextErrorReaction());
