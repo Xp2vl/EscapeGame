@@ -90,9 +90,9 @@ function playDialogControlled(lines, onFinishSounds) {
 // ---------------------------------------------------------
 // 6) DIALOG MED PAUSE (dialog2)
 // ---------------------------------------------------------
+
 function runDialogPause(dialog1, dialog2, dialog3 = null) {
 
-  // Første del
   playDialogControlled(dialog1, () => {
 
     showNextButton();
@@ -100,10 +100,8 @@ function runDialogPause(dialog1, dialog2, dialog3 = null) {
     nextBtn.onclick = () => {
       hideNextButton();
 
-      // Anden del
       playDialogControlled(dialog2, () => {
 
-        // Hvis der er en tredje del
         if (dialog3) {
 
           showNextButton();
@@ -111,7 +109,6 @@ function runDialogPause(dialog1, dialog2, dialog3 = null) {
           nextBtn.onclick = () => {
             hideNextButton();
 
-            // Tredje del
             playDialogControlled(dialog3, () => {
               dialogActive = false;
               nextStep();
@@ -119,7 +116,6 @@ function runDialogPause(dialog1, dialog2, dialog3 = null) {
           };
 
         } else {
-          // Ingen tredje del → afslut
           dialogActive = false;
           nextStep();
         }
@@ -480,8 +476,47 @@ if (A === nerfCode || B === nerfCode) {
     return;
   }
 
-   // BONUS
-  const result = interactions[key1] || interactions[key2];
+  // BONUS
+const result = interactions[key1] || interactions[key2];
+
+if (result) {
+  if (result.dialog2) {
+    runDialogPause(
+      result.dialog2.first,
+      result.dialog2.second,
+      result.dialog2.third || null
+    );
+    resetDigitFields();
+    return;
+  }
+
+  if (result.dialog) {
+    playDialogControlled(result.dialog, () => {
+      dialogActive = false;
+      hideNextButton();
+      resetDigitFields();
+    });
+    return;
+  }
+}
+
+// FEJL
+playErrorDialog(getNextErrorReaction());
+}
+
+
+// ---------------------------------------------------------
+// 18) HYBRID-LOGIK FOR KODE
+// ---------------------------------------------------------
+
+function checkCode() {
+  if (dialogActive) return;
+
+  const code = get4();
+
+  hideNextButton();
+
+  const result = codes[code];
 
   if (result) {
     if (result.dialog2) {
@@ -502,31 +537,6 @@ if (A === nerfCode || B === nerfCode) {
       });
       return;
     }
-  }
-
-  // FEJL
-  playErrorDialog(getNextErrorReaction());
-}
-
-// ---------------------------------------------------------
-// 18) HYBRID-LOGIK FOR KODE
-// ---------------------------------------------------------
-
-function checkCode() {
-  if (dialogActive) return;
-
-  const code = get4();
-
-  hideNextButton();
-
-  const result = codes[code];
-  if (result) {
-    playDialogControlled(result.dialog, () => {
-      dialogActive = false;
-      hideNextButton();
-      resetDigitFields();
-    });
-    return;
   }
 
   const correct = flowCodeCodes[flowIndex];
