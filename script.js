@@ -583,7 +583,7 @@ flowSteps = [
         { text: "<br>Josephine: Der er sikkert noget du kan bruge i kommoden", sound: null }
       ],
       [
-        { text: "Tag kort 2", sound: null }
+        { text: "<b>Tag kort 2</b>", sound: null }
       ]
     )
   },
