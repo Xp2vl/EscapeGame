@@ -480,18 +480,19 @@ if (A === nerfCode || B === nerfCode) {
     return;
   }
 
-  // BONUS
+   // BONUS
   const result = interactions[key1] || interactions[key2];
 
-if (result.dialog2) {
-  runDialogPause(
-    result.dialog2.first,
-    result.dialog2.second,
-    result.dialog2.third || null
-  );
-  resetDigitFields();
-  return;
-}
+  if (result) {
+    if (result.dialog2) {
+      runDialogPause(
+        result.dialog2.first,
+        result.dialog2.second,
+        result.dialog2.third || null
+      );
+      resetDigitFields();
+      return;
+    }
 
     if (result.dialog) {
       playDialogControlled(result.dialog, () => {
@@ -501,6 +502,7 @@ if (result.dialog2) {
       });
       return;
     }
+  }
 
   // FEJL
   playErrorDialog(getNextErrorReaction());
