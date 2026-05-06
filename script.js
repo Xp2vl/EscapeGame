@@ -593,7 +593,7 @@ if (result) {
     });
     return;
   }
-}
+
 
 // FEJL
 playErrorDialog(getNextErrorReaction());
