@@ -444,24 +444,22 @@ function interact() {
 
   hideNextButton();
 
-// NERF (helt uden dialogsystem)
-if (A === nerfCode || B === nerfCode) {
+// NERF (men IKKE hvis det er 625+415 eller 415+625)
+if (
+  (A === nerfCode || B === nerfCode) &&
+  !( (A === "625" && B === "415") || (A === "415" && B === "625") )
+) {
 
-    const reaction = getNextNerfReaction()[0]; // én linje
+    const reaction = getNextNerfReaction()[0];
 
-    // Vis teksten i dialogboksen
     dialogText.innerHTML = reaction.text;
 
-    // Spil lyden uden at vente på noget
     if (reaction.sound) {
         const audio = new Audio("assets/lyd/" + reaction.sound);
-        audio.play(); // ingen onended, ingen callback
+        audio.play();
     }
 
-    // Nulstil felterne med det samme
     resetDigitFields();
-
-    // Spillet fortsætter helt normalt
     return;
 }
 
