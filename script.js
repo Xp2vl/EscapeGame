@@ -721,6 +721,14 @@ function interact() {
 
   hideNextButton();
 
+  const step = flowSteps[flowIndex];
+
+  // 🔒 STEP LÅST?
+  if (step.completed) {
+    playErrorDialog(getNextErrorReaction());
+    return;
+  }
+
   // 1) NERF (men IKKE 625+415 / 415+625)
   if (
     (A === nerfCode || B === nerfCode) &&
@@ -738,7 +746,7 @@ function interact() {
     return;
   }
 
-  // 2) BONUS-INTERACTIONS (uafhængige af flow)
+  // 2) BONUS-INTERACTIONS
   const result = interactions[key1] || interactions[key2];
 
   if (result) {
@@ -759,8 +767,6 @@ function interact() {
   }
 
   // 3) FLOW-STEP (explore)
-  const step = flowSteps[flowIndex];
-
   if (!step || step.type !== "explore") {
     playErrorDialog(getNextErrorReaction());
     return;
@@ -775,6 +781,9 @@ function interact() {
     playErrorDialog(getNextErrorReaction());
     return;
   }
+
+  // 🔒 LÅS STEPPET
+  step.completed = true;
 
   resetDigitFields();
   nextStep();
@@ -791,6 +800,14 @@ function checkCode() {
   if (!code) return;
 
   hideNextButton();
+
+  const step = flowSteps[flowIndex];
+
+  // STEP LÅST?
+  if (step.completed) {
+    playErrorDialog(getNextErrorReaction());
+    return;
+  }
 
   // 1) BONUS 4-CIFREDE KODER
   const result = codes[code];
@@ -813,14 +830,16 @@ function checkCode() {
   }
 
   // 2) FLOW-STEP (code)
-  const step = flowSteps[flowIndex];
-
   if (!step || step.type !== "code") {
     playErrorDialog(getNextErrorReaction());
     return;
   }
 
   if (code === step.code) {
+
+    // 🔒 LÅS STEPPET
+    step.completed = true;
+
     resetDigitFields();
     nextStep();
     return;
