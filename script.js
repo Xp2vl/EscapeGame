@@ -740,44 +740,49 @@ function interact() {
 
   const step = flowSteps[flowIndex];
 
-  console.log("STEP:", step);
+  // 2) FLOW-STEP (explore) – koden SKAL matche dette step
+  if (!step || step.type !== "explore") {
+    playErrorDialog(getNextErrorReaction());
+    return;
+  }
 
-  // 2) FLOW-STEP (explore) – ALTID TJEKKES FØR BONUS
-  if (step && step.type === "explore") {
-    const valid = step.codes || [];
-    const match =
-      valid.includes(key1) ||
-      (key2 && valid.includes(key2));
+  const valid = step.codes || [];
+  let usedKey = null;
 
-    if (match) {
-      resetDigitFields();
+  if (valid.includes(key1)) {
+    usedKey = key1;
+  } else if (key2 && valid.includes(key2)) {
+    usedKey = key2;
+  }
+
+  if (!usedKey) {
+    // forkert kode til dette step
+    playErrorDialog(getNextErrorReaction());
+    return;
+  }
+
+  // 3) HENT DIALOG FRA interactions MED DEN KODE
+  const data = interactions[usedKey];
+
+  resetDigitFields();
+
+  if (data && data.dialog2) {
+    // dialog2 = flere dele, runDialogPause håndterer selv nextStep() til sidst
+    runDialogPause(...Object.values(data.dialog2));
+    return;
+  }
+
+  if (data && data.dialog) {
+    // enkel dialog, vi går selv videre bagefter
+    playDialogControlled(data.dialog, () => {
+      dialogActive = false;
       nextStep();
-      return;
-    }
+    });
+    return;
   }
 
-  // 3) BONUS-INTERACTIONS (kun hvis det IKKE var et flow-hit)
-  const result = interactions[key1] || interactions[key2];
-
-  if (result) {
-    if (result.dialog2) {
-      runDialogPause(...Object.values(result.dialog2));
-      resetDigitFields();
-      return;
-    }
-
-    if (result.dialog) {
-      playDialogControlled(result.dialog, () => {
-        dialogActive = false;
-        hideNextButton();
-        resetDigitFields();
-      });
-      return;
-    }
-  }
-
-  // 4) FEJL
-  playErrorDialog(getNextErrorReaction());
+  // Hvis der ikke er nogen dialog til koden, går vi bare videre i flowet
+  nextStep();
 }
 
 // ---------------------------------------------------------
@@ -794,37 +799,38 @@ function checkCode() {
 
   const step = flowSteps[flowIndex];
 
-  // 1) FLOW-STEP (code) – TJEKKES FØRST
-  if (step && step.type === "code") {
-    if (code === step.code) {
-      resetDigitFields();
+  // 1) FLOW-STEP (code) – koden SKAL matche dette step
+  if (!step || step.type !== "code") {
+    playErrorDialog(getNextErrorReaction());
+    return;
+  }
+
+  if (code !== step.code) {
+    playErrorDialog(getNextErrorReaction());
+    return;
+  }
+
+  // 2) HENT DIALOG FRA codes MED DEN KODE
+  const data = codes[code];
+
+  resetDigitFields();
+
+  if (data && data.dialog2) {
+    // flere dele, runDialogPause håndterer selv nextStep()
+    runDialogPause(...Object.values(data.dialog2));
+    return;
+  }
+
+  if (data && data.dialog) {
+    playDialogControlled(data.dialog, () => {
+      dialogActive = false;
       nextStep();
-      return;
-    }
+    });
+    return;
   }
 
-  // 2) BONUS 4-CIFREDE KODER – KUN HVIS DET IKKE VAR FLOW
-  const result = codes[code];
-
-  if (result) {
-    if (result.dialog2) {
-      runDialogPause(...Object.values(result.dialog2));
-      resetDigitFields();
-      return;
-    }
-
-    if (result.dialog) {
-      playDialogControlled(result.dialog, () => {
-        dialogActive = false;
-        hideNextButton();
-        resetDigitFields();
-      });
-      return;
-    }
-  }
-
-  // 3) FEJL
-  playErrorDialog(getNextErrorReaction());
+  // ingen dialog, bare videre
+  nextStep();
 }
 
 // ---------------------------------------------------------
