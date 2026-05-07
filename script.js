@@ -250,7 +250,7 @@ const interactions = {
         { text: "<br>Josephine: Måske i nogle af de andre skuffer", sound: "Josephine_1.mp3" }
       ],
       second: [
-        { text: "Tag kort 03", sound: null }
+        { text: "<b>Tag kort 03</b>", sound: null }
       ]
     }
   },
