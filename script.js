@@ -620,42 +620,7 @@ const codes = {
       ]
     }
   }  
-  
-};
 
-// ---------------------------------------------------------
-// 13) FLOW-SPECIFIKKE KODER
-// ---------------------------------------------------------
-
-const flowExploreCodes = {
-  1: ["854"], //Step 2
-  2: ["259"], //Step 3
-  3: ["384+464", "464+384"], //Step 4
-  4: ["244+962", "962+244"], //Step 5
-  6: ["625+415", "415+625"], //Step 7
-  7: ["689+348", "348+689"], //Step 8
-  9: ["522+158", "158+522"], //Step 10
-  10: ["816+527", "527+816"], //Step 11
-  11: ["252+952", "952+252"], //Step 12 
-  12: ["598+324", "324+598"], //Step 13
-  13: ["249+724", "724+249"], //Step 14
-  14: ["934+714", "714+934"], //Step 15
-  15: ["257"], //Step 16
-  16: ["214+927", "927+214"], //Step 18
-  17: ["236"], //Step 19
-  18: ["333+947", "947+333"], //Step 20
-  19: ["418+951", "951+418"], //Step 21
-  20: ["958+588", "588+958"], //Step 22
-  21: ["616+794", "794+616"], //Step 23
-  22: ["189+894", "894+189"], //Step 24
-  23: ["295+741", "741+295"], //Step 25
-  24: ["873+259", "259+873"] //Step 26
-};
-
-const flowCodeCodes = {
-  5: "5287", //Step 6
-  8: "1482", //Step 9
-  16: "6595" //Step 17
 };
 
 // ---------------------------------------------------------
@@ -749,79 +714,71 @@ function interact() {
 
   const A = get3("A");
   const B = get3("B");
+  if (!A && !B) return;
 
-  let key1 = A && B ? `${A}+${B}` : A || B;
-  let key2 = A && B ? `${B}+${A}` : "";
+  const key1 = A && B ? `${A}+${B}` : A || B;
+  const key2 = A && B ? `${B}+${A}` : "";
 
   hideNextButton();
 
-// NERF (men IKKE hvis det er 625+415 eller 415+625)
-if (
-  (A === nerfCode || B === nerfCode) &&
-  !((A === "625" && B === "415") || (A === "415" && B === "625"))
-) {
-
+  // 1) NERF (men IKKE 625+415 / 415+625)
+  if (
+    (A === nerfCode || B === nerfCode) &&
+    !((A === "625" && B === "415") || (A === "415" && B === "625"))
+  ) {
     const reaction = getNextNerfReaction()[0];
-
     dialogText.innerHTML = reaction.text;
 
     if (reaction.sound) {
-        const audio = new Audio("assets/lyd/" + reaction.sound);
-        audio.play();
+      const audio = new Audio("assets/lyd/" + reaction.sound);
+      audio.play();
     }
 
     resetDigitFields();
     return;
-}
-
-  // FLOW
-  const correct = flowExploreCodes[flowIndex];
-
-  if (
-    flowSteps[flowIndex].type === "explore" &&
-    correct &&
-    (correct.includes(key1) || correct.includes(key2))
-  ) {
-    nextStep();
-    return;
   }
 
-  // BONUS
-const result = interactions[key1] || interactions[key2];
+  // 2) BONUS-INTERACTIONS (uafhængige af flow)
+  const result = interactions[key1] || interactions[key2];
 
-if (result) {
-  if (result.dialog2) {
-    runDialogPause(
-      ...Object.values(result.dialog2)
-    );
-    resetDigitFields();
-    return;
-  }
-
-  if (result.dialog) {
-    playDialogControlled(result.dialog, () => {
-      dialogActive = false;
-      hideNextButton();
+  if (result) {
+    if (result.dialog2) {
+      runDialogPause(...Object.values(result.dialog2));
       resetDigitFields();
-    });
+      return;
+    }
+
+    if (result.dialog) {
+      playDialogControlled(result.dialog, () => {
+        dialogActive = false;
+        hideNextButton();
+        resetDigitFields();
+      });
+      return;
+    }
+  }
+
+  // 3) FLOW-STEP (explore)
+  const step = flowSteps[flowIndex];
+
+  if (!step || step.type !== "explore") {
+    playErrorDialog(getNextErrorReaction());
     return;
   }
-}
 
-  if (result.dialog) {
-    playDialogControlled(result.dialog, () => {
-      dialogActive = false;
-      hideNextButton();
-      resetDigitFields();
-    });
+  const valid = step.codes || [];
+  const match =
+    valid.includes(key1) ||
+    (key2 && valid.includes(key2));
+
+  if (!match) {
+    playErrorDialog(getNextErrorReaction());
     return;
   }
 
-
-// FEJL
-playErrorDialog(getNextErrorReaction());
+  resetDigitFields();
+  nextStep();
 }
-
 
 // ---------------------------------------------------------
 // 18) HYBRID-LOGIK FOR KODE
@@ -831,41 +788,45 @@ function checkCode() {
   if (dialogActive) return;
 
   const code = get4();
+  if (!code) return;
 
   hideNextButton();
 
-const result = codes[code];
+  // 1) BONUS 4-CIFREDE KODER
+  const result = codes[code];
 
-if (result) {
-  if (result.dialog2) {
-    runDialogPause(
-      ...Object.values(result.dialog2)
-    );
-    resetDigitFields();
-    return;
-  }
-
-  if (result.dialog) {
-    playDialogControlled(result.dialog, () => {
-      dialogActive = false;
-      hideNextButton();
+  if (result) {
+    if (result.dialog2) {
+      runDialogPause(...Object.values(result.dialog2));
       resetDigitFields();
-    });
+      return;
+    }
+
+    if (result.dialog) {
+      playDialogControlled(result.dialog, () => {
+        dialogActive = false;
+        hideNextButton();
+        resetDigitFields();
+      });
+      return;
+    }
+  }
+
+  // 2) FLOW-STEP (code)
+  const step = flowSteps[flowIndex];
+
+  if (!step || step.type !== "code") {
+    playErrorDialog(getNextErrorReaction());
     return;
   }
-}
 
-const correct = flowCodeCodes[flowIndex];
-
-  if (
-    flowSteps[flowIndex].type === "code" &&
-    correct &&
-    code === correct
-  ) {
+  if (code === step.code) {
+    resetDigitFields();
     nextStep();
     return;
   }
 
+  // 3) FEJL
   playErrorDialog(getNextErrorReaction());
 }
 
@@ -899,7 +860,6 @@ function showHint() {
 // ---------------------------------------------------------
 
 flowSteps = [
-
   {
     type: "dialog2",
     run: () => runDialogPause(
@@ -916,48 +876,78 @@ flowSteps = [
     )
   },
 
-  { type: "explore", run: () => showExplorePanel() }, // Step 2
-  { type: "explore", run: () => showExplorePanel() }, // Step 3
-  { type: "explore", run: () => showExplorePanel() }, // Step 4
-  { type: "explore", run: () => showExplorePanel() }, // Step 5
- 
-  { type: "code", run: () => showCodePanel() }, // Step 6
+  // index 1 – step 2
+  { type: "explore", codes: ["854"], run: () => showExplorePanel() },
 
-  { type: "explore", run: () => showExplorePanel() }, // Step 7
-  { type: "explore", run: () => showExplorePanel() }, // Step 8
+  // index 2 – step 3
+  { type: "explore", codes: ["259"], run: () => showExplorePanel() },
 
-  { type: "code", run: () => showCodePanel() }, // Step 9
+  // index 3 – step 4
+  { type: "explore", codes: ["384+464", "464+384"], run: () => showExplorePanel() },
 
-  { type: "explore", run: () => showExplorePanel() }, // Step 10
-  { type: "explore", run: () => showExplorePanel() }, // Step 11
-  { type: "explore", run: () => showExplorePanel() }, // Step 12
-  { type: "explore", run: () => showExplorePanel() }, // Step 13
-  { type: "explore", run: () => showExplorePanel() }, // Step 14
-  { type: "explore", run: () => showExplorePanel() }, // Step 15
-  { type: "explore", run: () => showExplorePanel() }, // Step 16
+  // index 4 – step 5
+  { type: "explore", codes: ["244+962", "962+244"], run: () => showExplorePanel() },
 
-  { type: "code", run: () => showCodePanel() }, // Step 17
+  // index 5 – step 6 (code)
+  { type: "code", code: "5287", run: () => showCodePanel() },
 
-  { type: "explore", run: () => showExplorePanel() }, // Step 18
-  { type: "explore", run: () => showExplorePanel() }, // Step 19
-  { type: "explore", run: () => showExplorePanel() }, // Step 20
-  { type: "explore", run: () => showExplorePanel() }, // Step 21
-  { type: "explore", run: () => showExplorePanel() }, // Step 22
-  { type: "explore", run: () => showExplorePanel() }, // Step 23
-  { type: "explore", run: () => showExplorePanel() }, // Step 24
-  { type: "explore", run: () => showExplorePanel() }, // Step 25
-  { type: "explore", run: () => showExplorePanel() } // Step 26
+  // index 6 – step 7
+  { type: "explore", codes: ["625+415", "415+625"], run: () => showExplorePanel() },
 
-//  {
-//    type: "dialog2",
-//    run: () => runDialogPause(
-//      [
-//        { text: "Malthe: Du fangede Yetien!", sound: "malthe_win.mp3" },
-//        { text: "<br>Josephine: Godt gået!", sound: "josephine_win.mp3" }
-//      ],
-//      [
-//        { text: "<br><br>Tak for spillet!", sound: null }
-//      ]
-//    )
-//  }
+  // index 7 – step 8
+  { type: "explore", codes: ["689+348", "348+689"], run: () => showExplorePanel() },
+
+  // index 8 – step 9 (code)
+  { type: "code", code: "1482", run: () => showCodePanel() },
+
+  // index 9 – step 10
+  { type: "explore", codes: ["522+158", "158+522"], run: () => showExplorePanel() },
+
+  // index 10 – step 11
+  { type: "explore", codes: ["816+527", "527+816"], run: () => showExplorePanel() },
+
+  // index 11 – step 12
+  { type: "explore", codes: ["252+952", "952+252"], run: () => showExplorePanel() },
+
+  // index 12 – step 13
+  { type: "explore", codes: ["598+324", "324+598"], run: () => showExplorePanel() },
+
+  // index 13 – step 14
+  { type: "explore", codes: ["249+724", "724+249"], run: () => showExplorePanel() },
+
+  // index 14 – step 15
+  { type: "explore", codes: ["934+714", "714+934"], run: () => showExplorePanel() },
+
+  // index 15 – step 16
+  { type: "explore", codes: ["257"], run: () => showExplorePanel() },
+
+  // index 16 – step 17 (code)
+  { type: "code", code: "6595", run: () => showCodePanel() },
+
+  // index 17 – step 18
+  { type: "explore", codes: ["214+927", "927+214"], run: () => showExplorePanel() },
+
+  // index 18 – step 19
+  { type: "explore", codes: ["236"], run: () => showExplorePanel() },
+
+  // index 19 – step 20
+  { type: "explore", codes: ["333+947", "947+333"], run: () => showExplorePanel() },
+
+  // index 20 – step 21
+  { type: "explore", codes: ["418+951", "951+418"], run: () => showExplorePanel() },
+
+  // index 21 – step 22
+  { type: "explore", codes: ["958+588", "588+958"], run: () => showExplorePanel() },
+
+  // index 22 – step 23
+  { type: "explore", codes: ["616+794", "794+616"], run: () => showExplorePanel() },
+
+  // index 23 – step 24
+  { type: "explore", codes: ["189+894", "894+189"], run: () => showExplorePanel() },
+
+  // index 24 – step 25
+  { type: "explore", codes: ["295+741", "741+295"], run: () => showExplorePanel() },
+
+  // index 25 – step 26
+  { type: "explore", codes: ["873+259", "259+873"], run: () => showExplorePanel() }
 ];
