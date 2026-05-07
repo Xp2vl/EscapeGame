@@ -721,14 +721,6 @@ function interact() {
 
   hideNextButton();
 
-  const step = flowSteps[flowIndex];
-
-  // 🔒 STEP LÅST?
-  if (step.completed) {
-    playErrorDialog(getNextErrorReaction());
-    return;
-  }
-
   // 1) NERF (men IKKE 625+415 / 415+625)
   if (
     (A === nerfCode || B === nerfCode) &&
@@ -746,7 +738,23 @@ function interact() {
     return;
   }
 
-  // 2) BONUS-INTERACTIONS
+  const step = flowSteps[flowIndex];
+
+  // 2) FLOW-STEP (explore) – ALTID TJEKKES FØR BONUS
+  if (step && step.type === "explore") {
+    const valid = step.codes || [];
+    const match =
+      valid.includes(key1) ||
+      (key2 && valid.includes(key2));
+
+    if (match) {
+      resetDigitFields();
+      nextStep();
+      return;
+    }
+  }
+
+  // 3) BONUS-INTERACTIONS (kun hvis det IKKE var et flow-hit)
   const result = interactions[key1] || interactions[key2];
 
   if (result) {
@@ -766,27 +774,8 @@ function interact() {
     }
   }
 
-  // 3) FLOW-STEP (explore)
-  if (!step || step.type !== "explore") {
-    playErrorDialog(getNextErrorReaction());
-    return;
-  }
-
-  const valid = step.codes || [];
-  const match =
-    valid.includes(key1) ||
-    (key2 && valid.includes(key2));
-
-  if (!match) {
-    playErrorDialog(getNextErrorReaction());
-    return;
-  }
-
-  // 🔒 LÅS STEPPET
-  step.completed = true;
-
-  resetDigitFields();
-  nextStep();
+  // 4) FEJL
+  playErrorDialog(getNextErrorReaction());
 }
 
 // ---------------------------------------------------------
@@ -803,13 +792,16 @@ function checkCode() {
 
   const step = flowSteps[flowIndex];
 
-  // STEP LÅST?
-  if (step.completed) {
-    playErrorDialog(getNextErrorReaction());
-    return;
+  // 1) FLOW-STEP (code) – TJEKKES FØRST
+  if (step && step.type === "code") {
+    if (code === step.code) {
+      resetDigitFields();
+      nextStep();
+      return;
+    }
   }
 
-  // 1) BONUS 4-CIFREDE KODER
+  // 2) BONUS 4-CIFREDE KODER – KUN HVIS DET IKKE VAR FLOW
   const result = codes[code];
 
   if (result) {
@@ -827,22 +819,6 @@ function checkCode() {
       });
       return;
     }
-  }
-
-  // 2) FLOW-STEP (code)
-  if (!step || step.type !== "code") {
-    playErrorDialog(getNextErrorReaction());
-    return;
-  }
-
-  if (code === step.code) {
-
-    // 🔒 LÅS STEPPET
-    step.completed = true;
-
-    resetDigitFields();
-    nextStep();
-    return;
   }
 
   // 3) FEJL
