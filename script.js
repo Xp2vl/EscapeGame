@@ -740,6 +740,8 @@ function interact() {
 
   const step = flowSteps[flowIndex];
 
+  console.log("STEP:", step);
+
   // 2) FLOW-STEP (explore) – ALTID TJEKKES FØR BONUS
   if (step && step.type === "explore") {
     const valid = step.codes || [];
