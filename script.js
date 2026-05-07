@@ -740,7 +740,7 @@ function interact() {
 
   const step = flowSteps[flowIndex];
 
-  // 2) FLOW-STEP (explore) – koden SKAL matche dette step
+  // 2) FLOW-STEP (explore) – koden SKAL passe til dette step
   if (!step || step.type !== "explore") {
     playErrorDialog(getNextErrorReaction());
     return;
@@ -756,7 +756,7 @@ function interact() {
   }
 
   if (!usedKey) {
-    // forkert kode til dette step
+    // forkert kode til DETTE step
     playErrorDialog(getNextErrorReaction());
     return;
   }
@@ -767,13 +767,12 @@ function interact() {
   resetDigitFields();
 
   if (data && data.dialog2) {
-    // dialog2 = flere dele, runDialogPause håndterer selv nextStep() til sidst
+    // flere dele – runDialogPause kalder selv nextStep() til sidst
     runDialogPause(...Object.values(data.dialog2));
     return;
   }
 
   if (data && data.dialog) {
-    // enkel dialog, vi går selv videre bagefter
     playDialogControlled(data.dialog, () => {
       dialogActive = false;
       nextStep();
@@ -781,7 +780,7 @@ function interact() {
     return;
   }
 
-  // Hvis der ikke er nogen dialog til koden, går vi bare videre i flowet
+  // ingen dialog defineret → bare videre
   nextStep();
 }
 
@@ -799,7 +798,7 @@ function checkCode() {
 
   const step = flowSteps[flowIndex];
 
-  // 1) FLOW-STEP (code) – koden SKAL matche dette step
+  // 1) FLOW-STEP (code) – koden SKAL passe til dette step
   if (!step || step.type !== "code") {
     playErrorDialog(getNextErrorReaction());
     return;
@@ -816,7 +815,6 @@ function checkCode() {
   resetDigitFields();
 
   if (data && data.dialog2) {
-    // flere dele, runDialogPause håndterer selv nextStep()
     runDialogPause(...Object.values(data.dialog2));
     return;
   }
@@ -829,7 +827,7 @@ function checkCode() {
     return;
   }
 
-  // ingen dialog, bare videre
+  // ingen dialog defineret → bare videre
   nextStep();
 }
 
