@@ -374,8 +374,195 @@ const interactions = {
         { text: "<b>Tag kort 24</b>", sound: null }
       ]
     }
+  },
+
+  "249+724": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 25</b>", sound: null }
+      ],
+      second: [
+        { text: "Josephine: De lianer kan vi da bruge som reb.", sound: null },
+        { text: "<br>Malthe: Det kan vi da, godt tænkt Jose.", sound: null },
+        { text: "<br>Josephine: Måske er der gemt noget i den lille kiste vi kan bruge til fælden.", sound: null }
+      ],
+      third: [
+        { text: "<b>Tag kort 26</b>", sound: null },
+        { text: "<br><b>Tag kort 27</b>", sound: null }
+      ],
+      fourth: [
+        { text: "Malthe: Jeg tror radioen mangler batterier.", sound: null },
+        { text: "<br>Josephine: Der burde være batterier i væguret.", sound: null },
+        { text: "<br>Malthe: Er det de samme batterier?", sound: null }
+      ],
+      fifth: [
+        { text: "<b>Tag kort 28</b>", sound: null }
+      ]
+    }
+  },
+
+  "934+714": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 29</b>", sound: null }
+      ],
+      second: [
+        { text: "Malthe: Sejt, det ligner da der er strøm på den. Prøv om den kan spille.", sound: null }
+      ]
+    }
+  },
+
+  "257": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 30</b>", sound: null },
+        { text: "<br><b>Tag kort 31</b>", sound: null },
+        { text: "<br><b>Tag kort 32</b>", sound: null },
+        { text: "<br><b>Tag kort 33</b>", sound: null },
+        { text: "<br><b>Tag kort 34</b>", sound: null }
+      ],
+      second: [
+        { text: "Josephine: Det var ikke længe de batterier holdte.", sound: null },
+        { text: "<br>Malthe: Men det var da nok til at få kisten til at åbne.", sound: null },
+        { text: "<br>Josephine: Vær forsigtig med skatten, jeg har selv fundet alt sammen fra græske øer.", sound: null },
+        { text: "<br>Malthe: Konkylien ser ret tung ud, kan vi ikke bruge den som vægtlod?", sound: null },
+        { text: "<br>Josephine: Det da en rigtig god idé!", sound: null }
+      ],
+      third: [
+        { text: "<b>Tag kort 35</b>", sound: null }
+      ],
+      fourth: [
+        { text: "Malthe: Kunne det tænkes der var noget lokkemad i køleboksen?", sound: null },
+        { text: "<br>Josephine: Det er der, jeg puttede i hvert fald min havregrød i den i morges.", sound: null },
+        { text: "<br>Malthe: Aaaad, havregrød, det der da ingen der gider spise.", sound: null },
+        { text: "<br>Josephine: Hvorfor tror du jeg ikke har spist den?", sound: null },
+      ],
+      fifth: [
+        { text: "<b>Tag kort 36</b>", sound: null }
+      ]
+    }
+  },
+
+  "214+927": {
+    dialog: [
+      { text: "Josephine: Så skal du bare starte den.", sound: null }
+    ]
+  },
+
+  "236": {
+    dialog2: {
+      first: [
+        { text: "<b>Ding...</b>", sound: null }
+      ],
+      second: [
+        { text: "<b>Tag kort 40</b>", sound: null }
+      ],
+      third: [
+        { text: "Josephine: Der skal sukker på, er sikker på yetier foretrækker den sød.", sound: null },
+        { text: "<br>Malthe: Der skal bare massere af sukker på.", sound: null },
+        { text: "<br>Josephine: Malthe havde sikkert puttet hele skålen på.", sound: null },
+        { text: "<br>Malthe: Sku'da ikke hele skålen... Bare det der er i skålen.", sound: null }
+      ]
+    }
+  },
+
+  "333+947": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 41</b>", sound: null }
+      ],
+      second: [
+        { text: "Josephine: Hvad mangler vi så til at bygge fælden?", sound: null },
+        { text: "<br>Malthe: Vi mangler stadig noget smørelse til hejsehjulet udenfor!", sound: null },
+        { text: "<br>Josephine: Skal vi ikke prøve om syltetøjet kan bruges til at smøre hjulet?", sound: null }
+      ],
+      third: [
+        { text: "<b>Tag kort 42</b>", sound: null }
+      ]
+    }
+  },
+
+  "418+951": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 43</b>", sound: null }
+      ],
+      second: [
+        { text: "Malthe: Tænk at det virkede, hjulet er godt nok lidt snasket.", sound: null },
+        { text: "<br>Josephine: Det er lige meget, bare det kan dreje rundt!", sound: null }
+      ]
+    }
+  },
+
+  "958+588": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 44</b>", sound: null }
+      ],
+      second: [
+        { text: "Josephine: Vi mangler da stadig et net til at fange yetien i.", sound: null },
+        { text: "<br>Malthe: Jeg tror ikke vi har noget net her.", sound: null },
+        { text: "<br>Josephine: Hmm, men vi har tæppet.", sound: null }
+      ],
+      third: [
+        { text: "<b>Tag kort 45</b>", sound: null }
+      ]
+    }
+  },
+
+  "616+794": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 46</b>", sound: null }
+      ],
+      second: [
+        { text: "Josephine: Vi har stadig ikke nogen spand.", sound: null },
+        { text: "<br>Malthe: Men vi har en tom køleboks.", sound: null }
+      ],
+      third: [
+        { text: "<b>Tag kort 47</b>", sound: null }
+      ]
+    }
+  },
+
+  "189+894": {
+    dialog: [
+      { text: "<b>Tag kort 48</b>", sound: null }
+    ]
+  },
+
+  "295+741": {
+    dialog: [
+      { text: "<b>Tag kort 49</b>", sound: null }
+    ]
+  },
+
+  "´873+259": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 50</b>", sound: null }
+      ],
+      second: [
+        { text: "Josephine: Det er en vild fælde vi har lavet.", sound: null },
+        { text: "<br>Malthe: Men tror du den er stærk nok til at fange en yeti?", sound: null },
+        { text: "<br>Josephine: Det må vi vente og se.", sound: null },
+        { text: "<br>Malthe: Skal vi ikke holde øje oppe fra udkigsposten?", sound: null },
+        { text: "<br>Josephine: Sshhhh, jeg kan høre noget.", sound: null },
+        { text: "<br>Malthe: Du har ret, vi må gemme os.", sound: null }
+      ],
+      third: [
+        { text: "<b>Tag kort 51</b>", sound: null }
+      ],
+      fourth: [
+        { text: "Josephine: Nååårh, den ser da sød ud.", sound: null },
+        { text: "<br>Malthe: Fælden var alt for lille.", sound: null },
+        { text: "<br>Josephine: Haha, yetien var meget størrer end vi troede.", sound: null },
+        { text: "<br>Malthe: Men se dens næse den bliver rød.", sound: null },
+        { text: "<br>Josephine: Så fryser den nok ikke mere...", sound: null }
+      ]
+    }
   }
-   
+
 };
 
 
@@ -410,7 +597,30 @@ const codes = {
         { text: "<br>Malthe: Er der noget brugbart i den?", sound: null }
       ]
     }
-  }
+  },
+  
+  "6595": {
+    dialog2: {
+      first: [
+        { text: "<b>Tag kort 37</b>", sound: null }
+      ],
+      second: [
+        { text: "Malthe: Mmmm, kold havregrød...", sound: null }
+      ],
+      third: [
+        { text: "<b>Tag kort 38</b>", sound: null }
+      ],
+      fourth: [
+        { text: "Josephine: Du kan varme den i microovnen.", sound: null },
+        { text: "<br>Malthe: Hvor lang tid skal den ha'?", sound: null },
+        { text: "<br>Josephine: Til den er varm, 3 minutter måske.", sound: null }
+      ],
+      fifth: [
+        { text: "<b>Tag kort 39</b>", sound: null }
+      ]
+    }
+  }  
+  
 };
 
 // ---------------------------------------------------------
@@ -427,12 +637,25 @@ const flowExploreCodes = {
   9: ["522+158", "158+522"], //Step 10
   10: ["816+527", "527+816"], //Step 11
   11: ["252+952", "952+252"], //Step 12 
-  12: ["598+324", "324+598"] //Step 13
+  12: ["598+324", "324+598"], //Step 13
+  13: ["249+724", "724+249"], //Step 14
+  14: ["934+714", "714+934"], //Step 15
+  15: ["257"], //Step 16
+  16: ["214+927", "927+214"], //Step 18
+  17: ["236"], //Step 19
+  18: ["333+947", "947+333"], //Step 20
+  19: ["418+951", "951+418"], //Step 21
+  20: ["958+588", "588+958"], //Step 22
+  21: ["616+794", "794+616"], //Step 23
+  22: ["189+894", "894+189"], //Step 24
+  23: ["295+741", "741+295"], //Step 25
+  24: ["873+259", "259+873"] //Step 26
 };
 
 const flowCodeCodes = {
   5: "5287", //Step 6
-  8: "1482" //Step 9
+  8: "1482", //Step 9
+  16: "6595" //Step 17
 };
 
 // ---------------------------------------------------------
@@ -709,19 +932,32 @@ flowSteps = [
   { type: "explore", run: () => showExplorePanel() }, // Step 11
   { type: "explore", run: () => showExplorePanel() }, // Step 12
   { type: "explore", run: () => showExplorePanel() }, // Step 13
+  { type: "explore", run: () => showExplorePanel() }, // Step 14
+  { type: "explore", run: () => showExplorePanel() }, // Step 15
+  { type: "explore", run: () => showExplorePanel() }, // Step 16
 
-  { type: "code", run: () => showCodePanel() },
+  { type: "code", run: () => showCodePanel() }, // Step 17
 
-  {
-    type: "dialog2",
-    run: () => runDialogPause(
-      [
-        { text: "Malthe: Du fangede Yetien!", sound: "malthe_win.mp3" },
-        { text: "<br>Josephine: Godt gået!", sound: "josephine_win.mp3" }
-      ],
-      [
-        { text: "<br><br>Tak for spillet!", sound: null }
-      ]
-    )
-  }
+  { type: "explore", run: () => showExplorePanel() }, // Step 18
+  { type: "explore", run: () => showExplorePanel() }, // Step 19
+  { type: "explore", run: () => showExplorePanel() }, // Step 20
+  { type: "explore", run: () => showExplorePanel() }, // Step 21
+  { type: "explore", run: () => showExplorePanel() }, // Step 22
+  { type: "explore", run: () => showExplorePanel() }, // Step 23
+  { type: "explore", run: () => showExplorePanel() }, // Step 24
+  { type: "explore", run: () => showExplorePanel() }, // Step 25
+  { type: "explore", run: () => showExplorePanel() } // Step 26
+
+//  {
+//    type: "dialog2",
+//    run: () => runDialogPause(
+//      [
+//        { text: "Malthe: Du fangede Yetien!", sound: "malthe_win.mp3" },
+//        { text: "<br>Josephine: Godt gået!", sound: "josephine_win.mp3" }
+//      ],
+//      [
+//        { text: "<br><br>Tak for spillet!", sound: null }
+//      ]
+//    )
+//  }
 ];
