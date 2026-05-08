@@ -413,11 +413,7 @@ const interactions = {
   "257": {
     dialog2: {
       first: [
-        { text: "<b>Tag kort 41</b>", sound: null },
-        { text: "<br><b>Tag kort 42</b>", sound: null },
-        { text: "<br><b>Tag kort 43</b>", sound: null },
-        { text: "<br><b>Tag kort 44</b>", sound: null },
-        { text: "<br><b>Tag kort 45</b>", sound: null }
+        { text: "<b>Tag kort 41</b>", sound: null }
       ],
       second: [
         { text: "Josephine: Det var ikke længe de batterier holdte.", sound: null },
@@ -427,7 +423,7 @@ const interactions = {
         { text: "<br>Josephine: Det da en rigtig god idé!", sound: null }
       ],
       third: [
-        { text: "<b>Tag kort 35</b>", sound: null }
+        { text: "<b>Tag kort 42</b>", sound: null }
       ],
       fourth: [
         { text: "Malthe: Kunne det tænkes der var noget lokkemad i køleboksen?", sound: null },
@@ -436,7 +432,8 @@ const interactions = {
         { text: "<br>Josephine: Hvorfor tror du jeg ikke har spist den?", sound: null },
       ],
       fifth: [
-        { text: "<b>Tag kort 36</b>", sound: null }
+        { text: "<b>Tag kort 43</b>", sound: null },
+        { text: "<br><b>Tag kort 44</b>", sound: null }
       ]
     }
   },
@@ -453,7 +450,7 @@ const interactions = {
         { text: "<b>Ding...</b>", sound: null }
       ],
       second: [
-        { text: "<b>Tag kort 40</b>", sound: null }
+        { text: "<b>Tag kort 52</b>", sound: null }
       ],
       third: [
         { text: "Josephine: Der skal sukker på, er sikker på yetier foretrækker den sød.", sound: null },
@@ -467,7 +464,7 @@ const interactions = {
   "333+947": {
     dialog2: {
       first: [
-        { text: "<b>Tag kort 41</b>", sound: null }
+        { text: "<b>Tag kort 53</b>", sound: null }
       ],
       second: [
         { text: "Josephine: Hvad mangler vi så til at bygge fælden?", sound: null },
@@ -475,7 +472,7 @@ const interactions = {
         { text: "<br>Josephine: Skal vi ikke prøve om syltetøjet kan bruges til at smøre hjulet?", sound: null }
       ],
       third: [
-        { text: "<b>Tag kort 42</b>", sound: null }
+        { text: "<b>Tag kort 54</b>", sound: null }
       ]
     }
   },
@@ -483,7 +480,7 @@ const interactions = {
   "418+951": {
     dialog2: {
       first: [
-        { text: "<b>Tag kort 43</b>", sound: null }
+        { text: "<b>Tag kort 55</b>", sound: null }
       ],
       second: [
         { text: "Malthe: Tænk at det virkede, hjulet er godt nok lidt snasket.", sound: null },
@@ -495,7 +492,7 @@ const interactions = {
   "958+588": {
     dialog2: {
       first: [
-        { text: "<b>Tag kort 44</b>", sound: null }
+        { text: "<b>Tag kort 56</b>", sound: null }
       ],
       second: [
         { text: "Josephine: Vi mangler da stadig et net til at fange yetien i.", sound: null },
@@ -503,7 +500,7 @@ const interactions = {
         { text: "<br>Josephine: Hmm, men vi har tæppet.", sound: null }
       ],
       third: [
-        { text: "<b>Tag kort 45</b>", sound: null }
+        { text: "<b>Tag kort 57</b>", sound: null }
       ]
     }
   },
@@ -511,34 +508,34 @@ const interactions = {
   "616+794": {
     dialog2: {
       first: [
-        { text: "<b>Tag kort 46</b>", sound: null }
+        { text: "<b>Tag kort 58</b>", sound: null }
       ],
       second: [
         { text: "Josephine: Vi har stadig ikke nogen spand.", sound: null },
         { text: "<br>Malthe: Men vi har en tom køleboks.", sound: null }
       ],
       third: [
-        { text: "<b>Tag kort 47</b>", sound: null }
+        { text: "<b>Tag kort 59</b>", sound: null }
       ]
     }
   },
 
   "189+894": {
     dialog: [
-      { text: "<b>Tag kort 48</b>", sound: null }
+      { text: "<b>Tag kort 60</b>", sound: null }
     ]
   },
 
   "295+741": {
     dialog: [
-      { text: "<b>Tag kort 49</b>", sound: null }
+      { text: "<b>Tag kort 61</b>", sound: null }
     ]
   },
 
   "´873+259": {
     dialog2: {
       first: [
-        { text: "<b>Tag kort 50</b>", sound: null }
+        { text: "<b>Tag kort 62</b>", sound: null }
       ],
       second: [
         { text: "Josephine: Det er en vild fælde vi har lavet.", sound: null },
@@ -549,7 +546,7 @@ const interactions = {
         { text: "<br>Malthe: Du har ret, vi må gemme os.", sound: null }
       ],
       third: [
-        { text: "<b>Tag kort 51</b>", sound: null }
+        { text: "<b>Tag kort 63</b>", sound: null }
       ],
       fourth: [
         { text: "Josephine: Nååårh, den ser da sød ud.", sound: null },
@@ -600,13 +597,13 @@ const codes = {
   "6595": {
     dialog2: {
       first: [
-        { text: "<b>Tag kort 37</b>", sound: null }
+        { text: "<b>Tag kort 49</b>", sound: null }
       ],
       second: [
         { text: "Malthe: Mmmm, kold havregrød...", sound: null }
       ],
       third: [
-        { text: "<b>Tag kort 38</b>", sound: null }
+        { text: "<b>Tag kort 50</b>", sound: null }
       ],
       fourth: [
         { text: "Josephine: Du kan varme den i microovnen.", sound: null },
@@ -614,7 +611,7 @@ const codes = {
         { text: "<br>Josephine: Til den er varm, 3 minutter måske.", sound: null }
       ],
       fifth: [
-        { text: "<b>Tag kort 39</b>", sound: null }
+        { text: "<b>Tag kort 51</b>", sound: null }
       ]
     }
   }  
