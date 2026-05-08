@@ -321,7 +321,7 @@ const interactions = {
     }
   },
 
-  "522+158": {
+  "522+458": {
     dialog2: {
       first: [
         { text: "<b>Tag kort 30</b>", sound: null }
@@ -359,7 +359,7 @@ const interactions = {
     }
   },
  
-  "598+324": {
+  "158+324": {
     dialog2: {
       first: [
         { text: "Malthe: Er det bare mig eller ligner det at den vokser?", sound: null },
@@ -374,7 +374,7 @@ const interactions = {
     }
   },
 
-  "249+724": {
+  "249+384": {
     dialog2: {
       first: [
         { text: "<b>Tag kort 36</b>", sound: null }
@@ -900,7 +900,7 @@ flowSteps = [
   { type: "code", code: "1482", run: () => showCodePanel() },
 
   // index 9 – step 10
-  { type: "explore", codes: ["522+158", "158+522"], run: () => showExplorePanel() },
+  { type: "explore", codes: ["522+458", "458+522"], run: () => showExplorePanel() },
 
   // index 10 – step 11
   { type: "explore", codes: ["816+527", "527+816"], run: () => showExplorePanel() },
@@ -909,10 +909,10 @@ flowSteps = [
   { type: "explore", codes: ["252+952", "952+252"], run: () => showExplorePanel() },
 
   // index 12 – step 13
-  { type: "explore", codes: ["598+324", "324+598"], run: () => showExplorePanel() },
+  { type: "explore", codes: ["158+324", "324+158"], run: () => showExplorePanel() },
 
   // index 13 – step 14
-  { type: "explore", codes: ["249+724", "724+249"], run: () => showExplorePanel() },
+  { type: "explore", codes: ["249+384", "384+249"], run: () => showExplorePanel() },
 
   // index 14 – step 15
   { type: "explore", codes: ["934+714", "714+934"], run: () => showExplorePanel() },
