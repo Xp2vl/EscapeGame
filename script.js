@@ -250,7 +250,7 @@ const interactions = {
         { text: "<br>Josephine: Måske i nogle af de andre skuffer", sound: "Josephine_1.mp3" }
       ],
       second: [
-        { text: "<b>Tag kort 03</b>", sound: null }
+        { text: "<b>Tag kort 3</b>", sound: null }
       ]
     }
   },
@@ -261,7 +261,7 @@ const interactions = {
         { text: "Malthe: Der er godt nok mange skumpile i den skuffe", sound: "Malthe_1.mp3" }
       ],
       second: [
-        { text: "<b>Tag kort 04</b>", sound: null }
+        { text: "<b>Tag kort 4</b>", sound: null }
       ]
     }
   },
@@ -274,16 +274,16 @@ const interactions = {
         { text: "<br>Malthe: Der ligger noget under kommoden", sound: "Malthe_1.mp3" }
       ],
       second: [
-         { text: "<b>Tag kort 05</b>", sound: null },
-         { text: "<br><b>Tag kort 06</b>", sound: null }
+         { text: "<b>Tag kort 5</b>", sound: null },
+         { text: "<br><b>Tag kort 6</b>", sound: null }
       ]
     }
   },
 
   "244+962": {
     dialog: [
-      { text: "<b>Tag kort 07</b>", sound: null },
-      { text: "<br><b>Tag kort 08</b>", sound: null }
+      { text: "<b>Tag kort 7</b>", sound: null },
+      { text: "<br><b>Tag kort 8</b>", sound: null }
     ]
   },
  
