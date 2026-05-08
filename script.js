@@ -532,7 +532,7 @@ const interactions = {
     ]
   },
 
-  "´873+259": {
+  "837+259": {
     dialog2: {
       first: [
         { text: "<b>Tag kort 62</b>", sound: null }
@@ -945,5 +945,5 @@ flowSteps = [
   { type: "explore", codes: ["295+741", "741+295"], run: () => showExplorePanel() },
 
   // index 25 – step 26
-  { type: "explore", codes: ["873+259", "259+873"], run: () => showExplorePanel() }
+  { type: "explore", codes: ["837+259", "259+837"], run: () => showExplorePanel() }
 ];
